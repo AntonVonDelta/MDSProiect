@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3DServer", "3DServer\3DServer.vcxproj", "{77F84859-EE09-47BE-B294-F9CAAA32504B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestOpenGL", "TestOpenGL\TestOpenGL.vcxproj", "{84241C65-6457-47F6-BE59-852F079FE075}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{77F84859-EE09-47BE-B294-F9CAAA32504B}.Release|x64.Build.0 = Release|x64
 		{77F84859-EE09-47BE-B294-F9CAAA32504B}.Release|x86.ActiveCfg = Release|Win32
 		{77F84859-EE09-47BE-B294-F9CAAA32504B}.Release|x86.Build.0 = Release|Win32
+		{84241C65-6457-47F6-BE59-852F079FE075}.Debug|x64.ActiveCfg = Debug|x64
+		{84241C65-6457-47F6-BE59-852F079FE075}.Debug|x64.Build.0 = Debug|x64
+		{84241C65-6457-47F6-BE59-852F079FE075}.Debug|x86.ActiveCfg = Debug|Win32
+		{84241C65-6457-47F6-BE59-852F079FE075}.Debug|x86.Build.0 = Debug|Win32
+		{84241C65-6457-47F6-BE59-852F079FE075}.Release|x64.ActiveCfg = Release|x64
+		{84241C65-6457-47F6-BE59-852F079FE075}.Release|x64.Build.0 = Release|x64
+		{84241C65-6457-47F6-BE59-852F079FE075}.Release|x86.ActiveCfg = Release|Win32
+		{84241C65-6457-47F6-BE59-852F079FE075}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
