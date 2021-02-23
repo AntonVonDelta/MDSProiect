@@ -9,6 +9,9 @@ One can easily use our web interface to talk to and receive responses from our c
 - Vilceanu Razvan-Arthur
 - Reznicencu Sergiu
 
+## Backlog
+The backlog is contained here: https://github.com/AntonVonDelta/MDSProiect/projects/
+
 ## User Stories
 
 ## Arhitectura/UML
