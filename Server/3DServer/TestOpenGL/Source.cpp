@@ -4,10 +4,10 @@
 #include<fstream>
 #include<cstring>
 
-#include "GL/glew.h"
-#include "GL/freeglut.h"
-#include "GLFW/glfw3.h"
 
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
+#include "GL/freeglut.h"
 
 using namespace std;
 
@@ -73,8 +73,7 @@ void display()
 	//glutSwapBuffers();
 }
 
-void
-init(void)
+void init(void)
 {
 	/* Setup cube vertex data. */
 	v[0][0] = v[1][0] = v[2][0] = v[3][0] = -1;
