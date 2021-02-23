@@ -4,7 +4,7 @@ This project tackles a major issue for current 3D rendering tehnologies in the b
 One can easily use our web interface to talk to and receive responses from our custom built http server.
 
 
-## Echipa
+## Team
 - Achimescu Valentin,
 - Vilceanu Razvan-Arthur
 - Reznicencu Sergiu
