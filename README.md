@@ -12,6 +12,9 @@ One can easily use our web interface to talk to and receive responses from our c
 ## Backlog
 The backlog is contained here: https://github.com/AntonVonDelta/MDSProiect/projects/
 
+## Unit Tests/Integration
+Now comes with Integration!
+
 ## User Stories
 
 ## Arhitectura/UML
