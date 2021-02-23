@@ -90,13 +90,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\freeglut\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\freeglut\include;C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\glew-2.1.0\include\GL</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\freeglut\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\freeglut\lib;C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\glew-2.1.0\lib\Release\Win32</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;freeglut.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>

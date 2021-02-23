@@ -1,9 +1,18 @@
 #include<iostream>
+#include<vector>
 #include<Windows.h>
+#include<fstream>
+#include<cstring>
+
+#include "glew.h"
 #include"GL/freeglut.h"
 
+
 using namespace std;
-#include <GL/glut.h>
+
+
+ofstream fout("img.bin",ofstream::out | ofstream::binary | ofstream::trunc);
+bool full = false;
 
 GLfloat light_diffuse[] = { 1.0, 0.0, 0.0, 1.0 };  /* Red diffuse light. */
 GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };  /* Infinite light location. */
@@ -14,6 +23,9 @@ GLint faces[6][4] = {  /* Vertex indices for the 6 faces of a cube. */
   {0, 1, 2, 3}, {3, 2, 6, 7}, {7, 6, 5, 4},
   {4, 5, 1, 0}, {5, 6, 2, 1}, {7, 4, 0, 3} };
 GLfloat v[8][3];  /* Will be filled in with X,Y,Z vertexes. */
+
+// Used for FrameBuffer object
+GLuint fbo, render_buf[2];
 
 void drawBox(void)
 {
@@ -32,9 +44,32 @@ void drawBox(void)
 
 void display(void)
 {
+	//Before drawing
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	drawBox();
-	glutSwapBuffers();
+
+	// Copy buffer
+	int width = glutGet(GLUT_WINDOW_WIDTH);
+	int height = glutGet(GLUT_WINDOW_HEIGHT);
+	int mem_size = width * height * 4;
+
+	std::vector<std::uint8_t> data(width * height * 4);
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+	glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, &data[0]);
+	if (!full) {
+		full = true;
+		fout.write((const char*)&data[0], mem_size);
+		fout.flush();
+	}
+
+	// Return to onscreen rendering:
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// Swap the buffers
+	//glutSwapBuffers();
 }
 
 void
@@ -76,11 +111,46 @@ init(void)
 int
 main(int argc, char** argv)
 {
+	bool err = false;
+
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutCreateWindow("red 3D lighted cube");
 	glutDisplayFunc(display);
-	init();
-	glutMainLoop();
+
+	// Write directly to another memory
+	int width = glutGet(GLUT_WINDOW_WIDTH);
+	int height = glutGet(GLUT_WINDOW_HEIGHT);
+
+	glewInit();
+
+	glGenFramebuffers(1, &fbo);
+	glGenRenderbuffers(2, render_buf);
+
+	glBindRenderbuffer(GL_RENDERBUFFER, render_buf[0]);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, width, height);
+	glBindRenderbuffer(GL_RENDERBUFFER, render_buf[1]);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, render_buf[0]);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, render_buf[1]);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
+		err = true;
+	}
+
+	if (!err) {
+		// Re-enable the default window-system framebuffer for drawing
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		init();
+		glutMainLoop();
+	}
+
+
+	glDeleteFramebuffers(1, &fbo);
+	glDeleteRenderbuffers(2, render_buf);
 	return 0;             /* ANSI C requires main to return int. */
 }
