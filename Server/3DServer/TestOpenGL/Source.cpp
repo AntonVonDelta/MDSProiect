@@ -4,14 +4,15 @@
 #include<fstream>
 #include<cstring>
 
-#include "glew.h"
-#include"GL/freeglut.h"
+#include "GL/glew.h"
+#include "GL/freeglut.h"
+#include "GLFW/glfw3.h"
 
 
 using namespace std;
 
 
-ofstream fout("img.bin",ofstream::out | ofstream::binary | ofstream::trunc);
+ofstream fout("img.bin", ofstream::out | ofstream::binary | ofstream::trunc);
 bool full = false;
 
 GLfloat light_diffuse[] = { 1.0, 0.0, 0.0, 1.0 };  /* Red diffuse light. */
@@ -26,6 +27,8 @@ GLfloat v[8][3];  /* Will be filled in with X,Y,Z vertexes. */
 
 // Used for FrameBuffer object
 GLuint fbo, render_buf[2];
+int width = 300;
+int height = 300;
 
 void drawBox(void)
 {
@@ -42,7 +45,7 @@ void drawBox(void)
 	}
 }
 
-void display(void)
+void display()
 {
 	//Before drawing
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -52,8 +55,6 @@ void display(void)
 	drawBox();
 
 	// Copy buffer
-	int width = glutGet(GLUT_WINDOW_WIDTH);
-	int height = glutGet(GLUT_WINDOW_HEIGHT);
 	int mem_size = width * height * 4;
 
 	std::vector<std::uint8_t> data(width * height * 4);
@@ -113,19 +114,28 @@ main(int argc, char** argv)
 {
 	bool err = false;
 
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutCreateWindow("red 3D lighted cube");
-	glutDisplayFunc(display);
+	if (!glfwInit())
+	{
+		// Initialization failed
+		return 0;
+	}
 
-	// Write directly to another memory
-	int width = glutGet(GLUT_WINDOW_WIDTH);
-	int height = glutGet(GLUT_WINDOW_HEIGHT);
+	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+	GLFWwindow* window = glfwCreateWindow(width, height, "Hidden window", NULL, NULL);
+	if (!window)
+	{
+		// Window or OpenGL context creation failed
+		glfwTerminate();
+	}
 
+	// Select current context
+	glfwMakeContextCurrent(window);
+
+	// Create Frame buffers
 	glewInit();
 
-	glGenFramebuffers(1, &fbo);
-	glGenRenderbuffers(2, render_buf);
+	glGenFramebuffers(1, &fbo);			// Frame buffer used for drawing on
+	glGenRenderbuffers(2, render_buf);	// We need two render buffers for color and depth
 
 	glBindRenderbuffer(GL_RENDERBUFFER, render_buf[0]);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, width, height);
@@ -142,15 +152,11 @@ main(int argc, char** argv)
 	}
 
 	if (!err) {
-		// Re-enable the default window-system framebuffer for drawing
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 		init();
-		glutMainLoop();
+		display();
 	}
 
+	glfwDestroyWindow(window);
+	glfwTerminate();
 
-	glDeleteFramebuffers(1, &fbo);
-	glDeleteRenderbuffers(2, render_buf);
-	return 0;             /* ANSI C requires main to return int. */
 }
