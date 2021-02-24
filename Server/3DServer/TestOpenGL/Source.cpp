@@ -30,8 +30,7 @@ GLuint fbo, render_buf[2];
 int width = 300;
 int height = 300;
 
-void drawBox(void)
-{
+void drawBox(void) {
 	int i;
 
 	for (i = 0; i < 6; i++) {
@@ -45,8 +44,7 @@ void drawBox(void)
 	}
 }
 
-void display()
-{
+void display() {
 	//Before drawing
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
@@ -73,8 +71,7 @@ void display()
 	//glutSwapBuffers();
 }
 
-void init(void)
-{
+void init(void) {
 	/* Setup cube vertex data. */
 	v[0][0] = v[1][0] = v[2][0] = v[3][0] = -1;
 	v[4][0] = v[5][0] = v[6][0] = v[7][0] = 1;
@@ -108,21 +105,17 @@ void init(void)
 	glRotatef(-20, 0.0, 0.0, 1.0);
 }
 
-int
-main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
 	bool err = false;
 
-	if (!glfwInit())
-	{
+	if (!glfwInit()) {
 		// Initialization failed
 		return 0;
 	}
 
 	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 	GLFWwindow* window = glfwCreateWindow(width, height, "Hidden window", NULL, NULL);
-	if (!window)
-	{
+	if (!window) {
 		// Window or OpenGL context creation failed
 		glfwTerminate();
 	}
