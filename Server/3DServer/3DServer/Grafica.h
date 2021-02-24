@@ -37,9 +37,25 @@ public:
 
 	bool Init();
 	void Destroy();
+	/// <summary>
+	/// </summary>
+	/// <returns>True if the class was succesfully initialized</returns>
+	bool IsInitialized() { return init_succesful; }
 
 	void setSize(int, int);
+	/// <summary>
+	/// Get pointer to internal memory buffer. Do not delete this memory!
+	/// </summary>
+	/// <returns></returns>
 	char* getBuffer() { return buffer; }
+
+	/// <summary>
+	/// Get the memory buffer size according to the set render size
+	/// </summary>
+	/// <returns></returns>
+	int getBufferSize() {
+		return width * height * 4;
+	}
 
 	void nextScence();
 };
