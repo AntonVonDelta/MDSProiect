@@ -105,15 +105,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Libraries\glew-2.1.0\include;$(SolutionDir)\Libraries\glfw-3.3.2.bin.WIN32\include;$(SolutionDir)\Libraries\freeglut\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Libraries\glew-2.1.0\include;$(SolutionDir)\Libraries\glfw-3.3.2.bin.WIN32\include;$(SolutionDir)\Libraries\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\Libraries\glew-2.1.0\lib\Release\Win32;$(SolutionDir)\Libraries\glfw-3.3.2.bin.WIN32\lib-vc2019;$(SolutionDir)\Libraries\freeglut\lib;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenGL32.lib;glfw3.lib;glew32.lib;freeglut.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Libraries\glew-2.1.0\lib\Release\Win32;$(SolutionDir)\Libraries\glfw-3.3.2.bin.WIN32\lib-vc2019;$(SolutionDir)\Libraries\freeglut\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;glfw3.lib;glew32.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
