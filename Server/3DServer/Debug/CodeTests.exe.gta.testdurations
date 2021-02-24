@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GtaTestDurations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Executable>C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\Debug\CodeTests.exe</Executable>
+  <TestDurations>
+    <TestDuration Test="TestCaseName.TestDummyFunction" Duration="1" />
+  </TestDurations>
+</GtaTestDurations>
