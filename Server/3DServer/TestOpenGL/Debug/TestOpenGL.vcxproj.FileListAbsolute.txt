@@ -1,0 +1,2 @@
+C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\Debug\TestOpenGL.exe.lastcodeanalysissucceeded
+C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\TestOpenGL\Debug\NativeCodeAnalysis.read.1.tlog
