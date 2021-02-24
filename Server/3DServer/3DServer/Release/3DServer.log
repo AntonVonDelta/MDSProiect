@@ -1,0 +1,5 @@
+﻿glfw3.lib(win32_window.obj) : error LNK2001: unresolved external symbol __imp__DragQueryFileW@16
+glfw3.lib(win32_window.obj) : error LNK2001: unresolved external symbol __imp__DragQueryPoint@8
+glfw3.lib(win32_window.obj) : error LNK2001: unresolved external symbol __imp__DragFinish@4
+glfw3.lib(win32_window.obj) : error LNK2001: unresolved external symbol __imp__DragAcceptFiles@8
+C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\Release\3DServer.exe : fatal error LNK1120: 4 unresolved externals

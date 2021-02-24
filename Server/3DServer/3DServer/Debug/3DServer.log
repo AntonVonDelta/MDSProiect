@@ -1,7 +1,1 @@
-﻿  Grafica.cpp
-  Source.cpp
-  Running Code Analysis for C/C++...
-  Generating Code...
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  3DServer.vcxproj -> C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\Debug\3DServer.exe
-C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\3DServer\Grafica.cpp(3): warning C26495: Variable 'Grafica::render_buf' is uninitialized. Always initialize a member variable (type.6).
+﻿  3DServer.vcxproj -> C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\Debug\3DServer.exe
