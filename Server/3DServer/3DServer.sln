@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3DServer", "3DServer\3DServ
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestOpenGL", "TestOpenGL\TestOpenGL.vcxproj", "{84241C65-6457-47F6-BE59-852F079FE075}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeTests", "CodeTests\CodeTests.vcxproj", "{396F0AF7-8050-4F62-BCC2-E8F748AF3B6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{84241C65-6457-47F6-BE59-852F079FE075}.Release|x64.Build.0 = Release|x64
 		{84241C65-6457-47F6-BE59-852F079FE075}.Release|x86.ActiveCfg = Release|Win32
 		{84241C65-6457-47F6-BE59-852F079FE075}.Release|x86.Build.0 = Release|Win32
+		{396F0AF7-8050-4F62-BCC2-E8F748AF3B6E}.Debug|x64.ActiveCfg = Debug|x64
+		{396F0AF7-8050-4F62-BCC2-E8F748AF3B6E}.Debug|x64.Build.0 = Debug|x64
+		{396F0AF7-8050-4F62-BCC2-E8F748AF3B6E}.Debug|x86.ActiveCfg = Debug|Win32
+		{396F0AF7-8050-4F62-BCC2-E8F748AF3B6E}.Debug|x86.Build.0 = Debug|Win32
+		{396F0AF7-8050-4F62-BCC2-E8F748AF3B6E}.Release|x64.ActiveCfg = Release|x64
+		{396F0AF7-8050-4F62-BCC2-E8F748AF3B6E}.Release|x64.Build.0 = Release|x64
+		{396F0AF7-8050-4F62-BCC2-E8F748AF3B6E}.Release|x86.ActiveCfg = Release|Win32
+		{396F0AF7-8050-4F62-BCC2-E8F748AF3B6E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

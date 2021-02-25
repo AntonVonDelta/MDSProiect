@@ -8,6 +8,8 @@ using namespace std;
 
 Grafica render;
 
+int test1(int a, int b) { return a + b; }
+
 int main() {
 	if (render.Init()){
 		cout<<"OpenGL initialized succesfully!"<<endl;
