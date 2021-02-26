@@ -8,8 +8,6 @@ using namespace std;
 
 Grafica render;
 
-int test1(int a, int b) { return a + b; }
-
 int main() {
 	if (render.Init()){
 		cout<<"OpenGL initialized succesfully!"<<endl;
@@ -18,12 +16,23 @@ int main() {
 	}
 
 	if (render.IsInitialized()) {
-		// Draw on internal buffers the next scene
-		render.nextScence();
+		while (true) {
+			int choice;
+			cout << "0 - Move back  | 1 - Move front" << endl;
+			cout << "2 - Move left | 3 - Move right" << endl;
+			cout << " 6 - Nothin'" << endl;
 
-		ofstream fo("img.bin", ofstream::binary | ofstream::trunc);
-		fo.write(render.getBuffer(),render.getBufferSize());
-		fo.flush();
+			cin >> choice;
+			render.moveScene(choice);
+
+			// Draw on internal buffers the next scene
+			render.nextScence();
+
+			ofstream fo("img.bin", ofstream::binary | ofstream::trunc);
+			fo.write(render.getBuffer(), render.getBufferSize());
+			fo.flush();
+		}
+
 	}
 
 	render.Destroy();

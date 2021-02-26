@@ -1,7 +1,7 @@
 #include "Grafica.h"
 
 Grafica::Grafica() {
-	buffer = new char[width*height*4];
+	buffer = new char[width * height * 4];
 }
 
 Grafica::~Grafica() {
@@ -21,16 +21,14 @@ bool Grafica::Init() {
 	// Make sure it wasn't already init'ed
 	if (init_succesful) return false;
 
-	if (!glfwInit())
-	{
+	if (!glfwInit()) {
 		// Initialization failed
 		return false;
 	}
 
 	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 	window = glfwCreateWindow(width, height, "Hidden window", NULL, NULL);
-	if (!window)
-	{
+	if (!window) {
 		// Window or OpenGL context creation failed
 		glfwTerminate();
 	}
@@ -65,7 +63,7 @@ bool Grafica::Init() {
 	return !error;
 }
 
-void Grafica::setSize(int window_width,int window_height) {
+void Grafica::setSize(int window_width, int window_height) {
 	if (!init_succesful) return;
 
 	width = window_width;
@@ -113,8 +111,7 @@ void Grafica::InitScene() {
 }
 
 
-void Grafica::drawBox(void)
-{
+void Grafica::drawBox(void) {
 	int i;
 
 	for (i = 0; i < 6; i++) {
@@ -147,4 +144,45 @@ void Grafica::nextScence() {
 
 	// Swap the buffers
 	//glutSwapBuffers();
+}
+
+void Grafica::moveScene(int direction) {
+	switch (direction) {
+		case 0:
+			glTranslatef(0.0, 0.0, move_amount);
+			break;
+
+		case 1:
+			glTranslatef(0.0, 0.0, -move_amount);
+			break;
+
+		case 2:
+			glTranslatef(move_amount, 0.0, 0.0);
+			break;
+
+		case 3:
+			glTranslatef(-move_amount, 0.0, 0.0);
+			break;
+
+		case 4:
+			glTranslatef(0.0, move_amount, 0.0);
+			break;
+
+		case 5:
+			glTranslatef(0.0, -move_amount, 0.0);
+			break;
+	}
+
+}
+
+void Grafica::rotateScene(int direction) {
+	switch (direction) {
+		case 0:
+			glRotatef(rotate_amount, 1.0, 0.0, 0.0);
+			break;
+
+		case 1:
+			glRotatef(-rotate_amount, 1.0, 0.0, 0.0);
+			break;
+	}
 }
