@@ -12,6 +12,9 @@ using namespace std;
 class Grafica {
 	bool init_succesful = false;
 
+	float move_amount = 1;
+	float rotate_amount = 10;
+
 	GLFWwindow* window;
 	GLuint fbo, render_buf[2];
 	int width = 300;
@@ -58,4 +61,6 @@ public:
 	}
 
 	void nextScence();
+	void moveScene(int direction);
+	void rotateScene(int direction);
 };
