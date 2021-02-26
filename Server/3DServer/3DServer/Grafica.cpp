@@ -10,6 +10,9 @@ Grafica::~Grafica() {
 
 void Grafica::Destroy() {
 	if (init_succesful) {
+		glDeleteFramebuffers(1, &fbo);
+		glDeleteRenderbuffers(2, render_buf);
+
 		glfwDestroyWindow(window);
 		glfwTerminate();
 	}
@@ -63,7 +66,7 @@ bool Grafica::Init() {
 	return !error;
 }
 
-void Grafica::setSize(int window_width, int window_height) {
+void Grafica::SetSize(int window_width, int window_height) {
 	if (!init_succesful) return;
 
 	width = window_width;
@@ -125,7 +128,7 @@ void Grafica::drawBox(void) {
 	}
 }
 
-void Grafica::nextScence() {
+void Grafica::NextScence() {
 	if (!init_succesful) return;
 
 	//Before drawing
@@ -146,7 +149,7 @@ void Grafica::nextScence() {
 	//glutSwapBuffers();
 }
 
-void Grafica::moveScene(int direction) {
+void Grafica::MoveScene(int direction) {
 	switch (direction) {
 		case 0:
 			glTranslatef(0.0, 0.0, move_amount);
@@ -175,7 +178,7 @@ void Grafica::moveScene(int direction) {
 
 }
 
-void Grafica::rotateScene(int direction) {
+void Grafica::RotateScene(int direction) {
 	switch (direction) {
 		case 0:
 			glRotatef(rotate_amount, 1.0, 0.0, 0.0);
