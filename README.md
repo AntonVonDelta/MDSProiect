@@ -5,7 +5,7 @@ One can easily use our web interface to talk to and receive responses from our c
 
 
 ## Team
-- Achimescu Valentin,
+- Achimescu Valentin
 - Vilceanu Razvan-Arthur
 - Reznicencu Sergiu
 
