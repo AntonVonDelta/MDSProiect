@@ -155,6 +155,7 @@ bool parser(CLIENT_STRUCTURE &client) {
 
 	if (!(parser_result = recvAll(client, buff, 200))) {
 		closeSelectedClient(client);
+		delete[] buff;
 		return false;
 	}
 
