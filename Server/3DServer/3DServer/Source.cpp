@@ -160,6 +160,8 @@ bool parser(CLIENT_STRUCTURE &client) {
 
 	buff[200 - 1] = 0;
 	printf("Received: %s", buff);
+
+	delete[] buff;
 }
 
 // Block until all bytes are received
