@@ -2,9 +2,6 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\Debug\3DServer.exe</FullPath>
-    </ProjectOutput>
-    <ProjectOutput>
       <FullPath>C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\Debug\CodeTests.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>

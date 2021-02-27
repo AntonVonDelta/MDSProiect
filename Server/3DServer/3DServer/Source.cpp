@@ -26,6 +26,7 @@ bool sendAll(CLIENT_STRUCTURE& client, char* buffer, unsigned int len);
 bool isClientValid(CLIENT_STRUCTURE& client);
 void closeSelectedClient(CLIENT_STRUCTURE& client);
 
+void meme() { cout << "asdasd"; }
 
 int main() {
 	SOCKADDR_IN server_config;
