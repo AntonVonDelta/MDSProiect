@@ -3,3 +3,7 @@
 ################################################################################
 
 /Server/3DServer/.vs/3DServer/v16
+
+# We don't want garbage to be commited everytime
+/Server/3DServer/Debug
+/Server/3DServer/Release
