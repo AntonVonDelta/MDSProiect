@@ -4,22 +4,14 @@
 
 /Server/3DServer/.vs/3DServer/v16
 
-# We don't want garbage to be commited everytime
-/Server/3DServer/Debug
-/Server/3DServer/Release
-/Server/3DServer/x64
+# Ignore all Debug/Release folders - those that contain compiled code and intermediary objects(such as logs and objs)
+Debug/
+Release/
+x64/
 
-# Here are stored logs of the builds
-/Server/3DServer/3DServer/Debug
-/Server/3DServer/3DServer/Release
-/Server/3DServer/3DServer/x64
+# Except the first Release folder that contains functional code
+!/Server/3DServer/Release
+!/Server/3DServer/x64/Release
 
-/Server/3DServer/TestOpenGL/Debug
-/Server/3DServer/TestOpenGL/Release
-/Server/3DServer/TestOpenGL/x64
-
-/Server/3DServer/CodeTests/Debug
-/Server/3DServer/CodeTests/Release
-/Server/3DServer/CodeTests/x64
-
+# No packages
 /Server/3DServer/packages
