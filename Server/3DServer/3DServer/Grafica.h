@@ -32,35 +32,35 @@ class Grafica {
 	GLfloat v[8][3];  /* Will be filled in with X,Y,Z vertexes. */
 
 
-	void InitScene();
+	void initScene();
 	void drawBox();
 public:
 	Grafica();
 	~Grafica();
 
-	bool Init();
-	void Destroy();
+	bool init();
+	void destroy();
 	/// <summary>
 	/// </summary>
 	/// <returns>True if the class was succesfully initialized</returns>
-	bool IsInitialized() { return init_succesful; }
+	bool isInitialized() { return init_succesful; }
 
-	void SetSize(int, int);
+	void setSize(int, int);
 	/// <summary>
 	/// Get pointer to internal memory buffer. Do not delete this memory!
 	/// </summary>
 	/// <returns></returns>
-	char* GetBuffer() { return buffer; }
+	char* getBuffer() { return buffer; }
 
 	/// <summary>
 	/// Get the memory buffer size according to the set render size
 	/// </summary>
 	/// <returns></returns>
-	int GetBufferSize() {
+	int getBufferSize() {
 		return width * height * 4;
 	}
 
-	void NextScence();
-	void MoveScene(int direction);
-	void RotateScene(int direction);
+	void nextScence();
+	void moveScene(int direction);
+	void rotateScene(int direction);
 };
