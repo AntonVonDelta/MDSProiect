@@ -8,7 +8,7 @@ Grafica::~Grafica() {
 	delete[] buffer;
 }
 
-void Grafica::Destroy() {
+void Grafica::destroy() {
 	if (init_succesful) {
 		glDeleteFramebuffers(1, &fbo);
 		glDeleteRenderbuffers(2, render_buf);
@@ -18,7 +18,7 @@ void Grafica::Destroy() {
 	}
 }
 // Create context for openGL. This creates a hidden window; no drawing is performed on it
-bool Grafica::Init() {
+bool Grafica::init() {
 	bool error = false;
 
 	// Make sure it wasn't already init'ed
@@ -59,14 +59,14 @@ bool Grafica::Init() {
 	}
 
 	if (!error) {
-		InitScene();
+		initScene();
 		init_succesful = true;
 	}
 
 	return !error;
 }
 
-void Grafica::SetSize(int window_width, int window_height) {
+void Grafica::setSize(int window_width, int window_height) {
 	if (!init_succesful) return;
 
 	width = window_width;
@@ -79,7 +79,7 @@ void Grafica::SetSize(int window_width, int window_height) {
 	glfwSetWindowSize(window, width, height);
 }
 
-void Grafica::InitScene() {
+void Grafica::initScene() {
 	/* Setup cube vertex data. */
 	v[0][0] = v[1][0] = v[2][0] = v[3][0] = -1;
 	v[4][0] = v[5][0] = v[6][0] = v[7][0] = 1;
@@ -128,7 +128,7 @@ void Grafica::drawBox(void) {
 	}
 }
 
-void Grafica::NextScence() {
+void Grafica::nextScence() {
 	if (!init_succesful) return;
 
 	//Before drawing
@@ -149,7 +149,7 @@ void Grafica::NextScence() {
 	//glutSwapBuffers();
 }
 
-void Grafica::MoveScene(int direction) {
+void Grafica::moveScene(int direction) {
 	switch (direction) {
 		case 0:
 			glTranslatef(0.0, 0.0, move_amount);
@@ -178,7 +178,7 @@ void Grafica::MoveScene(int direction) {
 
 }
 
-void Grafica::RotateScene(int direction) {
+void Grafica::rotateScene(int direction) {
 	switch (direction) {
 		case 0:
 			glRotatef(rotate_amount, 1.0, 0.0, 0.0);

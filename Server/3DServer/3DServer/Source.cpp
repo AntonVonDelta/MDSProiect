@@ -11,18 +11,26 @@
 
 using namespace std;
 
+#define HTTP_HEADER_MAX_SIZE 800
+
 Grafica render;
 SOCKET listening_socket;
 int server_port = 5050;
 fd_set master, read_fds;
 vector<CLIENT_STRUCTURE> pendingClients;
 
-void parser(CLIENT_STRUCTURE&);
+void processConnections();
+bool parser(CLIENT_STRUCTURE&);
+bool recvAll(CLIENT_STRUCTURE& client, char* buffer, unsigned int len);
+bool sendAll(CLIENT_STRUCTURE& client, char* buffer, unsigned int len);
+bool isClientValid(CLIENT_STRUCTURE& client);
+void closeSelectedClient(CLIENT_STRUCTURE& client);
+
 
 int main() {
 	SOCKADDR_IN server_config;
 
-	if (!render.Init()) {
+	if (!render.init()) {
 		cout << "OpenGL Init error!";
 		return 0;
 	}
@@ -63,18 +71,20 @@ int main() {
 		return 0;
 	}
 
+	processConnections();
 
 	closesocket(listening_socket);
 	WSACleanup();
-	render.Destroy();
+	render.destroy();
 	return 0;
 }
 
-void ProcessConnections() {
+void processConnections() {
 	unsigned int fdmax = listening_socket;
 	struct sockaddr_in clientinfo;
 	char strAddr[INET6_ADDRSTRLEN];
 	int selRes;
+	time_t current_time;
 	SOCKET client;
 
 	timeval timeout = { 0 , 500000 };
@@ -86,10 +96,17 @@ void ProcessConnections() {
 	while (true) {
 		read_fds = master;
 
-		// TODO: Check here if already connected sockets are active or inactive
+		// Check client validity after 5 sec. timeout
+		time(&current_time);
+		FOR_EVERY_CLIENT(z) {
+			if (pendingClients[z].timeWhenConnected != -1 && current_time - pendingClients[z].timeWhenConnected > 2) {
+				pendingClients[z].timeWhenConnected = -1;	// already checked time
+				if(!isClientValid(pendingClients[z])) closeSelectedClient(pendingClients[z]);
+			}
+		}
 
 		// Get new connections - check if server socket contains "connections" to be read
-		if ((selRes = select(fdmax + 1, &read_fds, NULL, NULL, &timeout)) <=0 ) continue;
+		if ((selRes = select(fdmax + 1, &read_fds, NULL, NULL, &timeout)) <1 ) continue;
 
 		for (unsigned int i = 0; i <= fdmax && selRes > 0; i++) {
 			if (FD_ISSET(i, &read_fds)) {
@@ -105,15 +122,16 @@ void ProcessConnections() {
 						if (client > fdmax) fdmax = client;
 
 						memset(&protoClient, 0, sizeof(protoClient));
+						protoClient.talksHTTP = false;
 						protoClient._sockid = client;
 						strcpy_s(protoClient.address, INET6_ADDRSTRLEN,InetNtopA(clientinfo.sin_family, &(clientinfo.sin_addr), strAddr, INET6_ADDRSTRLEN));
+
+						// Measure the time the socket connected
+						time(&protoClient.timeWhenConnected);
 
 						// Set timeout for recv command - or else it will block
 						DWORD maxWaitTime = 5000;
 						setsockopt(protoClient._sockid, SOL_SOCKET, SO_RCVTIMEO, (char*)&maxWaitTime, sizeof(maxWaitTime));
-
-						// Measure the time the socket connected
-						time(&protoClient.timeWhenConnected);
 
 						// Add to our clients
 						pendingClients.push_back(protoClient);
@@ -129,8 +147,55 @@ void ProcessConnections() {
 	}
 }
 
-void parser(CLIENT_STRUCTURE &client) {
-	// Http parser goes here
+bool parser(CLIENT_STRUCTURE &client) {
+	// Http parser goes here - this is called when the socket has data on the buffer to be read
+
+	char* buff = new char[HTTP_HEADER_MAX_SIZE];
+	bool parser_result = false;
+
+	if (!(parser_result = recvAll(client, buff, 200))) {
+		closeSelectedClient(client);
+		delete[] buff;
+		return false;
+	}
+
+	buff[200 - 1] = 0;
+	printf("Received: %s", buff);
+
+	delete[] buff;
+}
+
+// Block until all bytes are received
+bool recvAll(CLIENT_STRUCTURE& client, char* buffer, unsigned int len) {
+	int recvlen = 0;
+	unsigned int readSize = 0;
+
+	while (readSize < len) {
+		if ((recvlen = recv(client._sockid, buffer + readSize, len - readSize, 0)) < 1) {
+			return false;
+		}
+		readSize += recvlen;
+	}
+	return true;
+}
+
+// Block till all bytes are sent
+bool sendAll(CLIENT_STRUCTURE& client, char* buffer, unsigned int len) {
+	int sentlen;
+	unsigned int sentSize = 0;
+
+	while (sentSize < len) {
+		if ((sentlen = send(client._sockid, buffer + sentSize, len - sentSize, 0)) < 0) {
+			return false;
+		}
+		sentSize += sentlen;
+	}
+	return true;
+}
+
+// Determines if the client should be kept or not
+bool isClientValid(CLIENT_STRUCTURE& client) {
+	return client.talksHTTP;
 }
 
 // Remove client/socket
