@@ -1,5 +1,4 @@
-﻿  Grafica.cpp
-  Source.cpp
-  Generating Code...
+﻿  Source.cpp
+  LINK : C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\Debug\3DServer.exe not found or not built by the last incremental link; performing full link
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   3DServer.vcxproj -> C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\Debug\3DServer.exe

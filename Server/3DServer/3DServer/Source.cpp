@@ -136,7 +136,7 @@ void processConnections() {
 						// Add to our clients
 						pendingClients.push_back(protoClient);
 					}
-				} else {
+				} else { 
 					// Our non-server socket has something on the queue
 					int j = -1;
 					for (j = pendingClients.size() - 1; j >= 0 && (pendingClients[j]._sockid != i); j--);
