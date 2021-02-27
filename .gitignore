@@ -18,4 +18,8 @@
 /Server/3DServer/TestOpenGL/Release
 /Server/3DServer/TestOpenGL/x64
 
+/Server/3DServer/CodeTests/Debug
+/Server/3DServer/CodeTests/Release
+/Server/3DServer/CodeTests/x64
+
 /Server/3DServer/packages

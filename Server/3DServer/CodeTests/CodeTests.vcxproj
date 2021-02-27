@@ -67,7 +67,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>$(SolutionDir)\Libraries\glew-2.1.0\lib\Release\Win32;$(SolutionDir)\Libraries\glfw-3.3.2.bin.WIN32\lib-vc2019;$(SolutionDir)\Libraries\freeglut\lib;$(SolutionDir)\3DServer\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;freeglut.lib;ws2_32.lib;Grafica.obj;Source.obj;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;freeglut.lib;ws2_32.lib;Grafica.obj;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

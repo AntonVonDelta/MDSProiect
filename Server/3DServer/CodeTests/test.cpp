@@ -1,16 +1,14 @@
 #include "pch.h"
+#include "../3DServer/Grafica.h"
 
 int test1(int a, int b) {
 	return a + b;
 }
 
-void processConnections();
-void meme();
-
 TEST(TestCaseName, TestDummyFunction) {
-  EXPECT_EQ(test1(10,12),10+12);
-  EXPECT_TRUE(true);
-  meme();
-}
+	EXPECT_EQ(test1(10, 12), 10 + 12);
+	EXPECT_TRUE(true);
 
-int main() { return 0; }
+	Grafica test;
+	cout<<(unsigned int)test.getBuffer();
+}
