@@ -26,10 +26,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Definitions.h">
+    <ClInclude Include="Grafica.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Grafica.h">
+    <ClInclude Include="SocketHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

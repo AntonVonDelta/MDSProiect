@@ -67,8 +67,6 @@ bool Grafica::init() {
 }
 
 void Grafica::setSize(int window_width, int window_height) {
-	if (!init_succesful) return;
-
 	width = window_width;
 	height = window_height;
 
@@ -76,6 +74,7 @@ void Grafica::setSize(int window_width, int window_height) {
 	delete[] buffer;
 	buffer = new char[width * height * 4];
 
+	if (!init_succesful) return;
 	glfwSetWindowSize(window, width, height);
 }
 

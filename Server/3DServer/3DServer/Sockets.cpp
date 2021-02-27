@@ -6,10 +6,13 @@
 #include <Windows.h>
 #include <WinSock2.h>
 #include <WS2tcpip.h>
-#include "Definitions.h"
+#include "SocketHelper.h"
 #include "Grafica.h"
 
+// Store data about the http client - perhaps login info etc.
+//	struct CLIENT_DESCRIPTOR;
 
+struct CLIENT_STRUCTURE;
 
 Grafica render;
 SOCKET listening_socket;
