@@ -1,5 +1,7 @@
-﻿glfw3.lib(win32_window.obj) : error LNK2001: unresolved external symbol __imp__DragQueryFileW@16
-glfw3.lib(win32_window.obj) : error LNK2001: unresolved external symbol __imp__DragQueryPoint@8
-glfw3.lib(win32_window.obj) : error LNK2001: unresolved external symbol __imp__DragFinish@4
-glfw3.lib(win32_window.obj) : error LNK2001: unresolved external symbol __imp__DragAcceptFiles@8
-C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\Release\3DServer.exe : fatal error LNK1120: 4 unresolved externals
+﻿  Grafica.cpp
+  Source.cpp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 104 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  3DServer.vcxproj -> C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\Release\3DServer.exe
