@@ -1,8 +1,7 @@
 #pragma once
-
 #include <Windows.h>
 #include <WinSock2.h>
-#include <ws2tcpip.h>
+#include<WS2tcpip.h>
 
 // Store data about the http client - perhaps login info etc.
 //struct CLIENT_DESCRIPTOR {

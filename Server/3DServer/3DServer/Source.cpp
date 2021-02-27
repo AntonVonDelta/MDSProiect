@@ -1,9 +1,11 @@
+#define WIN32_LEAN_AND_MEAN // Stop the compiler from using "extra" definitions from windows.h which already includes some version of winsock
+
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <Windows.h>
 #include <WinSock2.h>
-#include <ws2tcpip.h>
+#include<WS2tcpip.h>
 #include "Definitions.h"
 #include "Grafica.h"
 
@@ -15,6 +17,7 @@ int server_port = 5050;
 fd_set master, read_fds;
 vector<CLIENT_STRUCTURE> pendingClients;
 
+void parser(CLIENT_STRUCTURE&);
 
 int main() {
 	SOCKADDR_IN server_config;
@@ -75,7 +78,6 @@ void ProcessConnections() {
 	SOCKET client;
 
 	timeval timeout = { 0 , 500000 };
-	time_t  currentTime, lastPingTime;
 
 	FD_ZERO(&master);
 	FD_ZERO(&read_fds);
@@ -104,7 +106,7 @@ void ProcessConnections() {
 
 						memset(&protoClient, 0, sizeof(protoClient));
 						protoClient._sockid = client;
-						strcpy(protoClient.address, InetNtopA(clientinfo.sin_family, &(clientinfo.sin_addr), strAddr, INET6_ADDRSTRLEN));
+						strcpy_s(protoClient.address, INET6_ADDRSTRLEN,InetNtopA(clientinfo.sin_family, &(clientinfo.sin_addr), strAddr, INET6_ADDRSTRLEN));
 
 						// Set timeout for recv command - or else it will block
 						DWORD maxWaitTime = 5000;
@@ -133,6 +135,8 @@ void parser(CLIENT_STRUCTURE &client) {
 
 // Remove client/socket
 void closeSelectedClient(CLIENT_STRUCTURE& client) {
+	int j;
+
 	closesocket(client._sockid);
 
 	FD_CLR(client._sockid, &master);
