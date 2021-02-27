@@ -5,7 +5,7 @@
 #include <vector>
 #include <Windows.h>
 #include <WinSock2.h>
-#include<WS2tcpip.h>
+#include <WS2tcpip.h>
 #include "Definitions.h"
 #include "Grafica.h"
 
@@ -163,6 +163,8 @@ bool parser(CLIENT_STRUCTURE &client) {
 	printf("Received: %s", buff);
 
 	delete[] buff;
+
+	return true;
 }
 
 // Block until all bytes are received
