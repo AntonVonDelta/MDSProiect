@@ -149,20 +149,8 @@ void processConnections() {
 
 bool parser(CLIENT_STRUCTURE &client) {
 	// Http parser goes here - this is called when the socket has data on the buffer to be read
-
-	char* buff = new char[HTTP_HEADER_MAX_SIZE];
-	bool parser_result = false;
-
-	if (!(parser_result = recvAll(client, buff, 200))) {
-		closeSelectedClient(client);
-		delete[] buff;
-		return false;
-	}
-
-	buff[200 - 1] = 0;
-	printf("Received: %s", buff);
-
-	delete[] buff;
+	
+	return true;
 }
 
 // Block until all bytes are received
