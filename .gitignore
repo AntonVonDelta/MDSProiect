@@ -7,10 +7,11 @@
 # We don't want garbage to be commited everytime
 /Server/3DServer/Debug
 /Server/3DServer/Release
+/Server/3DServer/x64
 
 # Here are stored logs of the builds
-/Server/3DServer/3DServer/Debug
-/Server/3DServer/3DServer/Release
-/Server/3DServer/3DServer/x64
+/Server/3DServer/TestOpenGL/Debug
+/Server/3DServer/TestOpenGL/Release
+/Server/3DServer/TestOpenGL/x64
 
 /Server/3DServer/packages
