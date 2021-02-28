@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3DServer", "3DServer\3DServ
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeTests", "CodeTests\CodeTests.vcxproj", "{396F0AF7-8050-4F62-BCC2-E8F748AF3B6E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ServerTests", "ServerTests\ServerTests.vcxproj", "{7D572452-B3BF-4750-8527-618E0F287843}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{396F0AF7-8050-4F62-BCC2-E8F748AF3B6E}.Release|x64.Build.0 = Release|x64
 		{396F0AF7-8050-4F62-BCC2-E8F748AF3B6E}.Release|x86.ActiveCfg = Release|Win32
 		{396F0AF7-8050-4F62-BCC2-E8F748AF3B6E}.Release|x86.Build.0 = Release|Win32
+		{7D572452-B3BF-4750-8527-618E0F287843}.Debug|x64.ActiveCfg = Debug|x64
+		{7D572452-B3BF-4750-8527-618E0F287843}.Debug|x64.Build.0 = Debug|x64
+		{7D572452-B3BF-4750-8527-618E0F287843}.Debug|x86.ActiveCfg = Debug|Win32
+		{7D572452-B3BF-4750-8527-618E0F287843}.Debug|x86.Build.0 = Debug|Win32
+		{7D572452-B3BF-4750-8527-618E0F287843}.Release|x64.ActiveCfg = Release|x64
+		{7D572452-B3BF-4750-8527-618E0F287843}.Release|x64.Build.0 = Release|x64
+		{7D572452-B3BF-4750-8527-618E0F287843}.Release|x86.ActiveCfg = Release|Win32
+		{7D572452-B3BF-4750-8527-618E0F287843}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
