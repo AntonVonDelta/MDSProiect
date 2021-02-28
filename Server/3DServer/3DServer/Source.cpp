@@ -31,7 +31,7 @@ int main() {
 	SOCKADDR_IN server_config;
 
 	if (!render.init()) {
-		cout << "OpenGL Init error!";
+		cout << "OpenGL Init error! ";
 		return 0;
 	}
 	printf("OpenGL initialized succesfully!");
