@@ -15,7 +15,7 @@ env:
   # Configuration type to build.
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-  BUILD_CONFIGURATION: Debug
+  BUILD_CONFIGURATION: Release #Compile and Test on release version
   BUILD_PLATFORM: x86
   
 jobs:
@@ -47,4 +47,4 @@ jobs:
   
     - name: Execute Unit Tests
       working-directory: ${{ github.workspace }} 
-      run: ${{env.SOLUTION_FILE_PATH}}\Debug\CodeTests.exe
+      run: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\CodeTests.exe
