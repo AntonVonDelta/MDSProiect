@@ -11,6 +11,7 @@
 
 using namespace std;
 
+#define HTTP_HEADER_MAX_SIZE 800
 
 // We can't write functional code in this cpp file
 // The reason is this: we need the obj files of all the cpp's to be used in unit testing. But this cpp file will be compiled to .obj file which
@@ -25,6 +26,20 @@ int main() {
 
 bool parser(CLIENT_STRUCTURE& client) {
 	// Http parser goes here - this is called when the socket has data on the buffer to be read
+
+	char* buff = new char[HTTP_HEADER_MAX_SIZE];
+	bool parser_result = false;
+
+	if (!(parser_result = recvAll(client, buff, 200))) {
+		closeSelectedClient(client);
+		delete[] buff;
+		return false;
+	}
+
+	buff[200 - 1] = 0;
+	printf("Received: %s", buff);
+
+	delete[] buff;
 
 	return true;
 }
