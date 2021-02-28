@@ -18,6 +18,9 @@
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sockets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Grafica.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -26,7 +29,7 @@
     <ClInclude Include="Grafica.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Definitions.h">
+    <ClInclude Include="Sockets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
