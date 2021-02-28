@@ -32,9 +32,9 @@ jobs:
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1
 
-#     - name: Restore NuGet packages
-#       working-directory: ${{ github.workspace }} 
-#       run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+    - name: Restore NuGet packages
+      working-directory: ${{ github.workspace }} 
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
 
     - name: Build Server
       working-directory: ${{ github.workspace }} 
@@ -47,4 +47,4 @@ jobs:
   
     - name: Execute Unit Tests
       working-directory: ${{ github.workspace }} 
-      run: vstest.console.exe /Platform:x86 ${{env.SOLUTION_FILE_PATH}}\Debug\ServerTests.exe
+      run: ${{env.SOLUTION_FILE_PATH}}\Debug\ServerTests.exe
