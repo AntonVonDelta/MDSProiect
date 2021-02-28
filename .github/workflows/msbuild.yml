@@ -9,11 +9,13 @@ on: [push]
 env:
   # Path to the solution file relative to the root of the project.
   SOLUTION_FILE_PATH: ${{ github.workspace }}\Server\3DServer
-
+  SERVER_FILE_PATH: ${{ github.workspace }}\Server\3DServer\3DServer
+  TESTS_FILE_PATH: ${{ github.workspace }}\Server\3DServer\CodeTests
+  
   # Configuration type to build.
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-  BUILD_CONFIGURATION: Release
+  BUILD_CONFIGURATION: Debug
   BUILD_PLATFORM: x86
   
 jobs:
@@ -26,6 +28,7 @@ jobs:
     - name: Echo environment
       run: echo ${{ github.workspace }} 
       
+      
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1
 
@@ -33,8 +36,14 @@ jobs:
 #       working-directory: ${{ github.workspace }} 
 #       run: nuget restore ${{env.SOLUTION_FILE_PATH}}
 
-    - name: Build
+    - name: Build Server
       working-directory: ${{ github.workspace }} 
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=${{env.BUILD_PLATFORM}} ${{env.SOLUTION_FILE_PATH}}
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=${{env.BUILD_PLATFORM}} ${{env.SERVER_FILE_PATH}}
+
+    - name: Build Unit Tests
+      working-directory: ${{ github.workspace }} 
+      # Add additional options to the MSBuild command line here (like platform or verbosity level).
+      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=${{env.BUILD_PLATFORM}} ${{env.TESTS_FILE_PATH}}
