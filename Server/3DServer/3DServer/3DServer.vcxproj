@@ -155,7 +155,7 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SocketHelper.h" />
+    <ClInclude Include="Sockets.h" />
     <ClInclude Include="Grafica.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

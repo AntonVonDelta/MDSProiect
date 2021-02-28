@@ -6,7 +6,7 @@
 #include <Windows.h>
 #include <WinSock2.h>
 #include <WS2tcpip.h>
-#include "SocketHelper.h"
+#include "Sockets.h"
 #include "Grafica.h"
 
 using namespace std;
@@ -17,6 +17,8 @@ using namespace std;
 // will of course contain the definition and declaration of 'main' function. 
 // But guess what: the unit testing project already has a 'main' function. By linking the .obj file there will be a conflict
 // Thus we separate all the logic from this file and write it into different 'cpp' files
+
+
 int main() {
 	return server_start();
 }

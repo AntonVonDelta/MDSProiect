@@ -29,7 +29,7 @@
     <ClInclude Include="Grafica.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SocketHelper.h">
+    <ClInclude Include="Sockets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

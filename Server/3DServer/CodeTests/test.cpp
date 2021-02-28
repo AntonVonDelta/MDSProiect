@@ -8,7 +8,7 @@
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 
-#include "../3DServer/SocketHelper.h"
+#include "../3DServer/Sockets.h"
 #include "../3DServer/Grafica.h"
 
 // To add new class for unit testing:
