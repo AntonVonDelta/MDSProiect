@@ -9,7 +9,7 @@
 #include "Definitions.h"
 #include "Grafica.h"
 
-using namespace std;
+using namespace std; 
 
 #define HTTP_HEADER_MAX_SIZE 800
 
