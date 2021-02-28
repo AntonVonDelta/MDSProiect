@@ -47,4 +47,4 @@ jobs:
   
     - name: Execute Unit Tests
       working-directory: ${{ github.workspace }} 
-      run: vstest.console.exe /Platform:x86 ${{env.SOLUTION_FILE_PATH}}\Debug\CodeTests.dll
+      run: vstest.console.exe /Platform:x86 ${{env.SOLUTION_FILE_PATH}}\Debug\ServerTests.exe
