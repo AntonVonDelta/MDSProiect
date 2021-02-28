@@ -47,4 +47,4 @@ jobs:
   
     - name: Execute Unit Tests
       working-directory: ${{ github.workspace }} 
-      run: ${{env.SOLUTION_FILE_PATH}}\Debug\CodeTests.exe
+      run: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\CodeTests.exe
