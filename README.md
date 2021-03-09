@@ -16,5 +16,6 @@ The backlog is contained here: https://github.com/AntonVonDelta/MDSProiect/proje
 Now comes with Integration!
 
 ## User Stories
+User Stories can be found here: https://github.com/AntonVonDelta/MDSProiect/blob/master/User%20Stories.txt
 
 ## Arhitectura/UML
