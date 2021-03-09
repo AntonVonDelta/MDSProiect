@@ -5,9 +5,13 @@ User Stories for the Remote3D project
 
 As a geometry passionate I want to generate a 3d object in order to better visualise it.
 
+As a geometry passionate I want to be able to select visible objects or faces with a mouse click in order to better visualise it.
+
 As a user with a slower device I don't want my computer resources to be used in the process because they are limited.
 
 As a user I want to select from a variety of objects to be rendered in order to have more options.
+
+As a user I want to generate objects from input text in order to render complex custom objects.
 
 As a user I want to be able to move the frame and see the object from more angles in order to have a better grasp of it.
 
@@ -15,4 +19,6 @@ As a user I want to have some tips on how to use the software so I can use it wi
 
 As an impatient user I want the object that is generated to move in real time so I won't have to wait very long.
 
-As an  I computer science passionate want to get a feedback on what is happening behind the screen so I can better understand how the software is working.
+As an computer science passionate I want to get a feedback on what is happening behind the screen so I can better understand how the software is working.
+
+As a user I want to viewing screen to be resizable so that I better visualize the objects.
