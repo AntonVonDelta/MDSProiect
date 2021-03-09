@@ -15,12 +15,12 @@ The server will provide an http-compatible api for manipulating the scene. The s
 - Reznicencu Sergiu
 
 ## Backlog
-The backlog is contained here: https://github.com/AntonVonDelta/MDSProiect/projects/
+The backlog is contained here: [Backlog!](https://github.com/AntonVonDelta/MDSProiect/projects/)
 
 ## Unit Tests/Integration
-Now comes with Integration!
+The code tests for the server components: [Unit Tests!](https://github.com/AntonVonDelta/MDSProiect/tree/master/Server/3DServer/CodeTests)
 
 ## User Stories
-User Stories can be found here: https://github.com/AntonVonDelta/MDSProiect/blob/master/User%20Stories.txt
+User Stories can be found here: [User Stories!](https://github.com/AntonVonDelta/MDSProiect/blob/master/User%20Stories.txt)
 
 ## Arhitectura/UML
