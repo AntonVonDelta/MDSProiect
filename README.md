@@ -24,7 +24,7 @@ The code tests for the server components: [Unit Tests!](https://github.com/Anton
 User Stories can be found here: [User Stories!](https://github.com/AntonVonDelta/MDSProiect/blob/master/User%20Stories.txt)
 
 ## Bug reports
-Issues found here: [#3!](https://github.com/AntonVonDelta/MDSProiect/issues/3), [#15!](https://github.com/AntonVonDelta/MDSProiect/issues/15)
+Issues found here: [#3!](https://github.com/AntonVonDelta/MDSProiect/issues/3) and [#15!](https://github.com/AntonVonDelta/MDSProiect/issues/15)
 
 ## Arhitectura/UML
 In progress...
