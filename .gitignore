@@ -1,16 +1,15 @@
-﻿################################################################################
+################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
 /Server/3DServer/.vs/3DServer/v16
 
-
 # Ignore all Debug/Release folders - those that contain compiled code and intermediary objects(such as logs and objs)
-Debug
-Release
-x64
+Debug/
+Release/
+x64/
 
-# Except the Release folder which includes useful executables
+# Except the first Release folder that contains functional code
 !/Server/3DServer/Release
 
 # No packages
