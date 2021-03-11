@@ -12,6 +12,8 @@ x64/
 # Except the first Release folder that contains functional code
 !/Server/3DServer/Release/*.exe
 !/Server/3DServer/x64/Release/*.exe
+!/Server/3DServer/Release/*.dll
+!/Server/3DServer/x64/Release/*.dll
 
 # No packages
 /Server/3DServer/packages
