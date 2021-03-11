@@ -17,7 +17,7 @@ from PIL import Image
 # cv2.imwrite('RandomColor.png', bgrImage)
 
 
-path=r"C:\Users\Sergiu\Desktop\Documente Facultate\Anul2\Sem2\MDS\Server\3DServer\3DServer\img.bin"
+path=r"..\TestOpenGL\img.bin"
 
 # image_data = np.array(bytearray(os.urandom(65536))) 
 image_data=np.fromfile(path,dtype="uint8")

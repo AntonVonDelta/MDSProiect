@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include "Sockets.h"
 #include "Grafica.h"
+#include <fstream>
 
 using namespace std;
 

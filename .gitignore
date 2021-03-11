@@ -9,8 +9,9 @@ Debug/
 Release/
 x64/
 
-# Except the first Release folder that contains functional code
+# Further filtering will be done in these folders
 !/Server/3DServer/Release
+!/Server/3DServer/Debug
 
 # No packages
 /Server/3DServer/packages
