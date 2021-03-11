@@ -14,3 +14,6 @@ x64/
 
 # No packages
 /Server/3DServer/packages
+
+# Dependency directories
+node_modules/
