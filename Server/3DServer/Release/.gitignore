@@ -1,0 +1,8 @@
+/*
+
+# Except the first Release folder that contains functional code
+!/*.exe
+!/*.exe
+!/*.dll
+!/*.dll
+!/.gitignore
