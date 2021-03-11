@@ -8,6 +8,7 @@ One can easily use our web interface to talk to and receive responses from our c
 - Achimescu Valentin
 - Vilceanu Razvan-Arthur
 - Reznicencu Sergiu
+- Vlad Pirlog
 
 ## Backlog
 The backlog is contained here: https://github.com/AntonVonDelta/MDSProiect/projects/
