@@ -13,6 +13,7 @@ The server will provide an http-compatible api for manipulating the scene. The s
 - Achimescu Valentin
 - Vilceanu Razvan-Arthur
 - Reznicencu Sergiu
+- Vlad Pirlog
 
 ## Backlog
 The backlog is contained here: [Backlog!](https://github.com/AntonVonDelta/MDSProiect/projects/)
