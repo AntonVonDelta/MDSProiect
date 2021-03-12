@@ -2,10 +2,20 @@
 
 Grafica::Grafica() {
 	buffer = new char[width * height * 4];
+	object_definition = new Vertex[8];
+
+	/* Setup cube vertex data. */
+	object_definition[0].x = object_definition[1].x = object_definition[2].x = object_definition[3].x = -1;
+	object_definition[4].x = object_definition[5].x = object_definition[6].x = object_definition[7].x = 1;
+	object_definition[0].y = object_definition[1].y = object_definition[4].y = object_definition[5].y = -1;
+	object_definition[2].y = object_definition[3].y = object_definition[6].y = object_definition[7].y = 1;
+	object_definition[0].z = object_definition[3].z = object_definition[4].z = object_definition[7].z = 1;
+	object_definition[1].z = object_definition[2].z = object_definition[5].z = object_definition[6].z = -1;
 }
 
 Grafica::~Grafica() {
 	delete[] buffer;
+	delete[] object_definition;
 }
 
 void Grafica::destroy() {
@@ -17,7 +27,7 @@ void Grafica::destroy() {
 		glfwTerminate();
 	}
 }
-// Create context for openGL. This creates a hidden window; no drawing is performed on it
+
 bool Grafica::init() {
 	bool error = false;
 
@@ -79,13 +89,7 @@ void Grafica::setSize(int window_width, int window_height) {
 }
 
 void Grafica::initScene() {
-	/* Setup cube vertex data. */
-	v[0][0] = v[1][0] = v[2][0] = v[3][0] = -1;
-	v[4][0] = v[5][0] = v[6][0] = v[7][0] = 1;
-	v[0][1] = v[1][1] = v[4][1] = v[5][1] = -1;
-	v[2][1] = v[3][1] = v[6][1] = v[7][1] = 1;
-	v[0][2] = v[3][2] = v[4][2] = v[7][2] = 1;
-	v[1][2] = v[2][2] = v[5][2] = v[6][2] = -1;
+
 
 	/* Enable a single OpenGL light. */
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
@@ -187,4 +191,11 @@ void Grafica::rotateScene(int direction) {
 			glRotatef(-rotate_amount, 1.0, 0.0, 0.0);
 			break;
 	}
+}
+
+bool Grafica::loadObject(string input) {
+	// Process data and fill vertexes in memory
+
+	
+	return true;
 }
