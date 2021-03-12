@@ -5,15 +5,93 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            background-color: #eee;
+        }
+
+        #progress-bar-container {
+            border-radius: 2rem;
+            height: 2rem;
+            margin: 1.5rem;
+            background-color: lightgrey;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            border-top-right-radius: 2rem;
+            border-bottom-right-radius: 2rem;
+            height: 100%;
+            width: 0;
+            font-size: large;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #20bf55;
+            animation: move 2s linear infinite;
+            background-image: linear-gradient(-45deg,
+                    rgba(255, 255, 255, 0.2) 25%,
+                    transparent 25%,
+                    transparent 50%,
+                    rgba(255, 255, 255, 0.2) 50%,
+                    rgba(255, 255, 255, 0.2) 75%,
+                    transparent 75%,
+                    transparent);
+            background-size: 120px 120px;
+            background-position: left;
+        }
+
+        #progress-bar-text-container {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #progress-bar-text {
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        #my-cnv {
+            width: 720px;
+            height: 480px;
+        }
+
+        @keyframes move {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 120px 120px;
+            }
+        }
+    </style>
     <title>Document</title>
 </head>
 
 <body>
-    <button type="button" id="my-btn-xsmall">Get XSmall Image</button>
-    <button type="button" id="my-btn-small">Get Small Image</button>
-    <button type="button" id="my-btn-medium">Get Medium Image</button>
+    <div>
+        <button type="button" id="my-btn-xsmall">Get XSmall Image</button>
+        <button type="button" id="my-btn-small">Get Small Image</button>
+        <button type="button" id="my-btn-medium">Get Medium Image</button>
+        <div id="progress-bar-container">
+            <div id="progress-bar-text-container">
+                <span id="progress-bar-text">Click a button to start the stream</span>
+            </div>
+            <div id="progress-bar"></div>
+        </div>
+    </div>
 
-    <canvas id="my-cnv" width="1920px" height="1280px" style="width: 720px; height: 480px;"></canvas>
+    <canvas id="my-cnv" width="1920px" height="1280px"></canvas>
     <script src="/script.js"></script>
 </body>
 
