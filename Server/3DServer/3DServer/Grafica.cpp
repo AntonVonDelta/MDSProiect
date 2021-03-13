@@ -2,20 +2,10 @@
 
 Grafica::Grafica() {
 	buffer = new char[width * height * 4];
-	object_definition = new Vertex[8];
-
-	/* Setup cube vertex data. */
-	object_definition[0].x = object_definition[1].x = object_definition[2].x = object_definition[3].x = -1;
-	object_definition[4].x = object_definition[5].x = object_definition[6].x = object_definition[7].x = 1;
-	object_definition[0].y = object_definition[1].y = object_definition[4].y = object_definition[5].y = -1;
-	object_definition[2].y = object_definition[3].y = object_definition[6].y = object_definition[7].y = 1;
-	object_definition[0].z = object_definition[3].z = object_definition[4].z = object_definition[7].z = 1;
-	object_definition[1].z = object_definition[2].z = object_definition[5].z = object_definition[6].z = -1;
 }
 
 Grafica::~Grafica() {
 	delete[] buffer;
-	delete[] object_definition;
 }
 
 void Grafica::destroy() {
@@ -193,9 +183,52 @@ void Grafica::rotateScene(int direction) {
 	}
 }
 
-bool Grafica::loadObject(string input) {
+void Grafica::loadObject(string input) {
 	// Process data and fill vertexes in memory
+	vector<Vertex> corners;
+	vector<Triangle> scene_data;
 
-	
-	return true;
+	istringstream stream(input);
+	string line;
+
+
+	while (getline(stream, line)) {
+		istringstream line_stream(line);
+		string mode;
+		line_stream >> mode;
+
+		if (mode == "v") {
+			// Process the vertex
+			Vertex temp;
+			line_stream >> temp.x;
+			line_stream >> temp.y;
+			line_stream >> temp.z;
+
+			if (line_stream.fail() || line_stream.bad()) throw runtime_error(string("Error on reading vertex data: ") + line);
+			corners.push_back(temp);
+		}
+		if (mode == "f") {
+			Triangle temp;
+			int vertex_index;
+
+			line_stream >> vertex_index;
+			temp.v[0] = corners[vertex_index - 1];
+
+			line_stream >> vertex_index;
+			temp.v[1] = corners[vertex_index - 1];
+
+			line_stream >> vertex_index;
+			temp.v[2] = corners[vertex_index - 1];
+
+			if (line_stream.fail() || line_stream.bad()) throw runtime_error(string("Error on reading triangle data: ") + line);
+
+			scene_data.push_back(temp);
+		}
+
+		continue;
+	}
+
+	if (scene_data.size() == 0) throw runtime_error("Error on final size: 0 triangles");
+
+	object_definition = scene_data;
 }

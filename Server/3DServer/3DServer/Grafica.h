@@ -3,6 +3,8 @@
 #include<cstring>
 #include <vector>
 #include<string>
+#include <sstream>
+#include <algorithm>
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
@@ -13,6 +15,11 @@ using namespace std;
 struct Vertex {
 	float x, y, z;
 };
+
+struct Triangle {
+	Vertex v[3];
+};
+
 class Grafica {
 	bool init_succesful = false;
 
@@ -35,7 +42,7 @@ class Grafica {
 	  {4, 5, 1, 0}, {5, 6, 2, 1}, {7, 4, 0, 3} };
 	GLfloat v[8][3];  /* Will be filled in with X,Y,Z vertexes. */
 
-	Vertex* object_definition=NULL;
+	vector<Triangle> object_definition;
 
 	void initScene();
 	void drawBox();
@@ -86,5 +93,5 @@ public:
 	/// <param name="direction"></param>
 	void rotateScene(int direction);
 
-	bool loadObject(string input);
+	void loadObject(string input);
 };
