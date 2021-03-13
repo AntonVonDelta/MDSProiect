@@ -19,5 +19,5 @@ The `index.ts` file will be compiled into `index.js` using the configuration fro
 ## Lint and fix the TypeScript files
 
 ```bash
-npm run build
+npm run lint
 ```
