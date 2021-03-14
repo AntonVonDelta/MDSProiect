@@ -21,6 +21,7 @@ struct Triangle {
 };
 
 class Grafica {
+protected:
 	bool init_succesful = false;
 
 	float move_amount = 1;
@@ -85,5 +86,8 @@ public:
 	/// <param name="direction"></param>
 	void rotateScene(int direction);
 
+	// Loads the object given
+	// The format is plain ascii string following the ascii standard
+	// This function throws exception if the format is malformed. The what() function provides user-readeable code
 	void loadObject(string input);
 };
