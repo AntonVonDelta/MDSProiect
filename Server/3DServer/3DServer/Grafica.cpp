@@ -79,7 +79,8 @@ void Grafica::setSize(int window_width, int window_height) {
 }
 
 void Grafica::initScene() {
-
+	// Reset the internal rotation/translation matrixes 
+	glLoadIdentity();
 
 	/* Enable a single OpenGL light. */
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
@@ -107,16 +108,12 @@ void Grafica::initScene() {
 }
 
 
-void Grafica::drawBox(void) {
-	int i;
-
-	for (i = 0; i < 6; i++) {
-		glBegin(GL_QUADS);
-		glNormal3fv(&n[i][0]);
-		glVertex3fv(&v[faces[i][0]][0]);
-		glVertex3fv(&v[faces[i][1]][0]);
-		glVertex3fv(&v[faces[i][2]][0]);
-		glVertex3fv(&v[faces[i][3]][0]);
+void Grafica::drawScene(void) {
+	for (const Triangle& triangle:object_definition) {
+		glBegin(GL_TRIANGLES);
+		glVertex3f(triangle.v[0].x, triangle.v[0].y, triangle.v[0].z);
+		glVertex3f(triangle.v[1].x, triangle.v[1].y, triangle.v[1].z);
+		glVertex3f(triangle.v[2].x, triangle.v[2].y, triangle.v[2].z);
 		glEnd();
 	}
 }
@@ -129,7 +126,7 @@ void Grafica::nextScence() {
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	drawBox();
+	drawScene();
 
 	// Copy pixel memory to buffer
 	glReadBuffer(GL_COLOR_ATTACHMENT0);
@@ -174,7 +171,7 @@ void Grafica::moveScene(int direction) {
 void Grafica::rotateScene(int direction) {
 	switch (direction) {
 		case 0:
-			glRotatef(rotate_amount, 1.0, 0.0, 0.0);
+			glRotatef(rotate_amount, 0.0, 1.0, 0.0);
 			break;
 
 		case 1:
@@ -229,6 +226,9 @@ void Grafica::loadObject(string input) {
 	}
 
 	if (scene_data.size() == 0) throw runtime_error("Error on final size: 0 triangles");
+
+	// Reinitialize the scene
+	initScene();
 
 	object_definition = scene_data;
 }
