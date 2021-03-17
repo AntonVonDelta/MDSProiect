@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -p .",
-    "lint": "eslint ./*.ts --fix"
+    "lint": "eslint ./*.ts --fix",
+    "test": "node obj-regex-test.js"
   },
   "keywords": [],
   "author": "",
