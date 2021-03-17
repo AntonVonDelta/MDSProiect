@@ -28,11 +28,15 @@ jobs:
         
     - name: Install dependencies    
       working-directory: ${{ github.workspace }}\Client\scene-renderer
-      run: npm ci
+      run: npm install
       
     - name: Build project
       working-directory: ${{ github.workspace }}\Client\scene-renderer
       run: npm run build --if-present
+      
+    - name: Compile TypeScript
+      working-directory: ${{ github.workspace }}\Client\scene-renderer
+      run: npm run lint
       
     - name: Running tests 
       working-directory: ${{ github.workspace }}\Client\scene-renderer
