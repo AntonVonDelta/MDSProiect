@@ -55,5 +55,6 @@ jobs:
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
+        automatic_release_tag: 'latest'
         files: |
           ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\3DServer.exe
