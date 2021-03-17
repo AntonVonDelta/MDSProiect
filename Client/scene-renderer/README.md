@@ -21,3 +21,11 @@ The `index.ts` file will be compiled into `index.js` using the configuration fro
 ```bash
 npm run lint
 ```
+
+## Run RegExp tests
+
+Run the test for the RegExp used for validating the `.obj` string input.
+
+```bash
+npm test
+```

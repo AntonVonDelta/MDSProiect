@@ -17,6 +17,13 @@ export class SceneRenderer {
     }
 
     /**
+     * RegExp object used for validating `.obj` input strings.
+     * @private
+     * @static
+     */
+    private static _OBJ_LINE_REGEX = /^(v( -?(0|[1-9]\d*)(\.\d+)?){3,4}|vn( -?(0|[1-9]\d*)(\.\d+)?){3}|vt( (1(\.0+)?|0(\.\d+)?)){1,3}|f( [1-9]\d*((\/([1-9]\d*)?)?\/[1-9]\d*)?){3,})$/
+
+    /**
      * Map for translating moving directions into API opcodes.
      * @private
      * @static
@@ -41,6 +48,16 @@ export class SceneRenderer {
     }
 
     /**
+     * Map used for acquiring the image size from the custom HTTP headers.
+     * @private
+     * @static
+     */
+    private static _IMAGE_SIZE_HEADERS = {
+        WIDTH: 'X-Image-Width',
+        HEIGHT: 'X-Image-Height'
+    }
+
+    /**
      * Flag used for signaling current user's authentication status.
      * @private
      */
@@ -48,7 +65,7 @@ export class SceneRenderer {
 
     /**
      * Function that authenticates the user in order to start the video feed.
-     * @returns a promise that resolves to `true` if the request succeeded, else throws an error
+     * @returns a promise that resolves to an object with `width` and `height` properties (the size of the image)
      * @throws `AlreadyLoggedInError`, `CannotGetCookieError`, `UnknownStatusCodeError`
      * @async
      */
@@ -60,19 +77,33 @@ export class SceneRenderer {
         if (res.status !== 200) throw new UnknownStatusCodeError()
 
         this._loggedIn = true
-        return true
+        const imageWidthHeader = res.headers.get(SceneRenderer._IMAGE_SIZE_HEADERS.WIDTH)
+        const imageHeightHeader = res.headers.get(SceneRenderer._IMAGE_SIZE_HEADERS.HEIGHT)
+
+        const imageWidth = imageWidthHeader ? parseInt(imageWidthHeader) : 720
+        const imageHeight = imageHeightHeader ? parseInt(imageHeightHeader) : 480
+
+        return { width: imageWidth, height: imageHeight }
     }
 
     /**
      * Function that sends a `.obj` formatted string to the server in order to render it.
      * @param data a string representing the user input in a `.obj` format
      * @returns a promise that resolves to `true` if the request succeeded, else throws an error
-     * @throws `UnauthorizedError`, `UnknownStatusCodeError`
+     * @throws `UnauthorizedError`, `MalformedDataError`, `UnknownStatusCodeError`
      * @see https://www.cs.cmu.edu/~mbz/personal/graphics/obj.html
      * @async
      */
     public async loadFromText (data: string) {
         if (!this._loggedIn) throw new UnauthorizedError()
+
+        const validLines = data
+            .split('\n')
+            .map(line => line.trim())
+            .filter(line => line.length > 0 && !line.startsWith('#'))
+        if (!validLines.every(line => SceneRenderer._OBJ_LINE_REGEX.test(line))) {
+            throw new MalformedDataError()
+        }
 
         const res = await fetch(SceneRenderer._ENDPOINTS.LOAD, {
             credentials: 'same-origin',
@@ -83,6 +114,9 @@ export class SceneRenderer {
         if (res.status === 404) {
             this._loggedIn = false
             throw new UnauthorizedError()
+        }
+        if (res.status === 422) {
+            throw new MalformedDataError(await res.text())
         }
         if (res.status !== 200) throw new UnknownStatusCodeError()
         return true
@@ -119,7 +153,7 @@ export class SceneRenderer {
      * @param direction the axis of rotation
      * @param amount number of degrees to rotate the object by; positive means counter-clockwise rotation
      * and negative means clockwise rotation
-     * @returns a promise that resolves to true if the request succeeded, else throws an error
+     * @returns a promise that resolves to `true` if the request succeeded, else throws an error
      * @throws `UnauthorizedError`, `UnknownStatusCodeError`
      * @async
      */
@@ -162,6 +196,12 @@ export class UnknownStatusCodeError extends Error {
 
 export class CannotGetCookieError extends Error {
     constructor (message = 'Cannot Get Cookie') {
+        super(message)
+    }
+}
+
+export class MalformedDataError extends Error {
+    constructor (message = 'Malformed Data') {
         super(message)
     }
 }
