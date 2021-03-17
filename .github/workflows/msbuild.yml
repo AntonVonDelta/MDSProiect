@@ -51,10 +51,11 @@ jobs:
       
       
     - name: Publish release version
-      uses: "marvinpinto/action-automatic-releases@latest"
+      uses: svenstaro/upload-release-action@v2
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        prerelease: false
-        automatic_release_tag: 'latest'
-        files: |
-          ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\3DServer.exe
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\3DServer.exe
+        asset_name: Server.exe
+        tag: ${{ github.ref }}
+        overwrite: true
+        body: "Server executable - Release version"
