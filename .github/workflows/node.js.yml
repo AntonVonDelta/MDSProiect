@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x, 15.x]
+        node-version: [12.x, 14.x, 15.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -31,17 +31,17 @@ jobs:
         node-version: ${{ matrix.node-version }}
         
     - name: Install dependencies    
-      working-directory: ${{ github.workspace }}
-      run: npm install ${{ env.SOLUTION_FILE_PATH }}
+      working-directory: ${{ env.SOLUTION_FILE_PATH }}
+      run: npm install
       
     - name: Build project
       working-directory:  ${{ env.SOLUTION_FILE_PATH }}
       run: npm run build
       
     - name: Compile TypeScript
-      working-directory: ${{ github.workspace }}
-      run: npm run lint ${{ env.SOLUTION_FILE_PATH }}
+      working-directory: ${{ env.SOLUTION_FILE_PATH }}
+      run: npm run lint 
       
     - name: Running tests 
-      working-directory: ${{ github.workspace }}
-      run: npm test ${{ env.SOLUTION_FILE_PATH }}
+      working-directory: ${{ env.SOLUTION_FILE_PATH }}
+      run: npm test
