@@ -28,4 +28,4 @@ User Stories can be found here: [User Stories](https://github.com/AntonVonDelta/
 Issues found here: [#3](https://github.com/AntonVonDelta/MDSProiect/issues/3) and [#15](https://github.com/AntonVonDelta/MDSProiect/issues/15)
 
 ## Arhitectura/UML
-In progress...
+In progress. ..
