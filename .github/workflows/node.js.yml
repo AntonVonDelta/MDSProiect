@@ -8,7 +8,11 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-    
+  
+env:
+  # Path to the solution file relative to the root of the project.
+  SOLUTION_FILE_PATH: ${{ github.workspace }}\Client\scene-renderer
+  
 jobs:
   build:
 
@@ -27,17 +31,17 @@ jobs:
         node-version: ${{ matrix.node-version }}
         
     - name: Install dependencies    
-      working-directory: ${{ github.workspace }}\Client\scene-renderer
-      run: npm install
+      working-directory: ${{ github.workspace }}
+      run: npm install ${{ env.SOLUTION_FILE_PATH }}
       
     - name: Build project
-      working-directory: ${{ github.workspace }}\Client\scene-renderer
-      run: npm run build --if-present
+      working-directory: ${{ github.workspace }}
+      run: npm run build ${{ env.SOLUTION_FILE_PATH }}
       
     - name: Compile TypeScript
-      working-directory: ${{ github.workspace }}\Client\scene-renderer
-      run: npm run lint
+      working-directory: ${{ github.workspace }}
+      run: npm run lint ${{ env.SOLUTION_FILE_PATH }}
       
     - name: Running tests 
-      working-directory: ${{ github.workspace }}\Client\scene-renderer
-      run: npm test
+      working-directory: ${{ github.workspace }}
+      run: npm test ${{ env.SOLUTION_FILE_PATH }}
