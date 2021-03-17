@@ -68,7 +68,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\3DServer.exe
-        asset_name: Server
+        asset_name: Server.exe
         asset_content_type: application/exe
 
     - uses: eregon/publish-release@v1
