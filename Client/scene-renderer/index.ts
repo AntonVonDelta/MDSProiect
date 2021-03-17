@@ -73,7 +73,7 @@ export class SceneRenderer {
         if (this._loggedIn) throw new AlreadyLoggedInError()
 
         const res = await fetch(SceneRenderer._ENDPOINTS.LOGIN, { credentials: 'same-origin' })
-        if (res.status === 409) throw new CannotGetCookieError(await res.text())
+        if (res.status === 409) throw new CannotGetCookieError()
         if (res.status !== 200) throw new UnknownStatusCodeError()
 
         this._loggedIn = true
