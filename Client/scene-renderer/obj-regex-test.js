@@ -105,4 +105,7 @@ tests.forEach(([test, expected]) => {
     }
 })
 console.log(`Ran ${tests.length} test(s).`)
+if (numTestsFailed > 0) {
+    throw new Error(`${numTestsFailed} test(s) failed.`)
+}
 console.log(`${numTestsFailed} test(s) failed.`)
