@@ -35,8 +35,8 @@ jobs:
       run: npm install ${{ env.SOLUTION_FILE_PATH }}
       
     - name: Build project
-      working-directory: ${{ github.workspace }}
-      run: npm run build ${{ env.SOLUTION_FILE_PATH }}
+      working-directory:  ${{ env.SOLUTION_FILE_PATH }}
+      run: npm run build
       
     - name: Compile TypeScript
       working-directory: ${{ github.workspace }}
