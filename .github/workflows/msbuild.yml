@@ -50,30 +50,10 @@ jobs:
       run: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\CodeTests.exe
       
       
-      
-    - name: Create Draft Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TAG: $(git rev-parse --short "$GITHUB_SHA")
+    - name: Publish release version
+      uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        tag_name: TAG
-        release_name: "Server"
-        draft: true
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
-
-    - uses: actions/upload-release-asset@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\3DServer.exe
-        asset_name: Server.exe
-        asset_content_type: application/exe
-
-    - uses: eregon/publish-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        release_id: ${{ steps.create_release.outputs.id }}
+        files: |
+          ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\3DServer.exe
