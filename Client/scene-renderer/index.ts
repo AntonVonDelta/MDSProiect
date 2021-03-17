@@ -48,6 +48,16 @@ export class SceneRenderer {
     }
 
     /**
+     * Map used for acquiring the image size from the custom HTTP headers.
+     * @private
+     * @static
+     */
+    private static _IMAGE_SIZE_HEADERS = {
+        WIDTH: 'X-Image-Width',
+        HEIGHT: 'X-Image-Height'
+    }
+
+    /**
      * Flag used for signaling current user's authentication status.
      * @private
      */
@@ -55,7 +65,7 @@ export class SceneRenderer {
 
     /**
      * Function that authenticates the user in order to start the video feed.
-     * @returns a promise that resolves to `true` if the request succeeded, else throws an error
+     * @returns a promise that resolves to an object with `width` and `height` properties (the size of the image)
      * @throws `AlreadyLoggedInError`, `CannotGetCookieError`, `UnknownStatusCodeError`
      * @async
      */
@@ -63,11 +73,17 @@ export class SceneRenderer {
         if (this._loggedIn) throw new AlreadyLoggedInError()
 
         const res = await fetch(SceneRenderer._ENDPOINTS.LOGIN, { credentials: 'same-origin' })
-        if (res.status === 409) throw new CannotGetCookieError()
+        if (res.status === 409) throw new CannotGetCookieError(await res.text())
         if (res.status !== 200) throw new UnknownStatusCodeError()
 
         this._loggedIn = true
-        return true
+        const imageWidthHeader = res.headers.get(SceneRenderer._IMAGE_SIZE_HEADERS.WIDTH)
+        const imageHeightHeader = res.headers.get(SceneRenderer._IMAGE_SIZE_HEADERS.HEIGHT)
+
+        const imageWidth = imageWidthHeader ? parseInt(imageWidthHeader) : 720
+        const imageHeight = imageHeightHeader ? parseInt(imageHeightHeader) : 480
+
+        return { width: imageWidth, height: imageHeight }
     }
 
     /**
@@ -137,7 +153,7 @@ export class SceneRenderer {
      * @param direction the axis of rotation
      * @param amount number of degrees to rotate the object by; positive means counter-clockwise rotation
      * and negative means clockwise rotation
-     * @returns a promise that resolves to true if the request succeeded, else throws an error
+     * @returns a promise that resolves to `true` if the request succeeded, else throws an error
      * @throws `UnauthorizedError`, `UnknownStatusCodeError`
      * @async
      */
