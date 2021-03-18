@@ -65,7 +65,8 @@ export class SceneRenderer {
 
     /**
      * Function that authenticates the user in order to start the video feed.
-     * @returns a promise that resolves to an object with `width` and `height` properties (the size of the image)
+     * @returns a promise that resolves to an object with `width`, `height` (the size of the image) and
+     * `stream` (null or a ReadableStream for an UInt8Array) properties
      * @throws `AlreadyLoggedInError`, `CannotGetCookieError`, `UnknownStatusCodeError`
      * @async
      */
@@ -82,8 +83,9 @@ export class SceneRenderer {
 
         const imageWidth = imageWidthHeader ? parseInt(imageWidthHeader) : 720
         const imageHeight = imageHeightHeader ? parseInt(imageHeightHeader) : 480
+        const imageReadableStream = res.body
 
-        return { width: imageWidth, height: imageHeight }
+        return { width: imageWidth, height: imageHeight, stream: imageReadableStream }
     }
 
     /**
