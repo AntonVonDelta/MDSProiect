@@ -1,6 +1,6 @@
 # Remote3D
 #### Remote visualization and control of 3D renderings by computation offloading - with Web Interface!
-This project tackles a major issue for current 3D rendering tehnologies in the browser: limited CPU and GPU resources. Our solution is suited for mobile and low powered devices or embedded graphical systems with limited processing power or for old system incompatible with the new WegGL technology.
+This project tackles a major issue for current 3D rendering tehnologies in the browser: limited CPU and GPU resources. Our solution is suited for mobile and low powered devices or embedded graphical systems with limited processing power or for old systems incompatible with the new WegGL technology.
 
 One can easily use our web interface to talk to and receive responses from our custom built http server which processes and renders the requested scenes.
 The main ideea of the project is to offload all the GPU computation needed by the client to render an object to another server which will perform all the hard-work. When the requested scene is rendered, the memory buffer is sent in a special format accepted by the http protocol to the client which can visualise the results in their own browser.
