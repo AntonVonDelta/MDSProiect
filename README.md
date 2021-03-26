@@ -9,6 +9,8 @@ The website interface will help the user to use the platorm and will provide a m
 
 The server will provide an http-compatible api for manipulating the scene. The server will also be able to render custom built objects provided by the client through the web interface.
 
+**Download release version from [here](https://github.com/AntonVonDelta/MDSProiect/releases)**
+
 ## Team
 - Achimescu Valentin
 - Vilceanu Razvan-Arthur
