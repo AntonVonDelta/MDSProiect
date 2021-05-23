@@ -42,6 +42,7 @@ protected:
 public:
 	Grafica();
 	~Grafica();
+	Grafica(const Grafica& other);
 
 	/// <summary>
 	/// Create context for openGL. This creates a hidden window; no drawing is performed on it

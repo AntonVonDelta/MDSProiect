@@ -7,6 +7,19 @@ Grafica::Grafica() {
 Grafica::~Grafica() {
 	delete[] buffer;
 }
+Grafica::Grafica(const Grafica& other){
+	buffer = new char[width * height * 4];
+	move_amount = other.move_amount;
+	rotate_amount = other.rotate_amount;
+	width = other.width;
+	height = other.height;
+	object_definition = other.object_definition;
+
+	if (other.init_succesful) {
+		init();
+		drawScene();
+	}
+}
 
 void Grafica::destroy() {
 	if (init_succesful) {
@@ -109,7 +122,7 @@ void Grafica::initScene() {
 
 
 void Grafica::drawScene(void) {
-	for (const Triangle& triangle:object_definition) {
+	for (const Triangle& triangle : object_definition) {
 		glBegin(GL_TRIANGLES);
 		glVertex3f(triangle.v[0].x, triangle.v[0].y, triangle.v[0].z);
 		glVertex3f(triangle.v[1].x, triangle.v[1].y, triangle.v[1].z);
