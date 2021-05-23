@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include "Sockets.h"
 #include "Grafica.h"
+#include "Http.h"
 
 using namespace std;
 
@@ -23,6 +24,33 @@ int main() {
 
 bool parser(CLIENT_STRUCTURE& client) {
 	// Http parser goes here - this is called when the socket has data on the buffer to be read
-
+	Http http;
+	try {
+		HttpContext http_context = http.readHeader(client);
+		client.talksHTTP=true;
+		string opt = http_context.get_param("page");
+		if (opt == "/api/login")
+		{
+			http_context.init_Grafica();
+			map<string, string> fields;
+			http.sendResponse(http_context, 200, "dasduasdasdadjhjdasdasd", fields);
+		}
+		if (opt == "/api/load")
+		{
+			int lenght = 0;
+			if (http_context.get_param("content-length") != "")
+				lenght = stoi(http_context.get_param("content-length"));
+			string body = http.readBody(client, lenght);
+			http_context.init_Grafica();
+			http_context.get_Grafica()->loadObject(body);
+			map<string, string> fields;
+			http.sendResponse(http_context, 200, "dasduasdasdadjhjdasdasd", fields);
+			closeSelectedClient(client);
+		}
+	}
+	catch (string s)
+	{
+		printf(s.c_str());
+	}
 	return true;
 }

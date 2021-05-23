@@ -14,7 +14,6 @@
 
 struct CLIENT_STRUCTURE;
 
-Grafica render;
 SOCKET listening_socket;
 int server_port = 5050;
 fd_set master, read_fds;
@@ -29,12 +28,6 @@ void closeSelectedClient(CLIENT_STRUCTURE& client);
 
 int server_start() {
 	SOCKADDR_IN server_config;
-
-	if (!render.init()) {
-		cout << "OpenGL Init error!";
-		return 1;
-	}
-	printf("OpenGL initialized succesfully!");
 
 	// Init sockets
 	WSADATA wsaData;
@@ -75,7 +68,6 @@ int server_start() {
 
 	closesocket(listening_socket);
 	WSACleanup();
-	render.destroy();
 
 	return 0;
 }
@@ -103,7 +95,7 @@ void processConnections() {
 		FOR_EVERY_CLIENT(z) {
 			if (pendingClients[z].timeWhenConnected != -1 && current_time - pendingClients[z].timeWhenConnected > 2) {
 				pendingClients[z].timeWhenConnected = -1;	// already checked time
-				if (!isClientValid(pendingClients[z])) closeSelectedClient(pendingClients[z]);
+				//if (!isClientValid(pendingClients[z])) closeSelectedClient(pendingClients[z]);
 			}
 		}
 
