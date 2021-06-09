@@ -8,6 +8,7 @@
 #include <WS2tcpip.h>
 #include "Grafica.h"
 #include "Sockets.h"
+#include <map>
 
 // Store data about the http client - perhaps login info etc.
 //	struct CLIENT_DESCRIPTOR;
@@ -20,7 +21,7 @@ fd_set master, read_fds;
 vector<CLIENT_STRUCTURE> pendingClients;
 
 void processConnections();
-bool parser(CLIENT_STRUCTURE&);
+void parser(CLIENT_STRUCTURE&);
 bool recvAll(CLIENT_STRUCTURE& client, char* buffer, unsigned int len);
 bool sendAll(CLIENT_STRUCTURE& client, char* buffer, unsigned int len);
 bool isClientValid(CLIENT_STRUCTURE& client);
@@ -158,7 +159,7 @@ bool recvAll(CLIENT_STRUCTURE& client, char* buffer, unsigned int len) {
 }
 
 // Block till all bytes are sent
-bool sendAll(CLIENT_STRUCTURE& client, char* buffer, unsigned int len) {
+bool sendAll(CLIENT_STRUCTURE& client, const char* buffer, unsigned int len) {
 	int sentlen;
 	unsigned int sentSize = 0;
 

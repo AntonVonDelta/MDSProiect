@@ -21,8 +21,8 @@ struct CLIENT_STRUCTURE {									// define the structure for storing the detail
 
 int server_start();
 void processConnections();
-bool parser(CLIENT_STRUCTURE&);
+void parser(CLIENT_STRUCTURE&);
 bool recvAll(CLIENT_STRUCTURE& client, char* buffer, unsigned int len);
-bool sendAll(CLIENT_STRUCTURE& client, char* buffer, unsigned int len);
+bool sendAll(CLIENT_STRUCTURE& client, const char* buffer, unsigned int len);
 bool isClientValid(CLIENT_STRUCTURE& client);
 void closeSelectedClient(CLIENT_STRUCTURE& client);

@@ -1,14 +1,19 @@
 #include "Http.h"
 
-HttpContext::~HttpContext(){
-	data.destroy();	
+HttpContext::~HttpContext() {
+	closeSelectedClient(Client);
+	if (data != nullptr)
+	{
+		data->destroy();
+		delete data;
+	}
 }
 
 void HttpContext::init_Grafica() {
 	data.init();
 }
 Grafica& HttpContext::get_Grafica() {
-	return data;
+	return *data;
 }
 void HttpContext::set_request_params(map<string, string> rp) {
 	request_params = rp;
@@ -176,7 +181,7 @@ void Http::sendResponse(HttpContext& http_context,int responseCode,string body, 
 	}
 	header << "\r\n";
 	string response = header.str();
-	strcpy(buffer, response.c_str());
+	strcpy_s(buffer, response.c_str());
 	int len = strlen(buffer);
 	sendAll(http_context.getClient(), buffer, len);
 	char* cstr = new char[200];
@@ -202,4 +207,17 @@ string Http::gen_RandomId(const int len) {
 	return tmp_s;
 }
 
+void Http::sendChunk(HttpContext& http_context, const char* buffer, int len) {
+	ostringstream body_string;
+	bool result;
+	body_string << hex << body_string.tellp() << "\r\n";
+	string body = body_string.str();
+	sendAll(http_context.getClient(), body.c_str(), body_string.tellp());
+	if (len!=0)
+		result=sendAll(http_context.getClient(), buffer, len);
+	result=sendAll(http_context.getClient(), "\r\n", 2);
+	if (result == false)
+		throw "Disconnected";
+CLIENT_STRUCTURE& HttpContext::getClient() {
+	return Client;
 }

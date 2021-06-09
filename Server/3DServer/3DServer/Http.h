@@ -29,7 +29,7 @@ private:
 	map<string, string> request_params;
 	CLIENT_STRUCTURE Client;
 	string SessionId;
-	Grafica data; // This is used to store Grafica object. This is created on heap so must be destroyed on class destructor
+	Grafica *data=nullptr; // This is used to store Grafica object. This is created on heap so must be destroyed on class destructor
 public:
 	~HttpContext();
 	HttpContext() =default;
@@ -50,6 +50,6 @@ public:
 	static HttpContext* readHeader(CLIENT_STRUCTURE&);
 	static string readBody(CLIENT_STRUCTURE&, int);
 	static void sendResponse(HttpContext&,int,string,map<string,string>);
-	static void sendChunk(HttpContext&);
+	static void sendChunk(HttpContext&,const char*,int);
 };
 
