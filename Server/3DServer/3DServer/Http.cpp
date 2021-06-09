@@ -24,6 +24,11 @@ void HttpContext::setClient(CLIENT_STRUCTURE client) {
 string HttpContext::getSessionId() {
 	return SessionId;
 }
+
+CLIENT_STRUCTURE& HttpContext::getClient() {
+	return Client;
+}
+
 void HttpContext::setSessionId(string sessionId) {
 	SessionId = sessionId;
 }
@@ -149,7 +154,7 @@ void Http::sendResponse(HttpContext& http_context,int responseCode,string body, 
 {
 	char buffer[1000];
 	int n, a = 5, b = 3;
-	int response;
+	ostringstream header;
 	map<int, string> codes = {
 		{200,"200 OK"},
 		{404,"404 Not Found"},
@@ -159,11 +164,19 @@ void Http::sendResponse(HttpContext& http_context,int responseCode,string body, 
 	};
 	int content_length = body.length();
 	if(body=="" || content_length == 0)
-		response = sprintf_s(buffer,1000, "HTTP/1.1 %s\r\n", codes[responseCode].c_str());
+		header << "HTTP/1.1 " << codes[responseCode] << "\r\n";
 	else
 	{
-		response = sprintf_s(buffer,1000, "HTTP/1.1 %s\r\nContent-Type: text/html;\r\nServer: Apache\r\nConnection: Close\r\nContent-Lenght: %d\r\n\r\n", codes[responseCode].c_str(),content_length);
+		header << "HTTP/1.1 " << codes[responseCode] << "\r\nConnection: Close\r\n";
 	}
+
+	for (auto const& x : fields)
+	{
+		header << x.first << ": " << x.second << "\r\n";
+	}
+	header << "\r\n";
+	string response = header.str();
+	strcpy(buffer, response.c_str());
 	int len = strlen(buffer);
 	sendAll(http_context.getClient(), buffer, len);
 	char* cstr = new char[200];
@@ -189,6 +202,4 @@ string Http::gen_RandomId(const int len) {
 	return tmp_s;
 }
 
-CLIENT_STRUCTURE& HttpContext::getClient() {
-	return Client;
 }
