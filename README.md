@@ -1,4 +1,5 @@
 # Remote3D
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/8a32c6d90aae4017be0187b8277b907b)](https://www.codacy.com/gh/AntonVonDelta/MDSProiect/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AntonVonDelta/MDSProiect&amp;utm_campaign=Badge_Grade)
 #### Remote visualization and control of 3D renderings by computation offloading - with Web Interface!
 This project tackles a major issue for current 3D rendering tehnologies in the browser: limited CPU and GPU resources. Our solution is suited for mobile and low powered devices or embedded graphical systems with limited processing power or for old systems incompatible with the new WegGL technology.
 
