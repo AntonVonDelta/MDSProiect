@@ -55,4 +55,4 @@ jobs:
         prerelease: false
         title: "Server"
         files: |
-          ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\3DServer.exe
+          *.exe
