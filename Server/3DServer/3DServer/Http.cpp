@@ -202,4 +202,6 @@ string Http::gen_RandomId(const int len) {
 	return tmp_s;
 }
 
+void Http::sendChunk(HttpContext&) {
+
 }
