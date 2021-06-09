@@ -17,8 +17,8 @@
 // DO NOT addd the Source.obj file as it contains a definition of 'main' which will create conflicts
 
 // Dummy declaration - just for the sake of compilation
-bool parser(CLIENT_STRUCTURE& client) {
-	return 0;
+void parser(CLIENT_STRUCTURE& client) {
+	return;
 }
 
 

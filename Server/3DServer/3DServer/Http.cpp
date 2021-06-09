@@ -1,19 +1,19 @@
 #include "Http.h"
 
-HttpContext::~HttpContext()
-{
-	if (data != NULL) {
+HttpContext::~HttpContext() {
+	closeSelectedClient(Client);
+	if (data != nullptr)
+	{
 		data->destroy();
 		delete data;
-	}	
+	}
 }
 
 void HttpContext::init_Grafica() {
-	data = new Grafica;
 	data->init();
 }
-Grafica* HttpContext::get_Grafica() {
-	return data;
+Grafica& HttpContext::get_Grafica() {
+	return *data;
 }
 void HttpContext::set_request_params(map<string, string> rp) {
 	request_params = rp;
@@ -26,10 +26,21 @@ void HttpContext::setClient(CLIENT_STRUCTURE client) {
 	Client = client;
 }
 
-HttpContext Http::readHeader(CLIENT_STRUCTURE &client_struct)
-{
-	HttpContext http_context;
-	http_context.setClient(client_struct);
+string HttpContext::getSessionId() {
+	return SessionId;
+}
+
+CLIENT_STRUCTURE& HttpContext::getClient() {
+	return Client;
+}
+
+void HttpContext::setSessionId(string sessionId) {
+	SessionId = sessionId;
+}
+
+HttpContext* Http::readHeader(CLIENT_STRUCTURE &client_struct){
+	HttpContext* http_context = new HttpContext;
+	http_context->setClient(client_struct);
 	char* buff=new char[1000];
 	char *initial_buff = buff;
 	string line;
@@ -66,7 +77,7 @@ HttpContext Http::readHeader(CLIENT_STRUCTURE &client_struct)
 
 	*buff = 0;
 	string str(initial_buff);
-	printf("%s\n",str.c_str());
+	//printf("%s\n",str.c_str());
 	int poz1 = str.find(' ');
 	int poz_opt = str.find('?');
 	int poz2 = str.substr(poz1+1).find(' ');
@@ -120,9 +131,9 @@ HttpContext Http::readHeader(CLIENT_STRUCTURE &client_struct)
 		new_request_params[key]=value;
 		str = str.substr(poz2 + 2);
 	}
-	http_context.set_request_params(new_request_params);
+	http_context->set_request_params(new_request_params);
 
-	printf("%s\n", http_context.get_param("dnt").c_str());
+	printf("%s\n", http_context->get_param("dnt").c_str());
 
 	delete[] initial_buff;
 	return http_context;
@@ -148,20 +159,29 @@ void Http::sendResponse(HttpContext& http_context,int responseCode,string body, 
 {
 	char buffer[1000];
 	int n, a = 5, b = 3;
-	int response;
+	ostringstream header;
 	map<int, string> codes = {
 		{200,"200 OK"},
 		{404,"404 Not Found"},
 		{409,"409 Conflict"},
+		{422,"422 Unprocessable failure"},
 		{500,"500 Internal Server Error"}
 	};
 	int content_length = body.length();
 	if(body=="" || content_length == 0)
-		response = sprintf_s(buffer,1000, "HTTP/1.1 %s\r\n", codes[responseCode].c_str());
+		header << "HTTP/1.1 " << codes[responseCode] << "\r\n";
 	else
 	{
-		response = sprintf_s(buffer,1000, "HTTP/1.1 %s\r\nContent-Type: text/html;\r\nServer: Apache\r\nConnection: Close\r\nContent-Lenght: %d\r\n\r\n", codes[responseCode].c_str(),content_length);
+		header << "HTTP/1.1 " << codes[responseCode] << "\r\nConnection: Close\r\n";
 	}
+
+	for (auto const& x : fields)
+	{
+		header << x.first << ": " << x.second << "\r\n";
+	}
+	header << "\r\n";
+	string response = header.str();
+	strcpy_s(buffer, response.c_str());
 	int len = strlen(buffer);
 	sendAll(http_context.getClient(), buffer, len);
 	char* cstr = new char[200];
@@ -169,6 +189,33 @@ void Http::sendResponse(HttpContext& http_context,int responseCode,string body, 
 	sendAll(http_context.getClient(), cstr, body.length());
 }
 
-CLIENT_STRUCTURE& HttpContext::getClient() {
-	return Client;
+string Http::gen_RandomId(const int len) {
+
+	string tmp_s;
+	static const char alphanum[] =
+		"0123456789"
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		"abcdefghijklmnopqrstuvwxyz";
+
+	srand((unsigned)time(NULL));
+
+	tmp_s.reserve(len);
+
+	for (int i = 0; i < len; ++i)
+		tmp_s += alphanum[rand() % (sizeof(alphanum) - 1)];
+
+	return tmp_s;
+}
+
+void Http::sendChunk(HttpContext& http_context, const char* buffer, int len) {
+	ostringstream body_string;
+	bool result;
+	body_string << hex << body_string.tellp() << "\r\n";
+	string body = body_string.str();
+	sendAll(http_context.getClient(), body.c_str(), body_string.tellp());
+	if (len != 0)
+		result = sendAll(http_context.getClient(), buffer, len);
+	result = sendAll(http_context.getClient(), "\r\n", 2);
+	if (result == false)
+		throw "Disconnected";
 }
