@@ -16,7 +16,7 @@ The server will provide an http-compatible api for manipulating the scene. The s
 - Achimescu Valentin
 - Vilceanu Razvan-Arthur
 - Reznicencu Sergiu
-- Vlad Pirlog
+- Pirlog Vlad
 
 ## Backlog
 The backlog is contained here: [Backlog](https://github.com/AntonVonDelta/MDSProiect/projects/)
@@ -25,7 +25,7 @@ The backlog is contained here: [Backlog](https://github.com/AntonVonDelta/MDSPro
 The code tests for the server components: [Unit Tests](https://github.com/AntonVonDelta/MDSProiect/tree/master/Server/3DServer/CodeTests)
 
 ## User Stories
-User Stories can be found here: [User Stories](https://github.com/AntonVonDelta/MDSProiect/blob/master/User%20Stories.txt)
+User Stories can be found [here](USER_STORIES.md).
 
 ## Bug reports
 Issues found here: [#3](https://github.com/AntonVonDelta/MDSProiect/issues/3) and [#15](https://github.com/AntonVonDelta/MDSProiect/issues/15)
