@@ -82,7 +82,7 @@ void parser(CLIENT_STRUCTURE& client) {
 				string id = cookie.substr(cookie.find('='));
 				id.erase(0, 1);
 				HttpContext* video_feed = openConnections.at(id);
-				http.sendChunk(&video_feed, "", 0);
+				http.sendChunk(*video_feed, "", 0);
 				delete video_feed;
 				openConnections.erase(id);
 				http.sendResponse(*http_context, 200, "", {});

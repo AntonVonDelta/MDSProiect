@@ -10,7 +10,7 @@ HttpContext::~HttpContext() {
 }
 
 void HttpContext::init_Grafica() {
-	data.init();
+	data->init();
 }
 Grafica& HttpContext::get_Grafica() {
 	return *data;
@@ -213,11 +213,9 @@ void Http::sendChunk(HttpContext& http_context, const char* buffer, int len) {
 	body_string << hex << body_string.tellp() << "\r\n";
 	string body = body_string.str();
 	sendAll(http_context.getClient(), body.c_str(), body_string.tellp());
-	if (len!=0)
-		result=sendAll(http_context.getClient(), buffer, len);
-	result=sendAll(http_context.getClient(), "\r\n", 2);
+	if (len != 0)
+		result = sendAll(http_context.getClient(), buffer, len);
+	result = sendAll(http_context.getClient(), "\r\n", 2);
 	if (result == false)
 		throw "Disconnected";
-CLIENT_STRUCTURE& HttpContext::getClient() {
-	return Client;
 }
