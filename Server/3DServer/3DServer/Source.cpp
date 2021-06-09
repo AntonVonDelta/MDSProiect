@@ -25,26 +25,32 @@ int main() {
 bool parser(CLIENT_STRUCTURE& client) {
 	// Http parser goes here - this is called when the socket has data on the buffer to be read
 	Http http;
+	if (client.talksHTTP) return true;
+
 	try {
-		HttpContext http_context = http.readHeader(client);
+		HttpContext* http_context = http.readHeader(client);
 		client.talksHTTP=true;
-		string opt = http_context.get_param("page");
+		string opt = http_context->get_param("page");
 		if (opt == "/api/login")
 		{
-			http_context.init_Grafica();
-			map<string, string> fields;
-			http.sendResponse(http_context, 200, "dasduasdasdadjhjdasdasd", fields);
+			http_context->init_Grafica();
+			string set_value = http.gen_RandomId(20);
+			cout << set_value;
+			http.sendResponse(*http_context, 200, "dasduasdasdadjhjdasdasd", {});
 		}
 		if (opt == "/api/load")
 		{
 			int lenght = 0;
-			if (http_context.get_param("content-length") != "")
-				lenght = stoi(http_context.get_param("content-length"));
+			if (http_context->get_param("content-length") != "")
+				lenght = stoi(http_context->get_param("content-length"));
 			string body = http.readBody(client, lenght);
-			http_context.init_Grafica();
-			http_context.get_Grafica()->loadObject(body);
-			map<string, string> fields;
-			http.sendResponse(http_context, 200, "dasduasdasdadjhjdasdasd", fields);
+			try {
+				http_context->get_Grafica().loadObject(body);
+				http.sendResponse(*http_context, 200, "dasduasdasdadjhjdasdasd", {});
+			}
+			catch (runtime_error e) {
+				http.sendResponse(*http_context, 422, e.what(), {});
+			}
 			closeSelectedClient(client);
 		}
 	}

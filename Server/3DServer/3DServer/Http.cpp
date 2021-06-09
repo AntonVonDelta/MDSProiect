@@ -1,18 +1,13 @@
 #include "Http.h"
 
-HttpContext::~HttpContext()
-{
-	if (data != NULL) {
-		data->destroy();
-		delete data;
-	}	
+HttpContext::~HttpContext(){
+	data.destroy();	
 }
 
 void HttpContext::init_Grafica() {
-	data = new Grafica;
-	data->init();
+	data.init();
 }
-Grafica* HttpContext::get_Grafica() {
+Grafica& HttpContext::get_Grafica() {
 	return data;
 }
 void HttpContext::set_request_params(map<string, string> rp) {
@@ -26,10 +21,16 @@ void HttpContext::setClient(CLIENT_STRUCTURE client) {
 	Client = client;
 }
 
-HttpContext Http::readHeader(CLIENT_STRUCTURE &client_struct)
-{
-	HttpContext http_context;
-	http_context.setClient(client_struct);
+string HttpContext::getSessionId() {
+	return SessionId;
+}
+void HttpContext::setSessionId(string sessionId) {
+	SessionId = sessionId;
+}
+
+HttpContext* Http::readHeader(CLIENT_STRUCTURE &client_struct){
+	HttpContext* http_context = new HttpContext;
+	http_context->setClient(client_struct);
 	char* buff=new char[1000];
 	char *initial_buff = buff;
 	string line;
@@ -66,7 +67,7 @@ HttpContext Http::readHeader(CLIENT_STRUCTURE &client_struct)
 
 	*buff = 0;
 	string str(initial_buff);
-	printf("%s\n",str.c_str());
+	//printf("%s\n",str.c_str());
 	int poz1 = str.find(' ');
 	int poz_opt = str.find('?');
 	int poz2 = str.substr(poz1+1).find(' ');
@@ -120,9 +121,9 @@ HttpContext Http::readHeader(CLIENT_STRUCTURE &client_struct)
 		new_request_params[key]=value;
 		str = str.substr(poz2 + 2);
 	}
-	http_context.set_request_params(new_request_params);
+	http_context->set_request_params(new_request_params);
 
-	printf("%s\n", http_context.get_param("dnt").c_str());
+	printf("%s\n", http_context->get_param("dnt").c_str());
 
 	delete[] initial_buff;
 	return http_context;
@@ -153,6 +154,7 @@ void Http::sendResponse(HttpContext& http_context,int responseCode,string body, 
 		{200,"200 OK"},
 		{404,"404 Not Found"},
 		{409,"409 Conflict"},
+		{422,"422 Unprocessable failure"},
 		{500,"500 Internal Server Error"}
 	};
 	int content_length = body.length();
@@ -167,6 +169,24 @@ void Http::sendResponse(HttpContext& http_context,int responseCode,string body, 
 	char* cstr = new char[200];
 	strcpy_s(cstr,200, body.c_str());
 	sendAll(http_context.getClient(), cstr, body.length());
+}
+
+string Http::gen_RandomId(const int len) {
+
+	string tmp_s;
+	static const char alphanum[] =
+		"0123456789"
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		"abcdefghijklmnopqrstuvwxyz";
+
+	srand((unsigned)time(NULL));
+
+	tmp_s.reserve(len);
+
+	for (int i = 0; i < len; ++i)
+		tmp_s += alphanum[rand() % (sizeof(alphanum) - 1)];
+
+	return tmp_s;
 }
 
 CLIENT_STRUCTURE& HttpContext::getClient() {

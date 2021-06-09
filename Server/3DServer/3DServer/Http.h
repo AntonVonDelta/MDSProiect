@@ -28,13 +28,15 @@ class HttpContext
 private:
 	map<string, string> request_params;
 	CLIENT_STRUCTURE Client;
-	Grafica* data; // This is used to store Grafica object. This is created on heap so must be destroyed on class destructor
+	string SessionId;
+	Grafica data; // This is used to store Grafica object. This is created on heap so must be destroyed on class destructor
 public:
 	~HttpContext();
 	HttpContext() =default;
 	string getSessionId();
+	void setSessionId(string);
 	void init_Grafica();
-	Grafica* get_Grafica();
+	Grafica& get_Grafica();
 	void set_request_params(map<string, string> rp);
 	string get_param(string);
 	CLIENT_STRUCTURE& getClient();
@@ -44,7 +46,8 @@ public:
 class Http
 {
 public:
-	static HttpContext readHeader(CLIENT_STRUCTURE&);
+	static string gen_RandomId(const int);
+	static HttpContext* readHeader(CLIENT_STRUCTURE&);
 	static string readBody(CLIENT_STRUCTURE&, int);
 	static void sendResponse(HttpContext&,int,string,map<string,string>);
 	static void sendChunk(HttpContext&);
