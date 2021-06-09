@@ -51,6 +51,8 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         artifacts: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\3DServer.exe
+        allowUpdates: true
+        artifactErrorsFailBuild: true
         replacesArtifacts: true
         tag: "0.9.0"
         token: ${{ secrets.GITHUB_TOKEN }}
