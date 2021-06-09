@@ -54,6 +54,6 @@ jobs:
         allowUpdates: true
         artifactErrorsFailBuild: true
         replacesArtifacts: true
-        tag: "0.9.0"
+        tag: "0.9.5"
         token: ${{ secrets.GITHUB_TOKEN }}
         commit: "master"
