@@ -5,5 +5,7 @@
 !/*.dll
 !/.gitignore
 
+gtest.dll
 gtestd.dll
+gtest_main.dll
 gtest_maind.dll
