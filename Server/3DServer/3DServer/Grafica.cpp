@@ -257,15 +257,13 @@ void Grafica::loadObject(string input) {
 					coord_stream >> vertex_index>>junk;
 
 					if (junk == '/') {
-						if (coord_stream.peek() != '/') {
+						if (coord_stream.peek() != '/' && !coord_stream.eof()) {
 							coord_stream >> texture_index;
-							if (coord_stream.eof()) texture_index = -1;
 						}
 						coord_stream >> junk;
 
-						if (junk == '/') {
+						if (junk == '/' && !coord_stream.eof()) {
 							coord_stream >> normal_index;
-							if (coord_stream.eof()) normal_index = -1;
 						}
 					}
 					
