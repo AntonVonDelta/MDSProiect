@@ -41,15 +41,15 @@ public:
 		throw string("Context cannot be copied!");
 	}
 
-	void init_Grafica();
-	void set_request_params(map<string, string> rp);
+	void initGrafica();
+	void setRequestParams(map<string, string> rp);
 	void setClient(CLIENT_STRUCTURE);
 	void setSessionId(string);
 	void setActivity();
 
 	time_t getInactivity();
 	string getSessionId();
-	Grafica* get_Grafica();
+	Grafica* getGrafica();
 	string get_param(string);
 	CLIENT_STRUCTURE& getClient();
 };
@@ -59,7 +59,7 @@ class Http
 private:
 	static const int HEADER_BUFF_SIZE = 5000;
 public:
-	static string gen_RandomId(const int);
+	static string genRandomId(const int);
 	static HttpContext* readHeader(CLIENT_STRUCTURE&);
 	static string readBody(CLIENT_STRUCTURE&, int);
 	static void sendResponse(HttpContext&,int,string,map<string,string>);

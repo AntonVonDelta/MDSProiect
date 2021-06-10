@@ -9,14 +9,14 @@ HttpContext::~HttpContext() {
 	}
 }
 
-void HttpContext::init_Grafica() {
+void HttpContext::initGrafica() {
 	data = new Grafica;
 	if (!data->init()) throw string("Could not init the graphics!");
 }
-Grafica* HttpContext::get_Grafica() {
+Grafica* HttpContext::getGrafica() {
 	return data;
 }
-void HttpContext::set_request_params(map<string, string> rp) {
+void HttpContext::setRequestParams(map<string, string> rp) {
 	request_params = rp;
 }
 string HttpContext::get_param(string s) {
@@ -140,7 +140,7 @@ HttpContext* Http::readHeader(CLIENT_STRUCTURE &client_struct){
 
 	// Construct the http context
 	http_context->setClient(client_struct);
-	http_context->set_request_params(request_params);
+	http_context->setRequestParams(request_params);
 
 	delete[] initial_buff;
 	return http_context;
@@ -194,7 +194,7 @@ void Http::sendResponse(HttpContext& http_context,int responseCode,string body, 
 	if(!network_result) throw string("Disconnected!");
 }
 
-string Http::gen_RandomId(const int len) {
+string Http::genRandomId(const int len) {
 
 	string tmp_s;
 	static const char alphanum[] =

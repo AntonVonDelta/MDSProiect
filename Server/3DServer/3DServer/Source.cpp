@@ -47,7 +47,7 @@ void worker() {
 			}
 
 			try {
-				Grafica* grafica = connection->get_Grafica();
+				Grafica* grafica = connection->getGrafica();
 				grafica->nextScene();
 				http.sendChunk(*connection, grafica->getBuffer(), grafica->getBufferSize());
 			} catch (...) {
@@ -78,9 +78,9 @@ void parser(CLIENT_STRUCTURE& client) {
 
 		if (opt == "/api/login") 		{
 			try {
-				string generated_cookie = http.gen_RandomId(20);
-				http_context->init_Grafica();
-				http_context->get_Grafica()->nextScene();
+				string generated_cookie = http.genRandomId(20);
+				http_context->initGrafica();
+				http_context->getGrafica()->nextScene();
 
 				if (openConnections.find(generated_cookie) != openConnections.end()) {
 					http.sendResponse(*http_context, 409, "", {});
@@ -109,8 +109,8 @@ void parser(CLIENT_STRUCTURE& client) {
 					id.erase(0, 1);
 
 					HttpContext* video_feed = openConnections.at(id);
-					video_feed->get_Grafica()->loadObject(body);
-					video_feed->get_Grafica()->nextScene();
+					video_feed->getGrafica()->loadObject(body);
+					video_feed->getGrafica()->nextScene();
 					video_feed->setActivity();
 
 					http.sendResponse(*http_context, 200, "", {});
@@ -132,7 +132,7 @@ void parser(CLIENT_STRUCTURE& client) {
 				id.erase(0, 1);
 
 				HttpContext* video_feed = openConnections.at(id);
-				video_feed->get_Grafica()->moveScene(direction,amount);
+				video_feed->getGrafica()->moveScene(direction,amount);
 				video_feed->setActivity();
 
 				http.sendResponse(*http_context, 200, "", {});
@@ -151,7 +151,7 @@ void parser(CLIENT_STRUCTURE& client) {
 				id.erase(0, 1);
 
 				HttpContext* video_feed = openConnections.at(id);
-				video_feed->get_Grafica()->rotateScene(direction, amount);
+				video_feed->getGrafica()->rotateScene(direction, amount);
 				video_feed->setActivity();
 
 				http.sendResponse(*http_context, 200, "", {});
