@@ -4,3 +4,6 @@
 !/*.dll
 !/*.dll
 !/.gitignore
+
+gtestd.dll
+gtest_maind.dll
