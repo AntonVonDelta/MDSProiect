@@ -41,4 +41,3 @@ while True:
     image = Image.frombytes('RGBA', (w,h), image_data, 'raw')
 
     image.show()
-

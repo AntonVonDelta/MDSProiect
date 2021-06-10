@@ -94,22 +94,24 @@ HttpContext* Http::readHeader(CLIENT_STRUCTURE &client_struct){
 	string request_page;
 	map<string, string> request_params;
 	int poz1 = str.find(' ');
-	int poz2 = str.substr(poz1 + 1).find(' ');
+	int poz2 = str.find(' ', poz1 + 1);
 	int poz_opt = str.find('?');
 
-	if (poz_opt != -1 && poz_opt < poz2)
+	if (poz_opt != string::npos && poz_opt < poz2)
 		request_page = str.substr(poz1 + 1, poz_opt - poz1 - 1);
 	else
-		request_page = str.substr(poz1 + 1, poz2);
+		request_page = str.substr(poz1 + 1, poz2-poz1-1);
 	request_params["page"] = request_page;
 
 	// Get the requested parameters
-	if (poz_opt != -1) {
-		string opt = str.substr(poz_opt + 1, (poz2 - poz_opt - 1));
+	if (poz_opt != string::npos) {
+		string opt = str.substr(poz_opt, (poz2 - poz_opt));
 
 		// /move?direction={direction}&amount={amount}
 		// /rotate?direction={direction}&amount={amount}
 		while (opt.find('=')!=string::npos) {
+			opt = opt.erase(0, 1);
+
 			int poz_equal = opt.find('=');
 			int end= opt.find('&');
 			if (end == string::npos) {
@@ -162,7 +164,6 @@ string Http::readBody(CLIENT_STRUCTURE& client_struct, int lenth)
 
 void Http::sendResponse(HttpContext& http_context,int responseCode,string body, map<string, string> fields)
 {
-	char buffer[1000];
 	int content_length = body.length();
 	bool network_result;
 	ostringstream header;

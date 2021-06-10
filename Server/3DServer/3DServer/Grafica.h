@@ -28,8 +28,8 @@ class Grafica {
 protected:
 	bool init_succesful = false;
 
-	float move_amount = 1;
-	float rotate_amount = 10;
+	Normal move_vector;
+	Normal rotate_vector;
 
 	GLFWwindow* window;
 	GLuint fbo, render_buf[2];
@@ -47,9 +47,6 @@ public:
 	Grafica();
 	~Grafica();
 	Grafica(const Grafica& other);
-
-	void setMoveAmount(float amount) { move_amount = amount; }
-	void setRotateAmount(float amount) { rotate_amount = amount; }
 
 	/// <summary>
 	/// Create context for openGL. This creates a hidden window; no drawing is performed on it
@@ -86,13 +83,13 @@ public:
 	/// <summary>
 	/// Translates/moves the scene
 	/// </summary>
-	void moveScene(int direction);
+	void moveScene(int direction, float amount);
 
 	/// <summary>
 	/// Rotates the scene
 	/// </summary>
 	/// <param name="direction"></param>
-	void rotateScene(int direction);
+	void rotateScene(int direction,float amount);
 
 	// Loads the object given
 	// The format is plain ascii string following the ascii standard

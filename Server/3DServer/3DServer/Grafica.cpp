@@ -9,8 +9,8 @@ Grafica::~Grafica() {
 }
 Grafica::Grafica(const Grafica& other) {
 	buffer = new char[width * height * 4];
-	move_amount = other.move_amount;
-	rotate_amount = other.rotate_amount;
+	move_vector = other.move_vector;
+	rotate_vector = other.rotate_vector;
 	width = other.width;
 	height = other.height;
 	object_definition = other.object_definition;
@@ -122,6 +122,12 @@ void Grafica::initScene() {
 
 
 void Grafica::drawScene(void) {
+	glPushMatrix();
+
+	glTranslatef(move_vector.x,move_vector.y,move_vector.z);
+	glRotatef(rotate_vector.x,1.0,0,0);
+	glRotatef(rotate_vector.y, 0, 1.0, 0);
+
 	for (const Triangle& triangle : object_definition) {
 		glBegin(GL_TRIANGLES);
 		if (triangle.hasNormal) glNormal3f(triangle.normals[0].x, triangle.normals[0].y, triangle.normals[0].z);
@@ -132,6 +138,8 @@ void Grafica::drawScene(void) {
 		glVertex3f(triangle.v[2].x, triangle.v[2].y, triangle.v[2].z);
 		glEnd();
 	}
+
+	glPopMatrix();
 }
 
 void Grafica::nextScene() {
@@ -158,49 +166,43 @@ void Grafica::nextScene() {
 	//glutSwapBuffers();
 }
 
-void Grafica::moveScene(int direction) {
-	// Select current context
-	glfwMakeContextCurrent(window);
-
+void Grafica::moveScene(int direction, float amount) {
 	switch (direction) {
 		case 0:
-			glTranslatef(0.0, 0.0, move_amount);
+			move_vector.z+= amount;
 			break;
 
 		case 1:
-			glTranslatef(0.0, 0.0, -move_amount);
+			move_vector.z -= amount;
 			break;
 
 		case 2:
-			glTranslatef(move_amount, 0.0, 0.0);
+			move_vector.x += amount;
 			break;
 
 		case 3:
-			glTranslatef(-move_amount, 0.0, 0.0);
+			move_vector.x -= amount;
 			break;
 
 		case 4:
-			glTranslatef(0.0, move_amount, 0.0);
+			move_vector.y += amount;
 			break;
 
 		case 5:
-			glTranslatef(0.0, -move_amount, 0.0);
+			move_vector.y -= amount;
 			break;
 	}
 
 }
 
-void Grafica::rotateScene(int direction) {
-	// Select current context
-	glfwMakeContextCurrent(window);
-
+void Grafica::rotateScene(int direction, float amount) {
 	switch (direction) {
 		case 0:
-			glRotatef(rotate_amount, 0.0, 1.0, 0.0);
+			rotate_vector.y += amount;
 			break;
 
 		case 1:
-			glRotatef(-rotate_amount, 1.0, 0.0, 0.0);
+			rotate_vector.x += amount;
 			break;
 	}
 }
