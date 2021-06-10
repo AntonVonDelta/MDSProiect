@@ -18,9 +18,27 @@ from PIL import Image
 
 
 path=r"img.bin"
+w=300
+h=300
 
-# image_data = np.array(bytearray(os.urandom(65536))) 
-image_data=np.fromfile(path,dtype="uint8")
-image = Image.frombytes('RGBA', (300,300), image_data, 'raw')
+for filename in os.listdir("."):
+    if ".bin" in filename:
+        path=filename
+        break
 
-image.show()
+f = open(path, "rb")
+frames=int(os.path.getsize(path)/(w*h*4))
+range="0-"+str(frames-1)
+while True:
+    id=int(input("Go to image "+range+": "))
+
+    if id>=frames:
+        break
+
+    f.seek(id*w*h*4, 0)
+
+    image_data=np.fromfile(f,dtype="uint8")
+    image = Image.frombytes('RGBA', (w,h), image_data, 'raw')
+
+    image.show()
+
