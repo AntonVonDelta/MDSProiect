@@ -31,8 +31,8 @@ User Stories can be found [here](USER_STORIES.md).
 ## Bug reports
 Issues found here: [#3](https://github.com/AntonVonDelta/MDSProiect/issues/3) and [#15](https://github.com/AntonVonDelta/MDSProiect/issues/15)
 
-## Arhitectura/UML
-In progress. ..
-
 ## API
 The server API for the http protocol is found [here](https://github.com/AntonVonDelta/MDSProiect/wiki/Server-API)
+
+## Arhitectura/UML
+![Design](https://github.com/AntonVonDelta/MDSProiect/blob/master/UMLDesign.png)
