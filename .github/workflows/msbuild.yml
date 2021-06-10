@@ -26,8 +26,9 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Echo environment
-      run: echo ${{ github.workspace }} 
-      
+      run: |
+        echo ${{ github.workspace }} 
+        echo ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\3DServer.exe
       
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1
@@ -54,6 +55,6 @@ jobs:
         allowUpdates: true
         artifactErrorsFailBuild: true
         replacesArtifacts: true
-        tag: "0.9.5"
+        tag: "Release"
         token: ${{ secrets.GITHUB_TOKEN }}
         commit: "master"
