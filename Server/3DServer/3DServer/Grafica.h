@@ -15,8 +15,12 @@ using namespace std;
 struct Vertex {
 	GLfloat x, y, z;
 };
-
+struct Normal {
+	GLfloat x, y, z;
+};
 struct Triangle {
+	bool hasNormal;
+	Normal normals[3];
 	Vertex v[3];
 };
 

@@ -19,3 +19,5 @@ x64/
 # Dependency directories
 node_modules/
 /Server/3DServer/Debug Server Tools/img.bin
+/Server/3DServer/Debug/gtestd.dll
+/Server/3DServer/Debug/gtest_maind.dll

@@ -20,7 +20,10 @@
 void parser(CLIENT_STRUCTURE& client) {
 	return;
 }
-
+// Dummy declaration - just for the sake of compilation
+void worker() {
+	return;
+}
 
 class DummyGrafica:public Grafica {
 public:

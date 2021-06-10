@@ -139,8 +139,11 @@ void Grafica::initScene() {
 void Grafica::drawScene(void) {
 	for (const Triangle& triangle : object_definition) {
 		glBegin(GL_TRIANGLES);
+		if (triangle.hasNormal) glNormal3f(triangle.normals[0].x, triangle.normals[0].y, triangle.normals[0].z);
 		glVertex3f(triangle.v[0].x, triangle.v[0].y, triangle.v[0].z);
+		if (triangle.hasNormal) glNormal3f(triangle.normals[1].x, triangle.normals[1].y, triangle.normals[1].z);
 		glVertex3f(triangle.v[1].x, triangle.v[1].y, triangle.v[1].z);
+		if (triangle.hasNormal) glNormal3f(triangle.normals[2].x, triangle.normals[2].y, triangle.normals[2].z);
 		glVertex3f(triangle.v[2].x, triangle.v[2].y, triangle.v[2].z);
 		glEnd();
 	}
@@ -231,6 +234,7 @@ void Grafica::rotateScene(int direction) {
 void Grafica::loadObject(string input) {
 	// Process data and fill vertexes in memory
 	vector<Vertex> corners;
+	vector<Normal> normals;
 	vector<Triangle> scene_data;
 
 	istringstream stream(input);
@@ -252,19 +256,54 @@ void Grafica::loadObject(string input) {
 			if (line_stream.fail() || line_stream.bad()) throw runtime_error(string("Error on reading vertex data: ") + line);
 			corners.push_back(temp);
 		}
+		if (mode == "vn") {
+			// Process the vertex
+			Normal temp;
+			line_stream >> temp.x;
+			line_stream >> temp.y;
+			line_stream >> temp.z;
+
+			if (line_stream.fail() || line_stream.bad()) throw runtime_error(string("Error on reading normal data: ") + line);
+			normals.push_back(temp);
+		}
 		if (mode == "f") {
 			Triangle temp;
 			int vertex_index;
+			
+			temp.hasNormal = false;
 
 			try {
-				line_stream >> vertex_index;
-				temp.v[0] = corners.at(vertex_index - 1);
+				for (int i = 0; i < 3; i++) {
+					string coord_group;
+					line_stream >> coord_group;
+					istringstream coord_stream(coord_group);
+					int vertex_index=-1, texture_index=-1, normal_index=-1;
 
-				line_stream >> vertex_index;
-				temp.v[1] = corners.at(vertex_index - 1);
+					char junk;
+					coord_stream >> vertex_index>>junk;
 
-				line_stream >> vertex_index;
-				temp.v[2] = corners.at(vertex_index - 1);
+					if (junk == '/') {
+						if (coord_stream.peek() != '/') {
+							coord_stream >> texture_index;
+							if (coord_stream.eof()) texture_index = -1;
+						}
+						coord_stream >> junk;
+
+						if (junk == '/' && coord_stream.peek() != ' ') {
+							coord_stream >> normal_index;
+							if (coord_stream.eof()) normal_index = -1;
+						}
+					}
+					
+
+					temp.v[i] = corners.at(vertex_index-1);
+
+					if (normal_index != -1) {
+						temp.normals[i] = normals.at(normal_index-1);
+						temp.hasNormal = true;
+					}
+				}
+
 			} catch (out_of_range e) {
 				throw runtime_error(string("Index out of bounds on reading triangle data: ") + line);
 			}
