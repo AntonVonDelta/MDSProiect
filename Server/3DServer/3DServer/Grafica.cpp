@@ -263,7 +263,7 @@ void Grafica::loadObject(string input) {
 						}
 						coord_stream >> junk;
 
-						if (junk == '/' && coord_stream.peek() != ' ') {
+						if (junk == '/') {
 							coord_stream >> normal_index;
 							if (coord_stream.eof()) normal_index = -1;
 						}
