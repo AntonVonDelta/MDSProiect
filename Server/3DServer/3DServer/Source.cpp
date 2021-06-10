@@ -31,7 +31,7 @@ void worker() {
 	time_t current_time;
 	time(&current_time);
 
-	if (current_time - last_processed > 2 && a) {
+	if (current_time - last_processed > 2) {
 		last_processed = current_time;
 
 		for (auto it = openConnections.cbegin(); it != openConnections.cend();) {
