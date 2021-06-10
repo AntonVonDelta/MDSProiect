@@ -55,6 +55,6 @@ jobs:
         allowUpdates: true
         artifactErrorsFailBuild: true
         replacesArtifacts: true
-        tag: "Release"
+        tag: "latest"
         token: ${{ secrets.GITHUB_TOKEN }}
         commit: "master"
