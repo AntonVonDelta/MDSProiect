@@ -37,6 +37,12 @@ void worker() {
 		for (auto it = openConnections.cbegin(); it != openConnections.cend();) {
 			HttpContext* connection = it->second;
 
+			if (connection->getInactivity() > 20) {
+				delete connection;
+				openConnections.erase(it++);
+				continue;
+			}
+
 			try {
 				Grafica* grafica = connection->get_Grafica();
 				http.sendChunk(*connection, grafica->getBuffer(), grafica->getBufferSize());
@@ -101,6 +107,7 @@ void parser(CLIENT_STRUCTURE& client) {
 					HttpContext* video_feed = openConnections.at(id);
 					video_feed->get_Grafica()->loadObject(body);
 					video_feed->get_Grafica()->nextScene();
+					video_feed->setActivity();
 
 					http.sendResponse(*http_context, 200, "", {});
 				} catch (out_of_range) {
@@ -123,6 +130,7 @@ void parser(CLIENT_STRUCTURE& client) {
 				HttpContext* video_feed = openConnections.at(id);
 				video_feed->get_Grafica()->setMoveAmount(amount);
 				video_feed->get_Grafica()->moveScene(direction);
+				video_feed->setActivity();
 
 				http.sendResponse(*http_context, 200, "", {});
 			} catch (out_of_range) {
@@ -142,6 +150,7 @@ void parser(CLIENT_STRUCTURE& client) {
 				HttpContext* video_feed = openConnections.at(id);
 				video_feed->get_Grafica()->setRotateAmount(amount);
 				video_feed->get_Grafica()->rotateScene(direction);
+				video_feed->setActivity();
 
 				http.sendResponse(*http_context, 200, "", {});
 			} catch (out_of_range) {

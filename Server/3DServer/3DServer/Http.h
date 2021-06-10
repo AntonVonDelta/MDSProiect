@@ -30,9 +30,12 @@ private:
 	CLIENT_STRUCTURE Client;
 	string SessionId;
 	Grafica *data=nullptr; // This is used to store Grafica object. This is created on heap so must be destroyed on class destructor
+	time_t lastActivity;
 public:
 	~HttpContext();
-	HttpContext() = default;
+	HttpContext() {
+		time(&lastActivity);
+	}
 
 	HttpContext(const HttpContext & other) {
 		throw string("Context cannot be copied!");
@@ -42,7 +45,9 @@ public:
 	void set_request_params(map<string, string> rp);
 	void setClient(CLIENT_STRUCTURE);
 	void setSessionId(string);
+	void setActivity();
 
+	time_t getInactivity();
 	string getSessionId();
 	Grafica* get_Grafica();
 	string get_param(string);

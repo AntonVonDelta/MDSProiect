@@ -26,7 +26,15 @@ string HttpContext::get_param(string s) {
 void HttpContext::setClient(CLIENT_STRUCTURE client) {
 	Client = client;
 }
+void HttpContext::setActivity() {
+	time(&lastActivity);
+}
 
+time_t HttpContext::getInactivity() {
+	time_t currentTime;
+	time(&currentTime);
+	return currentTime - lastActivity;
+}
 string HttpContext::getSessionId() {
 	return SessionId;
 }

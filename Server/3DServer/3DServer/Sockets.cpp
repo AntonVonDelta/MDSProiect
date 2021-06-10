@@ -91,7 +91,7 @@ void processConnections() {
 		// Check client validity after 5 sec. timeout
 		time(&current_time);
 		FOR_EVERY_CLIENT(z) {
-			if (pendingClients[z].timeWhenConnected != -1 && current_time - pendingClients[z].timeWhenConnected > 2) {
+			if (pendingClients[z].timeWhenConnected != -1 && current_time - pendingClients[z].timeWhenConnected > 4) {
 				pendingClients[z].timeWhenConnected = -1;	// already checked time
 				if (!isClientValid(pendingClients[z])) closeSelectedClient(pendingClients[z]);
 			}
