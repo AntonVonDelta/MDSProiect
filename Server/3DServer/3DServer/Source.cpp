@@ -65,7 +65,7 @@ void parser(CLIENT_STRUCTURE& client) {
 	// Http parser goes here - this is called when the socket has data on the buffer to be read
 	Http http;
 	HttpContext* http_context = nullptr;
-	cout << "Test asset" << endl;
+
 	if (client.talksHTTP) {
 		return;
 	}
