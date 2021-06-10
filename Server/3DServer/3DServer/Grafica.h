@@ -44,6 +44,9 @@ public:
 	~Grafica();
 	Grafica(const Grafica& other);
 
+	void setMoveAmount(float amount) { move_amount = amount; }
+	void setRotateAmount(float amount) { rotate_amount = amount; }
+
 	/// <summary>
 	/// Create context for openGL. This creates a hidden window; no drawing is performed on it
 	/// </summary>
@@ -74,7 +77,7 @@ public:
 	/// <summary>
 	/// Advances the scene. Also copies the video memory to the output buffer
 	/// </summary>
-	void nextScence();
+	void nextScene();
 
 	/// <summary>
 	/// Translates/moves the scene

@@ -7,7 +7,7 @@ Grafica::Grafica() {
 Grafica::~Grafica() {
 	delete[] buffer;
 }
-Grafica::Grafica(const Grafica& other){
+Grafica::Grafica(const Grafica& other) {
 	buffer = new char[width * height * 4];
 	move_amount = other.move_amount;
 	rotate_amount = other.rotate_amount;
@@ -31,7 +31,22 @@ void Grafica::destroy() {
 	}
 }
 
+GLfloat n[6][3] = {  /* Normals for the 6 faces of a cube. */
+  {-1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {1.0, 0.0, 0.0},
+  {0.0, -1.0, 0.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, -1.0} };
+GLint faces[6][4] = {  /* Vertex indices for the 6 faces of a cube. */
+  {0, 1, 2, 3}, {3, 2, 6, 7}, {7, 6, 5, 4},
+  {4, 5, 1, 0}, {5, 6, 2, 1}, {7, 4, 0, 3} };
+GLfloat v[8][3];  /* Will be filled in with X,Y,Z vertexes. */
+
 bool Grafica::init() {
+	v[0][0] = v[1][0] = v[2][0] = v[3][0] = -1;
+	v[4][0] = v[5][0] = v[6][0] = v[7][0] = 1;
+	v[0][1] = v[1][1] = v[4][1] = v[5][1] = -1;
+	v[2][1] = v[3][1] = v[6][1] = v[7][1] = 1;
+	v[0][2] = v[3][2] = v[4][2] = v[7][2] = 1;
+	v[1][2] = v[2][2] = v[5][2] = v[6][2] = -1;
+
 	bool error = false;
 
 	// Make sure it wasn't already init'ed
@@ -129,10 +144,24 @@ void Grafica::drawScene(void) {
 		glVertex3f(triangle.v[2].x, triangle.v[2].y, triangle.v[2].z);
 		glEnd();
 	}
+	int i;
+
+	//for (i = 0; i < 6; i++) {
+	//	glBegin(GL_QUADS);
+	//	glNormal3fv(&n[i][0]);
+	//	glVertex3fv(&v[faces[i][0]][0]);
+	//	glVertex3fv(&v[faces[i][1]][0]);
+	//	glVertex3fv(&v[faces[i][2]][0]);
+	//	glVertex3fv(&v[faces[i][3]][0]);
+	//	glEnd();
+	//}
 }
 
-void Grafica::nextScence() {
+void Grafica::nextScene() {
 	if (!init_succesful) return;
+	
+	// Select current context
+	glfwMakeContextCurrent(window);
 
 	//Before drawing
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -153,6 +182,9 @@ void Grafica::nextScence() {
 }
 
 void Grafica::moveScene(int direction) {
+	// Select current context
+	glfwMakeContextCurrent(window);
+
 	switch (direction) {
 		case 0:
 			glTranslatef(0.0, 0.0, move_amount);
@@ -182,6 +214,9 @@ void Grafica::moveScene(int direction) {
 }
 
 void Grafica::rotateScene(int direction) {
+	// Select current context
+	glfwMakeContextCurrent(window);
+
 	switch (direction) {
 		case 0:
 			glRotatef(rotate_amount, 0.0, 1.0, 0.0);
@@ -221,14 +256,18 @@ void Grafica::loadObject(string input) {
 			Triangle temp;
 			int vertex_index;
 
-			line_stream >> vertex_index;
-			temp.v[0] = corners[vertex_index - 1];
+			try {
+				line_stream >> vertex_index;
+				temp.v[0] = corners.at(vertex_index - 1);
 
-			line_stream >> vertex_index;
-			temp.v[1] = corners[vertex_index - 1];
+				line_stream >> vertex_index;
+				temp.v[1] = corners.at(vertex_index - 1);
 
-			line_stream >> vertex_index;
-			temp.v[2] = corners[vertex_index - 1];
+				line_stream >> vertex_index;
+				temp.v[2] = corners.at(vertex_index - 1);
+			} catch (out_of_range e) {
+				throw runtime_error(string("Index out of bounds on reading triangle data: ") + line);
+			}
 
 			if (line_stream.fail() || line_stream.bad()) throw runtime_error(string("Error on reading triangle data: ") + line);
 
@@ -239,9 +278,6 @@ void Grafica::loadObject(string input) {
 	}
 
 	if (scene_data.size() == 0) throw runtime_error("Error on final size: 0 triangles");
-
-	// Reinitialize the scene
-	initScene();
 
 	object_definition = scene_data;
 }

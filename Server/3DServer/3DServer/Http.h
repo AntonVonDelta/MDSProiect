@@ -32,19 +32,27 @@ private:
 	Grafica *data=nullptr; // This is used to store Grafica object. This is created on heap so must be destroyed on class destructor
 public:
 	~HttpContext();
-	HttpContext() =default;
-	string getSessionId();
-	void setSessionId(string);
+	HttpContext() = default;
+
+	HttpContext(const HttpContext & other) {
+		throw string("Context cannot be copied!");
+	}
+
 	void init_Grafica();
-	Grafica& get_Grafica();
 	void set_request_params(map<string, string> rp);
+	void setClient(CLIENT_STRUCTURE);
+	void setSessionId(string);
+
+	string getSessionId();
+	Grafica* get_Grafica();
 	string get_param(string);
 	CLIENT_STRUCTURE& getClient();
-	void setClient(CLIENT_STRUCTURE);
 };
 
 class Http
 {
+private:
+	static const int HEADER_BUFF_SIZE = 5000;
 public:
 	static string gen_RandomId(const int);
 	static HttpContext* readHeader(CLIENT_STRUCTURE&);
