@@ -131,8 +131,8 @@ jobs:
           mkdir ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}
           mkdir ${{ env.OUTPUT_PATH }}
           copy index.js ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}/index.js
-          xcopy "${{ env.WEBSITE_ROOT_FILE_PATH }}" "${{ env.OUTPUT_PATH }}"
-          xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}"
+          xcopy "${{ env.WEBSITE_ROOT_FILE_PATH }}\" "${{ env.OUTPUT_PATH }}\"
+          xcopy "${{env.RELEASE_FILE_PATH}}\" "${{ env.OUTPUT_PATH }}\"
           
     - name: Archive project
       uses: papeloto/action-zip@v1
