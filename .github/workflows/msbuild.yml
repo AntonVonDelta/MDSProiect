@@ -54,7 +54,7 @@ jobs:
       run: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\CodeTests.exe
       
     - name: Save artifact
-    - uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v2
       with:
         name: server-artifact
         path: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\3DServer.exe
@@ -99,7 +99,7 @@ jobs:
         echo ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\3DServer.exe
         
     - name: Download server artifact
-    - uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v2
       with:
         name: server-artifact
 
