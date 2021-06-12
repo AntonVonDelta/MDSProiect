@@ -8,33 +8,41 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.InternalServerError = exports.MalformedDataError = exports.CannotGetCookieError = exports.UnknownStatusCodeError = exports.AlreadyLoggedInError = exports.UnauthorizedError = exports.SceneRenderer = void 0;
 /**
  * Class used for loading and interacting with the rendered objects.
  * @author Vlad Pirlog <https://github.com/vladpirlog>
  * @see https://github.com/AntonVonDelta/MDSProiect
  */
 class SceneRenderer {
-    constructor() {
+    /**
+     * @param origin the URL origin for the API calls
+     */
+    constructor(origin = '') {
         /**
          * Flag used for signaling current user's authentication status.
          * @private
          */
         this._loggedIn = false;
+        this._origin = origin;
+        this._endpoints = {
+            login: `${this._origin}/api/login`,
+            move: `${this._origin}/api/move`,
+            rotate: `${this._origin}/api/rotate`,
+            load: `${this._origin}/api/load`
+        };
     }
     /**
      * Function that authenticates the user in order to start the video feed.
      * @returns a promise that resolves to an object with `width`, `height` (the size of the image) and
      * `stream` (null or a ReadableStream for an UInt8Array) properties
-     * @throws `AlreadyLoggedInError`, `CannotGetCookieError`, `UnknownStatusCodeError`
+     * @throws `AlreadyLoggedInError`, `CannotGetCookieError`, `UnknownStatusCodeError`, `InternalServerError`
      * @async
      */
     login() {
         return __awaiter(this, void 0, void 0, function* () {
             if (this._loggedIn)
                 throw new AlreadyLoggedInError();
-            const res = yield fetch(SceneRenderer._ENDPOINTS.LOGIN, { credentials: 'same-origin' });
+            const res = yield fetch(this._endpoints.login, { credentials: 'same-origin' });
             if (res.status === 500)
                 throw new InternalServerError(yield res.text());
             if (res.status === 409)
@@ -54,7 +62,7 @@ class SceneRenderer {
      * Function that sends a `.obj` formatted string to the server in order to render it.
      * @param data a string representing the user input in a `.obj` format
      * @returns a promise that resolves to `true` if the request succeeded, else throws an error
-     * @throws `UnauthorizedError`, `MalformedDataError`, `UnknownStatusCodeError`
+     * @throws `UnauthorizedError`, `MalformedDataError`, `UnknownStatusCodeError`, `InternalServerError`
      * @see https://www.cs.cmu.edu/~mbz/personal/graphics/obj.html
      * @async
      */
@@ -69,7 +77,7 @@ class SceneRenderer {
             if (!validLines.every(line => SceneRenderer._OBJ_LINE_REGEX.test(line))) {
                 throw new MalformedDataError();
             }
-            const res = yield fetch(SceneRenderer._ENDPOINTS.LOAD, {
+            const res = yield fetch(this._endpoints.load, {
                 credentials: 'same-origin',
                 body: data,
                 method: 'POST',
@@ -94,7 +102,7 @@ class SceneRenderer {
      * @param direction positive or negative movement along one of the 3 axes
      * @param amount number of units to move in the given direction
      * @returns a promise that resolves to `true` if the request succeeded, else throws an error
-     * @throws `UnauthorizedError`, `UnknownStatusCodeError`
+     * @throws `UnauthorizedError`, `UnknownStatusCodeError`, `InternalServerError`
      * @async
      */
     move(direction, amount) {
@@ -104,7 +112,7 @@ class SceneRenderer {
             const queryParams = new URLSearchParams();
             queryParams.append('direction', SceneRenderer._MOVE_DIRECTION_OPCODES[direction].toString());
             queryParams.append('amount', amount.toString());
-            const fullPath = SceneRenderer._ENDPOINTS.MOVE + '&' + queryParams.toString();
+            const fullPath = this._endpoints.move + '&' + queryParams.toString();
             const res = yield fetch(fullPath, { credentials: 'same-origin' });
             if (res.status === 500)
                 throw new InternalServerError(yield res.text());
@@ -123,7 +131,7 @@ class SceneRenderer {
      * @param amount number of degrees to rotate the object by; positive means counter-clockwise rotation
      * and negative means clockwise rotation
      * @returns a promise that resolves to `true` if the request succeeded, else throws an error
-     * @throws `UnauthorizedError`, `UnknownStatusCodeError`
+     * @throws `UnauthorizedError`, `UnknownStatusCodeError`, `InternalServerError`
      * @async
      */
     rotate(direction, amount) {
@@ -133,7 +141,7 @@ class SceneRenderer {
             const queryParams = new URLSearchParams();
             queryParams.append('direction', SceneRenderer._ROTATE_DIRECTION_OPCODES[direction].toString());
             queryParams.append('amount', amount.toString());
-            const fullPath = SceneRenderer._ENDPOINTS.ROTATE + '&' + queryParams.toString();
+            const fullPath = this._endpoints.rotate + '&' + queryParams.toString();
             const res = yield fetch(fullPath, { credentials: 'same-origin' });
             if (res.status === 500)
                 throw new InternalServerError(yield res.text());
@@ -147,18 +155,6 @@ class SceneRenderer {
         });
     }
 }
-exports.SceneRenderer = SceneRenderer;
-/**
- * Map for translating actions into API endpoints.
- * @private
- * @static
- */
-SceneRenderer._ENDPOINTS = {
-    LOGIN: '/api/login',
-    MOVE: '/api/move',
-    ROTATE: '/api/rotate',
-    LOAD: '/api/load'
-};
 /**
  * RegExp object used for validating `.obj` input strings.
  * @private
@@ -201,34 +197,28 @@ class UnauthorizedError extends Error {
         super(message);
     }
 }
-exports.UnauthorizedError = UnauthorizedError;
 class AlreadyLoggedInError extends Error {
     constructor(message = 'Already Logged In') {
         super(message);
     }
 }
-exports.AlreadyLoggedInError = AlreadyLoggedInError;
 class UnknownStatusCodeError extends Error {
     constructor(message = 'Unknown Status Code') {
         super(message);
     }
 }
-exports.UnknownStatusCodeError = UnknownStatusCodeError;
 class CannotGetCookieError extends Error {
     constructor(message = 'Cannot Get Cookie') {
         super(message);
     }
 }
-exports.CannotGetCookieError = CannotGetCookieError;
 class MalformedDataError extends Error {
     constructor(message = 'Malformed Data') {
         super(message);
     }
 }
-exports.MalformedDataError = MalformedDataError;
 class InternalServerError extends Error {
     constructor(message = 'Internal Server Error') {
         super(message);
     }
 }
-exports.InternalServerError = InternalServerError;
