@@ -119,13 +119,6 @@ jobs:
         name: client-artifact
         path: ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}\index.js
         
-    - name: Test
-      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
-      run: |
-          dir "${{ env.WEBSITE_ROOT_FILE_PATH }}"
-          dir "${{env.RELEASE_FILE_PATH}}"
-          dir "${{ env.OUTPUT_PATH }}"
-          
     - name: Publishing client library
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
@@ -134,19 +127,12 @@ jobs:
           git add index.js ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}\index.js
           git commit -am "Automated build of client library"
           git push --force
-
-    - name: Test
-      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
-      run: |
-          dir "${{ env.WEBSITE_ROOT_FILE_PATH }}"
-          dir "${{env.RELEASE_FILE_PATH}}"
-          dir "${{ env.OUTPUT_PATH }}"
           
     - name: Constructing output folder
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
-          xcopy "${{ env.WEBSITE_ROOT_FILE_PATH }}" "${{ env.OUTPUT_PATH }}\" /s /e /y
-          xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\" /s /e /y
+          xcopy "${{ env.WEBSITE_ROOT_FILE_PATH }}" "${{ env.OUTPUT_PATH }}\www" /i /s /e /y
+          xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\" /i /s /e /y
           dir "${{ env.OUTPUT_PATH }}"
           
     - name: Test
