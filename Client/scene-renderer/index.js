@@ -8,8 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.InternalServerError = exports.MalformedDataError = exports.CannotGetCookieError = exports.UnknownStatusCodeError = exports.AlreadyLoggedInError = exports.UnauthorizedError = exports.SceneRenderer = void 0;
 /**
  * Class used for loading and interacting with the rendered objects.
  * @author Vlad Pirlog <https://github.com/vladpirlog>
@@ -27,7 +25,7 @@ class SceneRenderer {
      * Function that authenticates the user in order to start the video feed.
      * @returns a promise that resolves to an object with `width`, `height` (the size of the image) and
      * `stream` (null or a ReadableStream for an UInt8Array) properties
-     * @throws `AlreadyLoggedInError`, `CannotGetCookieError`, `UnknownStatusCodeError`
+     * @throws `AlreadyLoggedInError`, `CannotGetCookieError`, `UnknownStatusCodeError`, `InternalServerError`
      * @async
      */
     login() {
@@ -54,7 +52,7 @@ class SceneRenderer {
      * Function that sends a `.obj` formatted string to the server in order to render it.
      * @param data a string representing the user input in a `.obj` format
      * @returns a promise that resolves to `true` if the request succeeded, else throws an error
-     * @throws `UnauthorizedError`, `MalformedDataError`, `UnknownStatusCodeError`
+     * @throws `UnauthorizedError`, `MalformedDataError`, `UnknownStatusCodeError`, `InternalServerError`
      * @see https://www.cs.cmu.edu/~mbz/personal/graphics/obj.html
      * @async
      */
@@ -94,7 +92,7 @@ class SceneRenderer {
      * @param direction positive or negative movement along one of the 3 axes
      * @param amount number of units to move in the given direction
      * @returns a promise that resolves to `true` if the request succeeded, else throws an error
-     * @throws `UnauthorizedError`, `UnknownStatusCodeError`
+     * @throws `UnauthorizedError`, `UnknownStatusCodeError`, `InternalServerError`
      * @async
      */
     move(direction, amount) {
@@ -123,7 +121,7 @@ class SceneRenderer {
      * @param amount number of degrees to rotate the object by; positive means counter-clockwise rotation
      * and negative means clockwise rotation
      * @returns a promise that resolves to `true` if the request succeeded, else throws an error
-     * @throws `UnauthorizedError`, `UnknownStatusCodeError`
+     * @throws `UnauthorizedError`, `UnknownStatusCodeError`, `InternalServerError`
      * @async
      */
     rotate(direction, amount) {
@@ -147,7 +145,6 @@ class SceneRenderer {
         });
     }
 }
-exports.SceneRenderer = SceneRenderer;
 /**
  * Map for translating actions into API endpoints.
  * @private
@@ -201,34 +198,28 @@ class UnauthorizedError extends Error {
         super(message);
     }
 }
-exports.UnauthorizedError = UnauthorizedError;
 class AlreadyLoggedInError extends Error {
     constructor(message = 'Already Logged In') {
         super(message);
     }
 }
-exports.AlreadyLoggedInError = AlreadyLoggedInError;
 class UnknownStatusCodeError extends Error {
     constructor(message = 'Unknown Status Code') {
         super(message);
     }
 }
-exports.UnknownStatusCodeError = UnknownStatusCodeError;
 class CannotGetCookieError extends Error {
     constructor(message = 'Cannot Get Cookie') {
         super(message);
     }
 }
-exports.CannotGetCookieError = CannotGetCookieError;
 class MalformedDataError extends Error {
     constructor(message = 'Malformed Data') {
         super(message);
     }
 }
-exports.MalformedDataError = MalformedDataError;
 class InternalServerError extends Error {
     constructor(message = 'Internal Server Error') {
         super(message);
     }
 }
-exports.InternalServerError = InternalServerError;
