@@ -48,7 +48,7 @@ jobs:
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=${{env.BUILD_PLATFORM}} ${{env.SOLUTION_FILE_PATH}}
-  
+
     - name: Execute Unit Tests
       working-directory: ${{ github.workspace }} 
       run: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\CodeTests.exe
@@ -61,10 +61,42 @@ jobs:
         if-no-files-found: error 
         retention-days: 1
         
-
-  publish:
+      
+  tests_client:
     runs-on: windows-latest
     needs: tests_server
+    if: success()
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Use Node.js 15.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: '15.x'
+        
+    - name: Install dependencies    
+      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
+      run: npm install
+      
+    - name: Build project
+      working-directory:  ${{ env.CLIENT_SOLUTION_FILE_PATH }}
+      run: npm run build
+      
+    - name: Running tests 
+      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
+      run: npm test
+      
+    - name: Save artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: client-artifact
+        path: ${{ env.CLIENT_SOLUTION_FILE_PATH }}\index.js
+        if-no-files-found: error 
+        retention-days: 1
+        
+  publish:
+    runs-on: windows-latest
+    needs: tests_client
     if: success() && github.ref == 'refs/heads/master'
 
     steps:
@@ -81,19 +113,12 @@ jobs:
         name: server-artifact
         path: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}
         
-    - name: Use Node.js 15.x
-      uses: actions/setup-node@v1
+    - name: Download client artifact
+      uses: actions/download-artifact@v2
       with:
-        node-version: '15.x'
-
-    - name: Install dependencies    
-      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
-      run: npm install
-
-    - name: Build project
-      working-directory:  ${{ env.CLIENT_SOLUTION_FILE_PATH }}
-      run: npm run build
-
+        name: client-artifact
+        path: ${{ env.CLIENT_SOLUTION_FILE_PATH }}\index.js
+        
     - name: Publishing client library
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
@@ -117,4 +142,15 @@ jobs:
       with:
         files: ${{ env.OUTPUT_PATH }}
         recursive: true
-        dest: latest.zip
+        dest: remote3d.zip
+
+    - name: Publish release version
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: remote3d.zip
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        replacesArtifacts: true
+        tag: "latest"
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit: "master"
