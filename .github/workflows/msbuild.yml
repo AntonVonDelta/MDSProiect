@@ -48,7 +48,7 @@ jobs:
       run: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\CodeTests.exe
       
   publish:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: tests
     if: success() && github.ref == 'refs/heads/master'
 
