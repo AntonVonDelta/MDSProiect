@@ -5,18 +5,6 @@
  */
 class SceneRenderer {
     /**
-     * Map for translating actions into API endpoints.
-     * @private
-     * @static
-     */
-    private static _ENDPOINTS = {
-        LOGIN: '/api/login',
-        MOVE: '/api/move',
-        ROTATE: '/api/rotate',
-        LOAD: '/api/load'
-    }
-
-    /**
      * RegExp object used for validating `.obj` input strings.
      * @private
      * @static
@@ -64,6 +52,31 @@ class SceneRenderer {
     private _loggedIn = false
 
     /**
+     * The URL origin for the API calls.
+     * @private
+     */
+    private _origin: string
+
+    /**
+     * Map for translating actions into API endpoints.
+     * @private
+     */
+    private _endpoints: { login: string, move: string, rotate: string, load: string }
+
+    /**
+     * @param origin the URL origin for the API calls
+     */
+    public constructor(origin = '') {
+        this._origin = origin
+        this._endpoints = {
+            login: `${this._origin}/api/login`,
+            move: `${this._origin}/api/move`,
+            rotate: `${this._origin}/api/rotate`,
+            load: `${this._origin}/api/load`
+        }
+    }
+
+    /**
      * Function that authenticates the user in order to start the video feed.
      * @returns a promise that resolves to an object with `width`, `height` (the size of the image) and
      * `stream` (null or a ReadableStream for an UInt8Array) properties
@@ -73,7 +86,7 @@ class SceneRenderer {
     public async login () {
         if (this._loggedIn) throw new AlreadyLoggedInError()
 
-        const res = await fetch(SceneRenderer._ENDPOINTS.LOGIN, { credentials: 'same-origin' })
+        const res = await fetch(this._endpoints.login, { credentials: 'same-origin' })
         if (res.status === 500) throw new InternalServerError(await res.text())
         if (res.status === 409) throw new CannotGetCookieError()
         if (res.status !== 200) throw new UnknownStatusCodeError()
@@ -108,7 +121,7 @@ class SceneRenderer {
             throw new MalformedDataError()
         }
 
-        const res = await fetch(SceneRenderer._ENDPOINTS.LOAD, {
+        const res = await fetch(this._endpoints.load, {
             credentials: 'same-origin',
             body: data,
             method: 'POST',
@@ -141,7 +154,7 @@ class SceneRenderer {
         queryParams.append('direction', SceneRenderer._MOVE_DIRECTION_OPCODES[direction].toString())
         queryParams.append('amount', amount.toString())
 
-        const fullPath = SceneRenderer._ENDPOINTS.MOVE + '&' + queryParams.toString()
+        const fullPath = this._endpoints.move + '&' + queryParams.toString()
 
         const res = await fetch(fullPath, { credentials: 'same-origin' })
         if (res.status === 500) throw new InternalServerError(await res.text())
@@ -169,7 +182,7 @@ class SceneRenderer {
         queryParams.append('direction', SceneRenderer._ROTATE_DIRECTION_OPCODES[direction].toString())
         queryParams.append('amount', amount.toString())
 
-        const fullPath = SceneRenderer._ENDPOINTS.ROTATE + '&' + queryParams.toString()
+        const fullPath = this._endpoints.rotate + '&' + queryParams.toString()
 
         const res = await fetch(fullPath, { credentials: 'same-origin' })
         if (res.status === 500) throw new InternalServerError(await res.text())
