@@ -143,14 +143,14 @@ jobs:
           dir "${{ env.OUTPUT_PATH }}"
           
     - name: Archive project
-      working-directory: ${{ env.OUTPUT_PATH }}
+      working-directory: ${{ env.PROJECT_ROOT }}
       run: |
         7z a Remote3D.zip "${{ env.OUTPUT_PATH }}"
 
     - name: Publish release version
       uses: ncipollo/release-action@v1
       with:
-        artifacts: Remote3D.zip
+        artifacts: ${{ env.PROJECT_ROOT }}\Remote3D.zip
         allowUpdates: true
         artifactErrorsFailBuild: true
         replacesArtifacts: true
