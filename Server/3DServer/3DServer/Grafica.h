@@ -61,6 +61,9 @@ public:
 	bool isInitialized() { return init_succesful; }
 
 	void setSize(int, int);
+	int getWidth();
+	int getHeight();
+
 	/// <summary>
 	/// Get pointer to internal memory buffer. Do not delete this memory!
 	/// </summary>

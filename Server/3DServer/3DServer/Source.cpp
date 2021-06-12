@@ -72,7 +72,7 @@ void parser(CLIENT_STRUCTURE& client) {
 
 	try {
 		http_context = http.readHeader(client);
-		string opt = http_context->get_param("page");
+		string opt = http_context->getParam("page");
 
 		client.talksHTTP = true;
 
@@ -89,7 +89,9 @@ void parser(CLIENT_STRUCTURE& client) {
 					http.sendResponse(*http_context, 200, "", {
 						{string("Set-Cookie"), string("session=") + generated_cookie},
 						{string("Transfer-Encoding"), string("chunked")},
-						{string("Content-Type"), string("application/octet-stream")}
+						{string("Content-Type"), string("application/octet-stream")},
+						{string("X-Image-Width"), to_string(http_context->getGrafica()->getWidth())},
+						{string("X-Image-Height"), to_string(http_context->getGrafica()->getHeight())}
 						});
 					return;
 				}
@@ -99,12 +101,12 @@ void parser(CLIENT_STRUCTURE& client) {
 		}
 		if (opt == "/api/load") 		{
 			int lenght = 0;
-			if (http_context->get_param("content-length") != "") {
-				lenght = stoi(http_context->get_param("content-length"));
+			if (http_context->getParam("content-length") != "") {
+				lenght = stoi(http_context->getParam("content-length"));
 				string body = http.readBody(client, lenght);
 
 				try {
-					string cookie = http_context->get_param("cookie");
+					string cookie = http_context->getParam("cookie");
 					string id = cookie.substr(cookie.find('='));
 					id.erase(0, 1);
 
@@ -125,9 +127,9 @@ void parser(CLIENT_STRUCTURE& client) {
 		}
 		if (opt == "/api/move") {
 			try {
-				string cookie = http_context->get_param("cookie");
-				int direction= stoi(http_context->get_param("direction"));
-				float amount = stof(http_context->get_param("amount"));
+				string cookie = http_context->getParam("cookie");
+				int direction= stoi(http_context->getParam("direction"));
+				float amount = stof(http_context->getParam("amount"));
 				string id = cookie.substr(cookie.find('='));
 				id.erase(0, 1);
 
@@ -144,9 +146,9 @@ void parser(CLIENT_STRUCTURE& client) {
 		}
 		if (opt == "/api/rotate") {
 			try {
-				string cookie = http_context->get_param("cookie");
-				int direction = stoi(http_context->get_param("direction"));
-				float amount = stof(http_context->get_param("amount"));
+				string cookie = http_context->getParam("cookie");
+				int direction = stoi(http_context->getParam("direction"));
+				float amount = stof(http_context->getParam("amount"));
 				string id = cookie.substr(cookie.find('='));
 				id.erase(0, 1);
 
@@ -163,7 +165,7 @@ void parser(CLIENT_STRUCTURE& client) {
 		}
 		if (opt == "/api/close") 		{
 			try {
-				string cookie = http_context->get_param("cookie");
+				string cookie = http_context->getParam("cookie");
 				string id = cookie.substr(cookie.find('='));
 				id.erase(0, 1);
 

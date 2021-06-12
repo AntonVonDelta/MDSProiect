@@ -90,6 +90,15 @@ void Grafica::setSize(int window_width, int window_height) {
 	if (!init_succesful) return;
 	glfwSetWindowSize(window, width, height);
 }
+int Grafica::getWidth() {
+	return width;
+}
+
+int Grafica::getHeight() {
+	return height;
+}
+
+
 
 void Grafica::initScene() {
 	// Reset the internal rotation/translation matrixes 
@@ -195,6 +204,7 @@ void Grafica::moveScene(int direction, float amount) {
 
 }
 
+
 void Grafica::rotateScene(int direction, float amount) {
 	switch (direction) {
 		case 0:
@@ -244,7 +254,6 @@ void Grafica::loadObject(string input) {
 		}
 		if (mode == "f") {
 			Triangle temp;
-			int vertex_index;
 			
 			temp.hasNormal = false;
 

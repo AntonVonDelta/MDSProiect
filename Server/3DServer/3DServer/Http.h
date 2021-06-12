@@ -50,7 +50,7 @@ public:
 	time_t getInactivity();
 	string getSessionId();
 	Grafica* getGrafica();
-	string get_param(string);
+	string getParam(string);
 	CLIENT_STRUCTURE& getClient();
 };
 

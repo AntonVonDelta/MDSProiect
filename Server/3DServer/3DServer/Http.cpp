@@ -19,7 +19,7 @@ Grafica* HttpContext::getGrafica() {
 void HttpContext::setRequestParams(map<string, string> rp) {
 	request_params = rp;
 }
-string HttpContext::get_param(string s) {
+string HttpContext::getParam(string s) {
 	return request_params[s];
 }
 
