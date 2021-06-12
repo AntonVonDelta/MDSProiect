@@ -14,12 +14,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
  * @see https://github.com/AntonVonDelta/MDSProiect
  */
 class SceneRenderer {
-    constructor() {
+    /**
+     * @param origin the URL origin for the API calls
+     */
+    constructor(origin = '') {
         /**
          * Flag used for signaling current user's authentication status.
          * @private
          */
         this._loggedIn = false;
+        this._origin = origin;
+        this._endpoints = {
+            login: `${this._origin}/api/login`,
+            move: `${this._origin}/api/move`,
+            rotate: `${this._origin}/api/rotate`,
+            load: `${this._origin}/api/load`
+        };
     }
     /**
      * Function that authenticates the user in order to start the video feed.
@@ -32,7 +42,7 @@ class SceneRenderer {
         return __awaiter(this, void 0, void 0, function* () {
             if (this._loggedIn)
                 throw new AlreadyLoggedInError();
-            const res = yield fetch(SceneRenderer._ENDPOINTS.LOGIN, { credentials: 'same-origin' });
+            const res = yield fetch(this._endpoints.login, { credentials: 'same-origin' });
             if (res.status === 500)
                 throw new InternalServerError(yield res.text());
             if (res.status === 409)
@@ -67,7 +77,7 @@ class SceneRenderer {
             if (!validLines.every(line => SceneRenderer._OBJ_LINE_REGEX.test(line))) {
                 throw new MalformedDataError();
             }
-            const res = yield fetch(SceneRenderer._ENDPOINTS.LOAD, {
+            const res = yield fetch(this._endpoints.load, {
                 credentials: 'same-origin',
                 body: data,
                 method: 'POST',
@@ -102,7 +112,7 @@ class SceneRenderer {
             const queryParams = new URLSearchParams();
             queryParams.append('direction', SceneRenderer._MOVE_DIRECTION_OPCODES[direction].toString());
             queryParams.append('amount', amount.toString());
-            const fullPath = SceneRenderer._ENDPOINTS.MOVE + '&' + queryParams.toString();
+            const fullPath = this._endpoints.move + '&' + queryParams.toString();
             const res = yield fetch(fullPath, { credentials: 'same-origin' });
             if (res.status === 500)
                 throw new InternalServerError(yield res.text());
@@ -131,7 +141,7 @@ class SceneRenderer {
             const queryParams = new URLSearchParams();
             queryParams.append('direction', SceneRenderer._ROTATE_DIRECTION_OPCODES[direction].toString());
             queryParams.append('amount', amount.toString());
-            const fullPath = SceneRenderer._ENDPOINTS.ROTATE + '&' + queryParams.toString();
+            const fullPath = this._endpoints.rotate + '&' + queryParams.toString();
             const res = yield fetch(fullPath, { credentials: 'same-origin' });
             if (res.status === 500)
                 throw new InternalServerError(yield res.text());
@@ -145,17 +155,6 @@ class SceneRenderer {
         });
     }
 }
-/**
- * Map for translating actions into API endpoints.
- * @private
- * @static
- */
-SceneRenderer._ENDPOINTS = {
-    LOGIN: '/api/login',
-    MOVE: '/api/move',
-    ROTATE: '/api/rotate',
-    LOAD: '/api/load'
-};
 /**
  * RegExp object used for validating `.obj` input strings.
  * @private
