@@ -111,7 +111,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: server-artifact
-        path: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}
+        path: ${{ env.OUTPUT_PATH }}
         
     - name: Download client artifact
       uses: actions/download-artifact@v2
@@ -131,8 +131,6 @@ jobs:
     - name: Constructing output folder
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
-          mkdir ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}
-          mkdir ${{ env.OUTPUT_PATH }}
           copy index.js ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}\index.js
           xcopy "${{ env.WEBSITE_ROOT_FILE_PATH }}" "${{ env.OUTPUT_PATH }}\"
           xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\"
