@@ -145,15 +145,15 @@ jobs:
     - name: Constructing output folder
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
-          xcopy "${{ env.WEBSITE_ROOT_FILE_PATH }}"
-          xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\"
+          xcopy "${{ env.WEBSITE_ROOT_FILE_PATH }}" "${{ env.OUTPUT_PATH }}\" /s /e
+          xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\" /s /e
           dir "${{ env.OUTPUT_PATH }}"
           
     - name: Test
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
           dir "${{ env.WEBSITE_ROOT_FILE_PATH }}"
-          dir "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\"
+          dir "${{env.RELEASE_FILE_PATH}}"
           dir "${{ env.OUTPUT_PATH }}"
           
     - name: Archive project
