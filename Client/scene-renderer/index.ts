@@ -3,7 +3,7 @@
  * @author Vlad Pirlog <https://github.com/vladpirlog>
  * @see https://github.com/AntonVonDelta/MDSProiect
  */
-export class SceneRenderer {
+class SceneRenderer {
     /**
      * Map for translating actions into API endpoints.
      * @private
@@ -182,37 +182,37 @@ export class SceneRenderer {
     }
 }
 
-export class UnauthorizedError extends Error {
+class UnauthorizedError extends Error {
     constructor (message = 'Unauthorized') {
         super(message)
     }
 }
 
-export class AlreadyLoggedInError extends Error {
+class AlreadyLoggedInError extends Error {
     constructor (message = 'Already Logged In') {
         super(message)
     }
 }
 
-export class UnknownStatusCodeError extends Error {
+class UnknownStatusCodeError extends Error {
     constructor (message = 'Unknown Status Code') {
         super(message)
     }
 }
 
-export class CannotGetCookieError extends Error {
+class CannotGetCookieError extends Error {
     constructor (message = 'Cannot Get Cookie') {
         super(message)
     }
 }
 
-export class MalformedDataError extends Error {
+class MalformedDataError extends Error {
     constructor (message = 'Malformed Data') {
         super(message)
     }
 }
 
-export class InternalServerError extends Error {
+class InternalServerError extends Error {
     constructor (message = 'Internal Server Error') {
         super(message)
     }
