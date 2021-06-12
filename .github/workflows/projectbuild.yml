@@ -143,14 +143,14 @@ jobs:
           dir "${{ env.OUTPUT_PATH }}"
           
     - name: Archive project
-      uses: montudor/action-zip@v1
-      with:
-        args: zip -qq -r Remote3D.zip "${{ env.OUTPUT_PATH }}"
+      working-directory: ${{ env.OUTPUT_PATH }}
+      run: |
+        7z a Remote3D.zip \
 
     - name: Publish release version
       uses: ncipollo/release-action@v1
       with:
-        artifacts: remote3d.zip
+        artifacts: Remote3D.zip
         allowUpdates: true
         artifactErrorsFailBuild: true
         replacesArtifacts: true
