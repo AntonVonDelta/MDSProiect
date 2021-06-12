@@ -67,7 +67,7 @@ class SceneRenderer {
      * Function that authenticates the user in order to start the video feed.
      * @returns a promise that resolves to an object with `width`, `height` (the size of the image) and
      * `stream` (null or a ReadableStream for an UInt8Array) properties
-     * @throws `AlreadyLoggedInError`, `CannotGetCookieError`, `UnknownStatusCodeError`
+     * @throws `AlreadyLoggedInError`, `CannotGetCookieError`, `UnknownStatusCodeError`, `InternalServerError`
      * @async
      */
     public async login () {
@@ -93,7 +93,7 @@ class SceneRenderer {
      * Function that sends a `.obj` formatted string to the server in order to render it.
      * @param data a string representing the user input in a `.obj` format
      * @returns a promise that resolves to `true` if the request succeeded, else throws an error
-     * @throws `UnauthorizedError`, `MalformedDataError`, `UnknownStatusCodeError`
+     * @throws `UnauthorizedError`, `MalformedDataError`, `UnknownStatusCodeError`, `InternalServerError`
      * @see https://www.cs.cmu.edu/~mbz/personal/graphics/obj.html
      * @async
      */
@@ -131,7 +131,7 @@ class SceneRenderer {
      * @param direction positive or negative movement along one of the 3 axes
      * @param amount number of units to move in the given direction
      * @returns a promise that resolves to `true` if the request succeeded, else throws an error
-     * @throws `UnauthorizedError`, `UnknownStatusCodeError`
+     * @throws `UnauthorizedError`, `UnknownStatusCodeError`, `InternalServerError`
      * @async
      */
     public async move (direction: keyof typeof SceneRenderer._MOVE_DIRECTION_OPCODES, amount: number) {
@@ -159,7 +159,7 @@ class SceneRenderer {
      * @param amount number of degrees to rotate the object by; positive means counter-clockwise rotation
      * and negative means clockwise rotation
      * @returns a promise that resolves to `true` if the request succeeded, else throws an error
-     * @throws `UnauthorizedError`, `UnknownStatusCodeError`
+     * @throws `UnauthorizedError`, `UnknownStatusCodeError`, `InternalServerError`
      * @async
      */
     public async rotate (direction: keyof typeof SceneRenderer._ROTATE_DIRECTION_OPCODES, amount: number) {
