@@ -64,6 +64,7 @@ jobs:
 
   publish:
     runs-on: windows-latest
+    needs: tests_server
     if: success() && github.ref == 'refs/heads/master'
 
     steps:
