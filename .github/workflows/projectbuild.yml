@@ -105,7 +105,7 @@ jobs:
     - name: Echo environment
       run: |
         echo ${{ github.workspace }} 
-        echo ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\3DServer.exe
+        echo ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}
         
     - name: Download server artifact
       uses: actions/download-artifact@v2
@@ -117,7 +117,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: client-artifact
-        path: ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}\index.js
+        path: ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}
         
     - name: Publishing client library
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
@@ -131,21 +131,13 @@ jobs:
     - name: Constructing output folder
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
-          xcopy "${{ env.WEBSITE_ROOT_FILE_PATH }}" "${{ env.OUTPUT_PATH }}\www" /i /s /e /y
+          xcopy "${{ env.WEBSITE_ROOT_FILE_PATH }}" "${{ env.OUTPUT_PATH }}\www\" /i /s /e /y
           xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\" /i /s /e /y
-          dir "${{ env.OUTPUT_PATH }}"
-          
-    - name: Test
-      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
-      run: |
-          dir "${{ env.WEBSITE_ROOT_FILE_PATH }}"
-          dir "${{env.RELEASE_FILE_PATH}}"
-          dir "${{ env.OUTPUT_PATH }}"
           
     - name: Archive project
       working-directory: ${{ env.PROJECT_ROOT }}
       run: |
-        7z a Remote3D.zip "${{ env.OUTPUT_PATH }}"
+        7z a Remote3D.zip "${{ env.OUTPUT_PATH }}\*"
 
     - name: Publish release version
       uses: ncipollo/release-action@v1
