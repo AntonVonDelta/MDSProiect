@@ -119,20 +119,41 @@ jobs:
         name: client-artifact
         path: ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}\index.js
         
+    - name: Test
+      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
+      run: |
+          dir "${{ env.WEBSITE_ROOT_FILE_PATH }}"
+          dir "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\"
+          dir "${{ env.OUTPUT_PATH }}"
+          
     - name: Publishing client library
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
           git config user.name 'AntonVonDelta'
           git config user.email '25268629+AntonVonDelta@users.noreply.github.com'
-          git add index.js
+          git add index.js ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}\index.js
           git commit -am "Automated build of client library"
           git push --force
+
+    - name: Test
+      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
+      run: |
+          dir "${{ env.WEBSITE_ROOT_FILE_PATH }}"
+          dir "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\"
+          dir "${{ env.OUTPUT_PATH }}"
           
     - name: Constructing output folder
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
           xcopy "${{ env.WEBSITE_ROOT_FILE_PATH }}" "${{ env.OUTPUT_PATH }}\"
           xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\"
+          dir "${{ env.OUTPUT_PATH }}"
+          
+    - name: Test
+      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
+      run: |
+          dir "${{ env.WEBSITE_ROOT_FILE_PATH }}"
+          dir "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\"
           dir "${{ env.OUTPUT_PATH }}"
           
     - name: Archive project
