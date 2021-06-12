@@ -52,7 +52,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: docker-artifact
-        path: ${{env.SOLUTION_FILE_PATH}}\artifacts
+        path: ${{env.SOLUTION_FILE_PATH}}
         retention-days: 1
 
   publish:
@@ -65,7 +65,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: docker-artifact
-        path: ${{env.SOLUTION_FILE_PATH}}\artifacts
+        path: ${{env.SOLUTION_FILE_PATH}}
 
     - name: Publish release version 
       uses: ncipollo/release-action@v1
