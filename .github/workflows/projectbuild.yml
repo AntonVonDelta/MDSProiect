@@ -145,7 +145,7 @@ jobs:
     - name: Archive project
       working-directory: ${{ env.OUTPUT_PATH }}
       run: |
-        7z a Remote3D.zip \
+        7z a Remote3D.zip "${{ env.OUTPUT_PATH }}"
 
     - name: Publish release version
       uses: ncipollo/release-action@v1
