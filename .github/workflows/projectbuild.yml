@@ -143,7 +143,7 @@ jobs:
         dest: remote3d.zip
 
     - name: Publish release version
-      uses: ncipollo/release-action@v1
+      uses: ncipollo/release-action@v2
       with:
         artifacts: remote3d.zip
         allowUpdates: true
