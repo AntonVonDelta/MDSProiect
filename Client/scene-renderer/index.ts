@@ -74,6 +74,7 @@ export class SceneRenderer {
         if (this._loggedIn) throw new AlreadyLoggedInError()
 
         const res = await fetch(SceneRenderer._ENDPOINTS.LOGIN, { credentials: 'same-origin' })
+        if (res.status === 500) throw new InternalServerError(await res.text())
         if (res.status === 409) throw new CannotGetCookieError()
         if (res.status !== 200) throw new UnknownStatusCodeError()
 
@@ -113,6 +114,7 @@ export class SceneRenderer {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain' }
         })
+        if (res.status === 500) throw new InternalServerError(await res.text())
         if (res.status === 404) {
             this._loggedIn = false
             throw new UnauthorizedError()
@@ -142,6 +144,7 @@ export class SceneRenderer {
         const fullPath = SceneRenderer._ENDPOINTS.MOVE + '&' + queryParams.toString()
 
         const res = await fetch(fullPath, { credentials: 'same-origin' })
+        if (res.status === 500) throw new InternalServerError(await res.text())
         if (res.status === 404) {
             this._loggedIn = false
             throw new UnauthorizedError()
@@ -169,6 +172,7 @@ export class SceneRenderer {
         const fullPath = SceneRenderer._ENDPOINTS.ROTATE + '&' + queryParams.toString()
 
         const res = await fetch(fullPath, { credentials: 'same-origin' })
+        if (res.status === 500) throw new InternalServerError(await res.text())
         if (res.status === 404) {
             this._loggedIn = false
             throw new UnauthorizedError()
@@ -204,6 +208,12 @@ export class CannotGetCookieError extends Error {
 
 export class MalformedDataError extends Error {
     constructor (message = 'Malformed Data') {
+        super(message)
+    }
+}
+
+export class InternalServerError extends Error {
+    constructor (message = 'Internal Server Error') {
         super(message)
     }
 }
