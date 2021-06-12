@@ -25,7 +25,42 @@ env:
   BUILD_PLATFORM: x86
   
 jobs:
- 
+  tests_server:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Echo environment
+      run: |
+        echo ${{ github.workspace }} 
+        echo ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\3DServer.exe
+      
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Restore NuGet packages
+      working-directory: ${{ github.workspace }} 
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Build Server
+      working-directory: ${{ github.workspace }} 
+      # Add additional options to the MSBuild command line here (like platform or verbosity level).
+      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=${{env.BUILD_PLATFORM}} ${{env.SOLUTION_FILE_PATH}}
+  
+    - name: Execute Unit Tests
+      working-directory: ${{ github.workspace }} 
+      run: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\CodeTests.exe
+      
+    - name: Save artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: server-artifact
+        path: ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}\3DServer.exe
+        if-no-files-found: error 
+        retention-days: 1
+        
 
   publish:
     runs-on: windows-latest
