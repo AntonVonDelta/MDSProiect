@@ -10,13 +10,13 @@ env:
   # Path to the solution file relative to the root of the project.
   PROJECT_ROOT: ${{ github.workspace }}
   OUTPUT_PATH: ${{ github.workspace }}/Output
-  SOLUTION_FILE_PATH: ${{ github.workspace }}/Server/3DServer
-  RELEASE_FILE_PATH: ${{ github.workspace }}/Server/3DServer/Release
-  TESTS_FILE_PATH: ${{ github.workspace }}/Server/3DServer/CodeTests
+  SOLUTION_FILE_PATH: ${{ github.workspace }}\Server\3DServer
+  RELEASE_FILE_PATH: ${{ github.workspace }}\Server\3DServer\Release
+  TESTS_FILE_PATH: ${{ github.workspace }}\Server\3DServer\CodeTests
   
-  CLIENT_SOLUTION_FILE_PATH: ${{ github.workspace }}/Client/scene-renderer
-  WEBSITE_ROOT_FILE_PATH: ${{ github.workspace }}/Client/www
-  WEBSITE_SCRIPTS_FILE_PATH: ${{ github.workspace }}/Client/www/assets/js
+  CLIENT_SOLUTION_FILE_PATH: ${{ github.workspace }}\Client\scene-renderer
+  WEBSITE_ROOT_FILE_PATH: ${{ github.workspace }}\Client\www
+  WEBSITE_SCRIPTS_FILE_PATH: ${{ github.workspace }}\Client\www\assets\js
   
   # Configuration type to build.
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
