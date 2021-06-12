@@ -117,7 +117,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: client-artifact
-        path: ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}\index.js
+        path: ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}
     
     - name: Publishing client library
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
