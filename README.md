@@ -12,6 +12,8 @@ The server will provide an http-compatible api for manipulating the scene. The s
 
 **Download release version from [here](https://github.com/AntonVonDelta/MDSProiect/releases)**
 
+**The executable must be run in the same folder as these 3 dlls: freeglut.dll, glew32.dll, glfw3.dll**
+
 **Read the protocol [here](https://github.com/AntonVonDelta/MDSProiect/wiki/Server-API)**
 ## Team
 - Achimescu Valentin
