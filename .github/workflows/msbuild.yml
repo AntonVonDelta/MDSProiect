@@ -66,15 +66,15 @@ jobs:
         node-version: '15.x'
         
     - name: Install dependencies    
-      working-directory: ${{ env.SOLUTION_FILE_PATH }}
+      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: npm install
       
     - name: Build project
-      working-directory:  ${{ env.SOLUTION_FILE_PATH }}
+      working-directory:  ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: npm run build
       
     - name: Running tests 
-      working-directory: ${{ env.SOLUTION_FILE_PATH }}
+      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: npm test
 
   publish:
