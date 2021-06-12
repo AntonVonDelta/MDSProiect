@@ -175,7 +175,7 @@ void Http::sendResponse(HttpContext& http_context,int responseCode,string body, 
 		{500,"500 Internal Server Error"}
 	};
 
-	header << "HTTP/1.1 " << codes[responseCode] << "\r\nConnection: Close\r\n";
+	header << "HTTP/1.1 " << codes[responseCode] << "\r\nConnection: Close\r\n" << "Access-Control-Allow-Origin: *\r\n";
 	if (content_length != 0) {
 		header << "Content-Length: " << content_length << "\r\n";
 	}
