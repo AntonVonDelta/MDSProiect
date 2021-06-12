@@ -17,9 +17,20 @@
 // DO NOT addd the Source.obj file as it contains a definition of 'main' which will create conflicts
 
 // Dummy declaration - just for the sake of compilation
-bool parser(CLIENT_STRUCTURE& client) {
-	return 0;
+void parser(CLIENT_STRUCTURE& client) {
+	return;
 }
+// Dummy declaration - just for the sake of compilation
+void worker() {
+	return;
+}
+
+class DummyGrafica:public Grafica {
+public:
+	vector<Triangle> getScene() {
+		return object_definition;
+	}
+};
 
 TEST(TestOpenGLClass, TestInit) {
 	Grafica obj;
@@ -43,6 +54,112 @@ TEST(TestOpenGLClass, TestSetSize) {
 	EXPECT_EQ(obj.getBufferSize() / 4, dim);
 }
 
+TEST(TestOpenGLClass, TestLoadObject) {
+	DummyGrafica obj;
+	
+	// Test empty input
+	EXPECT_THROW(obj.loadObject(""),exception, "An empty object does not throw error");
+
+	// Perfectly valid cube
+	string 	object =
+		"v 0.0 0.0 0.0\r\n"
+		"v 0.0 0.0 1.0\r\n"
+		"v 0.0 1.0 0.0\r\n"
+		"v 0.0 1.0 1.0\r\n"
+		"v 1.0 0.0 0.0\r\n"
+		"v 1.0 0.0 1.0\r\n"
+		"v 1.0 1.0 0.0\r\n"
+		"v 1.0 1.0 1.0\r\n"
+		"f 1 7 5\r\n"
+		"f 1 3 7\r\n"
+		"f 1 4 3\r\n"
+		"f 1 2 4\r\n"
+		"f 3 8 7\r\n"
+		"f 3 4 8\r\n"
+		"f 5 7 8\r\n"
+		"f 5 8 6\r\n"
+		"f 1 5 6\r\n"
+		"f 1 6 2\r\n"
+		"f 2 6 8\r\n"
+		"f 2 8 4\r\n";
+	EXPECT_NO_THROW(obj.loadObject(object),"A perfectly valid object was deemed malformed");
+
+	// Other unsupported artifacts but still valid options inside the object
+	// defitnion
+	object =
+		"v 0.0 0.0 0.0\r\n"
+		"v 0.0 0.0 1.0\r\n"
+		"v 0.0 1.0 0.0\r\n"
+		"v 0.0 1.0 1.0\r\n"
+		"v 1.0 0.0 0.0\r\n"
+		"v 1.0 0.0 1.0\r\n"
+		"v 1.0 1.0 0.0\r\n"
+		"v 1.0 1.0 1.0\r\n"
+		"vn 0 0 0\r\n"
+		"vt 0 0 0\r\n"
+		"f 1 7 5\r\n"
+		"f 1 3 7\r\n"
+		"f 1 4 3\r\n"
+		"f 1 2 4\r\n"
+		"f 3 8 7\r\n"
+		"f 3 4 8\r\n"
+		"f 5 7 8\r\n"
+		"f 5 8 6\r\n"
+		"f 1 5 6\r\n"
+		"f 1 6 2\r\n"
+		"f 2 6 8\r\n"
+		"f 2 8 4\r\n";
+	EXPECT_NO_THROW(obj.loadObject(object),"A perfectly valid .obj code was deemed malformed");
+
+	// Supported obj tags and options but with malformed vertexes
+	object = object =
+		"v 0.0 0.0 0.0 1\r\n"
+		"v 0.0 1.0\r\n"
+		"v 0.0 1.0 0.0\r\n"
+		"v 0.0 1.0 1.0\r\n"
+		"v 1.0 0.0 0.0\r\n"
+		"v 1.0 0.0 1.0\r\n"
+		"v 1.0 1.0 0.0\r\n"
+		"v 1.0 1.0 1.0\r\n"
+		"f 1 7 5\r\n"
+		"f 1 3 7\r\n"
+		"f 1 4 3\r\n"
+		"f 1 2 4\r\n"
+		"f 3 8 7\r\n"
+		"f 3 4 8\r\n"
+		"f 5 7 8\r\n"
+		"f 5 8 6\r\n"
+		"f 1 5 6\r\n"
+		"f 1 6 2\r\n"
+		"f 2 6 8\r\n"
+		"f 2 8 4\r\n";
+	EXPECT_THROW(obj.loadObject(object),exception, "Invalid vertexes were accepted as valid");
+
+	// Supported obj tags and options but with malformed faces coordinates
+	object = object =
+		"v 0.0 0.0 0.0\r\n"
+		"v 0.0 0.0 1.0\r\n"
+		"v 0.0 1.0 0.0\r\n"
+		"v 0.0 1.0 1.0\r\n"
+		"v 1.0 0.0 0.0\r\n"
+		"v 1.0 0.0 1.0\r\n"
+		"v 1.0 1.0 0.0\r\n"
+		"v 1.0 1.0 1.0\r\n"
+		"f 1 7 5 7\r\n"
+		"f 3 7\r\n"
+		"f 1 4 3\r\n"
+		"f 1 2 4\r\n"
+		"f 3 8 7\r\n"
+		"f 3 4 8\r\n"
+		"f 5 7 8\r\n"
+		"f 5 8 6\r\n"
+		"f 1 5 6\r\n"
+		"f 1 6 2\r\n"
+		"f 2 6 8\r\n"
+		"f 2 8 4\r\n";
+	EXPECT_THROW(obj.loadObject(object), exception, "Invalid faces were accepted as valid");
+}
+
 TEST(TestSocketClass, TestValidClient) {
 	CLIENT_STRUCTURE temp;
 	temp.talksHTTP = true;
@@ -51,3 +168,4 @@ TEST(TestSocketClass, TestValidClient) {
 	temp.talksHTTP = false;
 	EXPECT_EQ(isClientValid(temp), false);
 }
+

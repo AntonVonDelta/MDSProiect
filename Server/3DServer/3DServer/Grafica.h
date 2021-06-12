@@ -13,18 +13,23 @@
 using namespace std;
 
 struct Vertex {
-	float x, y, z;
+	GLfloat x, y, z;
 };
-
+struct Normal {
+	GLfloat x, y, z;
+};
 struct Triangle {
+	bool hasNormal;
+	Normal normals[3];
 	Vertex v[3];
 };
 
 class Grafica {
+protected:
 	bool init_succesful = false;
 
-	float move_amount = 1;
-	float rotate_amount = 10;
+	Normal move_vector;
+	Normal rotate_vector;
 
 	GLFWwindow* window;
 	GLuint fbo, render_buf[2];
@@ -34,21 +39,14 @@ class Grafica {
 
 	GLfloat light_diffuse[4] = { 1.0, 0.0, 0.0, 1.0 };  /* Red diffuse light. */
 	GLfloat light_position[4] = { 1.0, 1.0, 1.0, 0.0 };  /* Infinite light location. */
-	GLfloat n[6][3] = {  /* Normals for the 6 faces of a cube. */
-	  {-1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {1.0, 0.0, 0.0},
-	  {0.0, -1.0, 0.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, -1.0} };
-	GLint faces[6][4] = {  /* Vertex indices for the 6 faces of a cube. */
-	  {0, 1, 2, 3}, {3, 2, 6, 7}, {7, 6, 5, 4},
-	  {4, 5, 1, 0}, {5, 6, 2, 1}, {7, 4, 0, 3} };
-	GLfloat v[8][3];  /* Will be filled in with X,Y,Z vertexes. */
-
 	vector<Triangle> object_definition;
 
 	void initScene();
-	void drawBox();
+	void drawScene();
 public:
 	Grafica();
 	~Grafica();
+	Grafica(const Grafica& other);
 
 	/// <summary>
 	/// Create context for openGL. This creates a hidden window; no drawing is performed on it
@@ -80,18 +78,21 @@ public:
 	/// <summary>
 	/// Advances the scene. Also copies the video memory to the output buffer
 	/// </summary>
-	void nextScence();
+	void nextScene();
 
 	/// <summary>
 	/// Translates/moves the scene
 	/// </summary>
-	void moveScene(int direction);
+	void moveScene(int direction, float amount);
 
 	/// <summary>
 	/// Rotates the scene
 	/// </summary>
 	/// <param name="direction"></param>
-	void rotateScene(int direction);
+	void rotateScene(int direction,float amount);
 
+	// Loads the object given
+	// The format is plain ascii string following the ascii standard
+	// This function throws exception if the format is malformed. The what() function provides user-readeable code
 	void loadObject(string input);
 };

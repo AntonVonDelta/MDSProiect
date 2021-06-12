@@ -9,44 +9,33 @@
 #include "Grafica.h"
 #include "Sockets.h"
 
-// Store data about the http client - perhaps login info etc.
-//	struct CLIENT_DESCRIPTOR;
 
+void processConnections();
+
+
+// Store data about the http client - perhaps login info etc.
 struct CLIENT_STRUCTURE;
 
-Grafica render;
 SOCKET listening_socket;
 int server_port = 5050;
 fd_set master, read_fds;
 vector<CLIENT_STRUCTURE> pendingClients;
 
-void processConnections();
-bool parser(CLIENT_STRUCTURE&);
-bool recvAll(CLIENT_STRUCTURE& client, char* buffer, unsigned int len);
-bool sendAll(CLIENT_STRUCTURE& client, char* buffer, unsigned int len);
-bool isClientValid(CLIENT_STRUCTURE& client);
-void closeSelectedClient(CLIENT_STRUCTURE& client);
 
 int server_start() {
 	SOCKADDR_IN server_config;
 
-	if (!render.init()) {
-		cout << "OpenGL Init error!";
-		return 1;
-	}
-	printf("OpenGL initialized succesfully!");
-
 	// Init sockets
 	WSADATA wsaData;
 	if (WSAStartup(MAKEWORD(2, 0), &wsaData)) {
-		printf("WSAStartup failed! Could not initialize sockets!");
+		cout << "WSAStartup failed! Could not initialize sockets!";
 		return 1;
 	}
 
 	// Create the listening server socket
 	listening_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (listening_socket == INVALID_SOCKET) {
-		printf("Error opening the socket!");
+		cout << "Error opening the socket!";
 		return 1;
 	}
 
@@ -58,14 +47,14 @@ int server_start() {
 
 
 	if (bind(listening_socket, (SOCKADDR*)&server_config, sizeof(server_config)) == SOCKET_ERROR) {
-		printf("Error in binding socket to port");
+		cout << "Error in binding socket to port";
 		closesocket(listening_socket);
 		WSACleanup();	// We better cleanup ourselves: it's possible the port will get locked next time we run (cause timeout)
 		return 1;
 	}
 
 	if (listen(listening_socket, SOMAXCONN) == SOCKET_ERROR) {
-		printf("Error in listening!");
+		cout << "Error in listening!";
 		closesocket(listening_socket);
 		WSACleanup();
 		return 1;
@@ -75,7 +64,6 @@ int server_start() {
 
 	closesocket(listening_socket);
 	WSACleanup();
-	render.destroy();
 
 	return 0;
 }
@@ -98,10 +86,12 @@ void processConnections() {
 	while (true) {
 		read_fds = master;
 
+		worker();
+
 		// Check client validity after 5 sec. timeout
 		time(&current_time);
 		FOR_EVERY_CLIENT(z) {
-			if (pendingClients[z].timeWhenConnected != -1 && current_time - pendingClients[z].timeWhenConnected > 2) {
+			if (pendingClients[z].timeWhenConnected != -1 && current_time - pendingClients[z].timeWhenConnected > 4) {
 				pendingClients[z].timeWhenConnected = -1;	// already checked time
 				if (!isClientValid(pendingClients[z])) closeSelectedClient(pendingClients[z]);
 			}
@@ -116,7 +106,7 @@ void processConnections() {
 					int sz = sizeof(clientinfo);
 					client = accept(listening_socket, (struct sockaddr*)&clientinfo, &sz);
 
-					if (client == SOCKET_ERROR)	printf("One accept() failed !");
+					if (client == SOCKET_ERROR)	cout << "One accept() failed !";
 					else {
 						CLIENT_STRUCTURE protoClient;
 
@@ -137,6 +127,8 @@ void processConnections() {
 
 						// Add to our clients
 						pendingClients.push_back(protoClient);
+
+						cout << "New connection to server from " << protoClient.address << endl;
 					}
 				} else {
 					// Our non-server socket has something on the queue
@@ -166,7 +158,7 @@ bool recvAll(CLIENT_STRUCTURE& client, char* buffer, unsigned int len) {
 }
 
 // Block till all bytes are sent
-bool sendAll(CLIENT_STRUCTURE& client, char* buffer, unsigned int len) {
+bool sendAll(CLIENT_STRUCTURE& client, const char* buffer, unsigned int len) {
 	int sentlen;
 	unsigned int sentSize = 0;
 

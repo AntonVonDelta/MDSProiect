@@ -18,3 +18,4 @@ x64/
 
 # Dependency directories
 node_modules/
+/Server/3DServer/Debug Server Tools/*.bin

@@ -7,6 +7,19 @@ Grafica::Grafica() {
 Grafica::~Grafica() {
 	delete[] buffer;
 }
+Grafica::Grafica(const Grafica& other) {
+	buffer = new char[width * height * 4];
+	move_vector = other.move_vector;
+	rotate_vector = other.rotate_vector;
+	width = other.width;
+	height = other.height;
+	object_definition = other.object_definition;
+
+	if (other.init_succesful) {
+		init();
+		drawScene();
+	}
+}
 
 void Grafica::destroy() {
 	if (init_succesful) {
@@ -79,7 +92,8 @@ void Grafica::setSize(int window_width, int window_height) {
 }
 
 void Grafica::initScene() {
-
+	// Reset the internal rotation/translation matrixes 
+	glLoadIdentity();
 
 	/* Enable a single OpenGL light. */
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
@@ -107,29 +121,39 @@ void Grafica::initScene() {
 }
 
 
-void Grafica::drawBox(void) {
-	int i;
+void Grafica::drawScene(void) {
+	glPushMatrix();
 
-	for (i = 0; i < 6; i++) {
-		glBegin(GL_QUADS);
-		glNormal3fv(&n[i][0]);
-		glVertex3fv(&v[faces[i][0]][0]);
-		glVertex3fv(&v[faces[i][1]][0]);
-		glVertex3fv(&v[faces[i][2]][0]);
-		glVertex3fv(&v[faces[i][3]][0]);
+	glTranslatef(move_vector.x,move_vector.y,move_vector.z);
+	glRotatef(rotate_vector.x,1.0,0,0);
+	glRotatef(rotate_vector.y, 0, 1.0, 0);
+
+	for (const Triangle& triangle : object_definition) {
+		glBegin(GL_TRIANGLES);
+		if (triangle.hasNormal) glNormal3f(triangle.normals[0].x, triangle.normals[0].y, triangle.normals[0].z);
+		glVertex3f(triangle.v[0].x, triangle.v[0].y, triangle.v[0].z);
+		if (triangle.hasNormal) glNormal3f(triangle.normals[1].x, triangle.normals[1].y, triangle.normals[1].z);
+		glVertex3f(triangle.v[1].x, triangle.v[1].y, triangle.v[1].z);
+		if (triangle.hasNormal) glNormal3f(triangle.normals[2].x, triangle.normals[2].y, triangle.normals[2].z);
+		glVertex3f(triangle.v[2].x, triangle.v[2].y, triangle.v[2].z);
 		glEnd();
 	}
+
+	glPopMatrix();
 }
 
-void Grafica::nextScence() {
+void Grafica::nextScene() {
 	if (!init_succesful) return;
+	
+	// Select current context
+	glfwMakeContextCurrent(window);
 
 	//Before drawing
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	drawBox();
+	drawScene();
 
 	// Copy pixel memory to buffer
 	glReadBuffer(GL_COLOR_ATTACHMENT0);
@@ -142,43 +166,43 @@ void Grafica::nextScence() {
 	//glutSwapBuffers();
 }
 
-void Grafica::moveScene(int direction) {
+void Grafica::moveScene(int direction, float amount) {
 	switch (direction) {
 		case 0:
-			glTranslatef(0.0, 0.0, move_amount);
+			move_vector.z+= amount;
 			break;
 
 		case 1:
-			glTranslatef(0.0, 0.0, -move_amount);
+			move_vector.z -= amount;
 			break;
 
 		case 2:
-			glTranslatef(move_amount, 0.0, 0.0);
+			move_vector.x += amount;
 			break;
 
 		case 3:
-			glTranslatef(-move_amount, 0.0, 0.0);
+			move_vector.x -= amount;
 			break;
 
 		case 4:
-			glTranslatef(0.0, move_amount, 0.0);
+			move_vector.y += amount;
 			break;
 
 		case 5:
-			glTranslatef(0.0, -move_amount, 0.0);
+			move_vector.y -= amount;
 			break;
 	}
 
 }
 
-void Grafica::rotateScene(int direction) {
+void Grafica::rotateScene(int direction, float amount) {
 	switch (direction) {
 		case 0:
-			glRotatef(rotate_amount, 1.0, 0.0, 0.0);
+			rotate_vector.y += amount;
 			break;
 
 		case 1:
-			glRotatef(-rotate_amount, 1.0, 0.0, 0.0);
+			rotate_vector.x += amount;
 			break;
 	}
 }
@@ -186,6 +210,7 @@ void Grafica::rotateScene(int direction) {
 void Grafica::loadObject(string input) {
 	// Process data and fill vertexes in memory
 	vector<Vertex> corners;
+	vector<Normal> normals;
 	vector<Triangle> scene_data;
 
 	istringstream stream(input);
@@ -207,18 +232,55 @@ void Grafica::loadObject(string input) {
 			if (line_stream.fail() || line_stream.bad()) throw runtime_error(string("Error on reading vertex data: ") + line);
 			corners.push_back(temp);
 		}
+		if (mode == "vn") {
+			// Process the vertex
+			Normal temp;
+			line_stream >> temp.x;
+			line_stream >> temp.y;
+			line_stream >> temp.z;
+
+			if (line_stream.fail() || line_stream.bad()) throw runtime_error(string("Error on reading normal data: ") + line);
+			normals.push_back(temp);
+		}
 		if (mode == "f") {
 			Triangle temp;
 			int vertex_index;
+			
+			temp.hasNormal = false;
 
-			line_stream >> vertex_index;
-			temp.v[0] = corners[vertex_index - 1];
+			try {
+				for (int i = 0; i < 3; i++) {
+					string coord_group;
+					line_stream >> coord_group;
+					istringstream coord_stream(coord_group);
+					int vertex_index=-1, texture_index=-1, normal_index=-1;
 
-			line_stream >> vertex_index;
-			temp.v[1] = corners[vertex_index - 1];
+					char junk;
+					coord_stream >> vertex_index>>junk;
 
-			line_stream >> vertex_index;
-			temp.v[2] = corners[vertex_index - 1];
+					if (junk == '/') {
+						if (coord_stream.peek() != '/' && !coord_stream.eof()) {
+							coord_stream >> texture_index;
+						}
+						coord_stream >> junk;
+
+						if (junk == '/' && !coord_stream.eof()) {
+							coord_stream >> normal_index;
+						}
+					}
+					
+
+					temp.v[i] = corners.at(vertex_index-1);
+
+					if (normal_index != -1) {
+						temp.normals[i] = normals.at(normal_index-1);
+						temp.hasNormal = true;
+					}
+				}
+
+			} catch (out_of_range e) {
+				throw runtime_error(string("Index out of bounds on reading triangle data: ") + line);
+			}
 
 			if (line_stream.fail() || line_stream.bad()) throw runtime_error(string("Error on reading triangle data: ") + line);
 
