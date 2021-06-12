@@ -136,14 +136,14 @@ jobs:
           xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\"
           
     - name: Archive project
-      uses: papeloto/action-zip@v1
+      uses: papeloto/action-zip@v2
       with:
-        files: ${{ env.OUTPUT_PATH }}
+        files: ${{ env.OUTPUT_PATH }}\
         recursive: true
         dest: remote3d.zip
 
     - name: Publish release version
-      uses: ncipollo/release-action@v2
+      uses: ncipollo/release-action@v1
       with:
         artifacts: remote3d.zip
         allowUpdates: true
