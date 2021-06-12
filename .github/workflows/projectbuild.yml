@@ -157,11 +157,9 @@ jobs:
           dir "${{ env.OUTPUT_PATH }}"
           
     - name: Archive project
-      uses: papeloto/action-zip@v1
+      uses: montudor/action-zip@v1
       with:
-        files: ${{ env.OUTPUT_PATH }}
-        recursive: true
-        dest: remote3d.zip
+        args: zip -qq -r Remote3D.zip "${{ env.OUTPUT_PATH }}"
 
     - name: Publish release version
       uses: ncipollo/release-action@v1
