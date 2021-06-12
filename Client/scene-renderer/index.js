@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MalformedDataError = exports.CannotGetCookieError = exports.UnknownStatusCodeError = exports.AlreadyLoggedInError = exports.UnauthorizedError = exports.SceneRenderer = void 0;
+exports.InternalServerError = exports.MalformedDataError = exports.CannotGetCookieError = exports.UnknownStatusCodeError = exports.AlreadyLoggedInError = exports.UnauthorizedError = exports.SceneRenderer = void 0;
 /**
  * Class used for loading and interacting with the rendered objects.
  * @author Vlad Pirlog <https://github.com/vladpirlog>
@@ -35,6 +35,8 @@ class SceneRenderer {
             if (this._loggedIn)
                 throw new AlreadyLoggedInError();
             const res = yield fetch(SceneRenderer._ENDPOINTS.LOGIN, { credentials: 'same-origin' });
+            if (res.status === 500)
+                throw new InternalServerError(yield res.text());
             if (res.status === 409)
                 throw new CannotGetCookieError();
             if (res.status !== 200)
@@ -73,6 +75,8 @@ class SceneRenderer {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain' }
             });
+            if (res.status === 500)
+                throw new InternalServerError(yield res.text());
             if (res.status === 404) {
                 this._loggedIn = false;
                 throw new UnauthorizedError();
@@ -102,6 +106,8 @@ class SceneRenderer {
             queryParams.append('amount', amount.toString());
             const fullPath = SceneRenderer._ENDPOINTS.MOVE + '&' + queryParams.toString();
             const res = yield fetch(fullPath, { credentials: 'same-origin' });
+            if (res.status === 500)
+                throw new InternalServerError(yield res.text());
             if (res.status === 404) {
                 this._loggedIn = false;
                 throw new UnauthorizedError();
@@ -129,6 +135,8 @@ class SceneRenderer {
             queryParams.append('amount', amount.toString());
             const fullPath = SceneRenderer._ENDPOINTS.ROTATE + '&' + queryParams.toString();
             const res = yield fetch(fullPath, { credentials: 'same-origin' });
+            if (res.status === 500)
+                throw new InternalServerError(yield res.text());
             if (res.status === 404) {
                 this._loggedIn = false;
                 throw new UnauthorizedError();
@@ -218,3 +226,9 @@ class MalformedDataError extends Error {
     }
 }
 exports.MalformedDataError = MalformedDataError;
+class InternalServerError extends Error {
+    constructor(message = 'Internal Server Error') {
+        super(message);
+    }
+}
+exports.InternalServerError = InternalServerError;
