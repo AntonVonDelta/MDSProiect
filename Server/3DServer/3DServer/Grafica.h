@@ -35,7 +35,7 @@ protected:
 	GLuint fbo, render_buf[2];
 	int width = 300;
 	int height = 300;
-	char* buffer = NULL;
+	char* buffer = nullptr;
 
 	GLfloat light_diffuse[4] = { 1.0, 0.0, 0.0, 1.0 };  /* Red diffuse light. */
 	GLfloat light_position[4] = { 1.0, 1.0, 1.0, 0.0 };  /* Infinite light location. */
@@ -45,6 +45,8 @@ protected:
 	void drawScene();
 public:
 	Grafica();
+	Grafica(int window_width, int window_height);
+
 	~Grafica();
 	Grafica(const Grafica& other);
 

@@ -33,7 +33,7 @@ private:
 	time_t lastActivity;
 public:
 	~HttpContext();
-	HttpContext() {
+	HttpContext():Client({}) {
 		time(&lastActivity);
 	}
 
@@ -41,7 +41,7 @@ public:
 		throw string("Context cannot be copied!");
 	}
 
-	void initGrafica();
+	void initGrafica(int width,int height);
 	void setRequestParams(map<string, string> rp);
 	void setClient(CLIENT_STRUCTURE);
 	void setSessionId(string);

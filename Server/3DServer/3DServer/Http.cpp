@@ -8,8 +8,8 @@ HttpContext::~HttpContext() {
 	}
 }
 
-void HttpContext::initGrafica() {
-	data = new Grafica;
+void HttpContext::initGrafica(int width,int height) {
+	data = new Grafica(width,height);
 	if (!data->init()) throw string("Could not init the graphics!");
 }
 Grafica* HttpContext::getGrafica() {
