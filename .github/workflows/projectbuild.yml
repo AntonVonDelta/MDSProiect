@@ -129,11 +129,11 @@ jobs:
           
     # M-am luptat cu fiarele din Efes si am invins
     - name: Constructing output folder
-      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
+      working-directory: ${{ env.PROJECT_ROOT }}
       run: |
-          echo .gitignore>>exclude.txt
+          echo .gitignore >> ${{ env.PROJECT_ROOT }}\exclude.txt
           xcopy "${{ env.WEBSITE_ROOT_FILE_PATH }}" "${{ env.OUTPUT_PATH }}\www\" /i /s /e /y
-          xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\" /i /s /e /y /exclude:exclude.txt
+          xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\" /i /s /e /y /exclude:${{ env.PROJECT_ROOT }}\exclude.txt
           
     - name: Archive project
       working-directory: ${{ env.PROJECT_ROOT }}
