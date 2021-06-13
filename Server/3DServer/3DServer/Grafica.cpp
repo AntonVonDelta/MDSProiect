@@ -1,6 +1,22 @@
 #include "Grafica.h"
 
 Grafica::Grafica() {
+	fbo = 0;
+	move_vector = {};
+	rotate_vector = {};
+	object_definition = vector<Triangle>();
+
+	buffer = new char[width * height * 4];
+}
+
+Grafica::Grafica(int window_width,int window_height) {
+	fbo = 0;
+	move_vector = {};
+	rotate_vector = {};
+	object_definition = vector<Triangle>();
+
+	width = window_width;
+	height = window_height;
 	buffer = new char[width * height * 4];
 }
 

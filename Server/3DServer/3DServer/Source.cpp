@@ -20,53 +20,51 @@ using namespace std;
 
 map<string, HttpContext*> openConnections;
 FILETIME last_processed;
-int FPS = 30;
+int OPENGL_WIDTH = 300;
+int OPENGL_HEIGHT = 300;
 
 int main(int argc,char* argv[]) {
 	if (argc >= 2) {
 		string port_str = argv[1];
 		server_port = stoi(port_str);
 	}
-	if (argc >= 3) {
-		string fps_str = argv[1];
-		FPS = stoi(fps_str);
+	if (argc >= 4) {
+		string width_str = argv[2];
+		string height_str = argv[3];
+		OPENGL_WIDTH = stoi(width_str);
+		OPENGL_HEIGHT =stoi(height_str);
 	}
+
 	return server_start();
 }
 
 // Called in a loop before processing incoming packets
 void worker() {
 	Http http;
-	FILETIME current_time;
-	GetSystemTimeAsFileTime(&current_time);
 
-	if ((current_time.dwLowDateTime - last_processed.dwLowDateTime)/10000 > 1000/(float)FPS) {
-		last_processed = current_time;
+	for (auto it = openConnections.cbegin(); it != openConnections.cend();) {
+		HttpContext* connection = it->second;
 
-		for (auto it = openConnections.cbegin(); it != openConnections.cend();) {
-			HttpContext* connection = it->second;
+		if (connection->getInactivity() > 60) {
+			// Finish chunk
+			http.sendChunk(*connection, "", 0);
 
-			if (connection->getInactivity() > 60) {
-				// Finish chunk
-				http.sendChunk(*connection, "", 0);
-
-				delete connection;
-				openConnections.erase(it++);
-				continue;
-			}
-
-			try {
-				Grafica* grafica = connection->getGrafica();
-				grafica->nextScene();
-				http.sendChunk(*connection, grafica->getBuffer(), grafica->getBufferSize());
-			} catch (...) {
-				delete connection;
-				openConnections.erase(it++);
-				continue;
-			}
-
-			++it;
+			delete connection;
+			openConnections.erase(it++);
+			continue;
 		}
+
+		try {
+			Grafica* grafica = connection->getGrafica();
+			grafica->nextScene();
+			http.sendChunk(*connection, grafica->getBuffer(), grafica->getBufferSize());
+		} catch (...) {
+			delete connection;
+			openConnections.erase(it++);
+			continue;
+		}
+
+		++it;
 	}
 }
 
@@ -88,7 +86,7 @@ void parser(CLIENT_STRUCTURE& client) {
 		if (opt == "/api/login") {
 			try {
 				string generated_cookie = http.genRandomId(20);
-				http_context->initGrafica();
+				http_context->initGrafica(OPENGL_WIDTH,OPENGL_HEIGHT);
 				http_context->getGrafica()->nextScene();
 
 				if (openConnections.find(generated_cookie) != openConnections.end()) {
