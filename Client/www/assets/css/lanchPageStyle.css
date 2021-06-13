@@ -1,0 +1,9 @@
+#canvas-wrapper{
+  display: flex;
+  justify-content: center;
+}
+canvas {
+  height: 300px;
+  width: 300px;
+  background-color: rgb(176, 177, 177);
+}
