@@ -21,7 +21,11 @@ using namespace std;
 map<string, HttpContext*> openConnections;
 time_t last_processed;
 
-int main() {
+int main(int argc,char* argv[]) {
+	if (argc == 2) {
+		string port = argv[1];
+		server_port = stoi(port);
+	}
 	return server_start();
 }
 

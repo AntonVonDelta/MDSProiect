@@ -12,12 +12,12 @@
 
 void processConnections();
 
+// TODO: needs refactoring
 
 // Store data about the http client - perhaps login info etc.
 struct CLIENT_STRUCTURE;
-
-SOCKET listening_socket;
 int server_port = 5050;
+SOCKET listening_socket;
 fd_set master, read_fds;
 vector<CLIENT_STRUCTURE> pendingClients;
 

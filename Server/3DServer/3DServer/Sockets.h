@@ -18,6 +18,7 @@ struct CLIENT_STRUCTURE {									// define the structure for storing the detail
 	char address[INET6_ADDRSTRLEN];							// store the ip address of client
 };
 
+extern int server_port;
 
 int server_start();
 void worker();
