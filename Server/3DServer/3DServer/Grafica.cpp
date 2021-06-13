@@ -118,6 +118,7 @@ void Grafica::initScene() {
 	gluPerspective( /* field of view in degree */ 40.0,
 		/* aspect ratio */ 1.0,
 		/* Z near */ 1.0, /* Z far */ 10.0);
+
 	glMatrixMode(GL_MODELVIEW);
 	gluLookAt(0.0, 0.0, 5.0,  /* eye is at (0,0,5) */
 		0.0, 0.0, 0.0,      /* center is at (0,0,0) */
@@ -125,8 +126,8 @@ void Grafica::initScene() {
 
 	/* Adjust cube position to be asthetic angle. */
 	glTranslatef(0.0, 0.0, -1.0);
-	glRotatef(60, 1.0, 0.0, 0.0);
-	glRotatef(-20, 0.0, 0.0, 1.0);
+	//glRotatef(60, 1.0, 0.0, 0.0);
+	//glRotatef(-20, 0.0, 0.0, 1.0);
 }
 
 
@@ -300,6 +301,14 @@ void Grafica::loadObject(string input) {
 	}
 
 	if (scene_data.size() == 0) throw runtime_error("Error on final size: 0 triangles");
+
+	// Reset translation and rotation
+	move_vector.x = 0;
+	move_vector.y = 0;
+	move_vector.z = 0;
+	rotate_vector.x = 0;
+	rotate_vector.y = 0;
+	rotate_vector.z = 0;
 
 	object_definition = scene_data;
 }

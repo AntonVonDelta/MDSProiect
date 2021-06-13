@@ -19,12 +19,17 @@ using namespace std;
 // Thus we separate all the logic from this file and write it into different 'cpp' files
 
 map<string, HttpContext*> openConnections;
-time_t last_processed;
+FILETIME last_processed;
+int FPS = 30;
 
 int main(int argc,char* argv[]) {
-	if (argc == 2) {
-		string port = argv[1];
-		server_port = stoi(port);
+	if (argc >= 2) {
+		string port_str = argv[1];
+		server_port = stoi(port_str);
+	}
+	if (argc >= 3) {
+		string fps_str = argv[1];
+		FPS = stoi(fps_str);
 	}
 	return server_start();
 }
@@ -32,10 +37,10 @@ int main(int argc,char* argv[]) {
 // Called in a loop before processing incoming packets
 void worker() {
 	Http http;
-	time_t current_time;
-	time(&current_time);
+	FILETIME current_time;
+	GetSystemTimeAsFileTime(&current_time);
 
-	if (current_time - last_processed > 2) {
+	if ((current_time.dwLowDateTime - last_processed.dwLowDateTime)/10000 > 1000/(float)FPS) {
 		last_processed = current_time;
 
 		for (auto it = openConnections.cbegin(); it != openConnections.cend();) {

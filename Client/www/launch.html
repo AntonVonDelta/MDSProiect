@@ -8,6 +8,7 @@
   <title>Document</title>
 
   <link rel="stylesheet" href="assets/css/lanchPageStyle.css">
+  
   <script
 			  src="https://code.jquery.com/jquery-3.6.0.min.js"
 			  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
@@ -16,18 +17,30 @@
 
 <body>
 
-  <div>
-    <button id="render-scene" onclick="renderScene()"> Activate</button>
-    <textarea type="text" id="render-input">
-  
-    </textarea>
-  </div>
+  <div id="page">
+    <div id="control-panel">
+      <div>
+        <button id="render-scene" onclick="setupScene()">Login</button>
+        <button id="render-scene" onclick="loadText()">Load text</button>
+        <button id="render-scene" onclick="loadSphere()">Load sphere</button>
+        <button id="render-scene" onclick="loadCube()">Load cube</button>
+        <button id="render-scene" onclick="loadThreeObj()">Load three objs</button>
+        <button id="render-scene" onclick="moveScene()">Move</button>
+        <button id="render-scene" onclick="rotateScene()">Rotate</button>
 
-  <div id="canvas-wrapper">
-    <canvas id="scene-canvas"></canvas>
-  </div>
+        <textarea type="text" id="render-input">
+      
+        </textarea>
+      </div>
+    </div>
   
-
+    <div id="view-panel">
+      <div id="canvas-wrapper">
+        <canvas id="scene-canvas"></canvas>
+      </div>
+    </div>
+  
+  </div>
 
 
   <script type="text/javascript" src="assets/js/index.js"></script>

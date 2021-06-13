@@ -1,9 +1,39 @@
-#canvas-wrapper{
-  display: flex;
-  justify-content: center;
+body,html{
+  width:100%;
+  margin:0;
+  padding:0;
 }
-canvas {
-  height: 300px;
-  width: 300px;
+
+#page{
+  display: flex;
+  margin-top:100px;
+}
+#control-panel{
+  flex: 1;
+}
+#render-input{
+  width:700px;
+  height:400px;
+}
+
+
+#view-panel{
+  flex:1
+}
+
+
+#canvas-wrapper{
+  border: 2px solid;
+  display: inline-flex;
+  padding: 20px;
+  overflow: auto;
+  width: 480px;
+  height:480px;
+  resize: both;
+}
+#scene-canvas {
+  height: 100%;
+  width: 100%;
   background-color: rgb(176, 177, 177);
 }
+
