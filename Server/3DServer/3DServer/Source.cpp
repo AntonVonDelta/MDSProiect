@@ -180,7 +180,7 @@ void parser(CLIENT_STRUCTURE& client) {
 					throw string("No extension defined!");
 				}
 
-				string path = "C:\\Users\\Sergiu\\Desktop\\Documente Facultate\\Anul2\\Sem2\\MDS\\Server\\3DServer\\Debug\\www";
+				string path = "www";
 				string extension = opt.substr(opt.find("."));
 				extension.erase(0, 1);
 				path += opt;
