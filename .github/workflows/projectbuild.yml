@@ -113,11 +113,6 @@ jobs:
         name: server-artifact
         path: ${{ env.OUTPUT_PATH }}
         
-    - name: TEST
-      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
-      run: |
-          dir  -ErrorAction SilentlyContinue ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}
-          
     - name: Download client artifact
       uses: actions/download-artifact@v2
       with:
@@ -134,7 +129,7 @@ jobs:
           git commit -am "Automated build of client library"
           git push --force
           
-          
+    # M-am luptat cu fiarele din Efes si am invins
     - name: Constructing output folder
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
