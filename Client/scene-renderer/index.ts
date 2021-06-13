@@ -9,7 +9,7 @@ class SceneRenderer {
      * @private
      * @static
      */
-    private static _OBJ_LINE_REGEX = /^(v( -?(0|[1-9]\d*)(\.\d+)?){3,4}|vn( -?(0|[1-9]\d*)(\.\d+)?){3}|vt( (1(\.0+)?|0(\.\d+)?)){1,3}|f( [1-9]\d*((\/([1-9]\d*)?)?\/[1-9]\d*)?){3,})$/
+    private static _OBJ_LINE_REGEX = /^(v(\s+-?(0|[1-9]\d*)(\.\d+)?){3,4}|vn(\s+-?(0|[1-9]\d*)(\.\d+)?){3}|vt(\s+-?(0|[1-9]\d*)(\.\d+)?){1,3}|f(\s+[1-9]\d*((\/([1-9]\d*)?)?\/[1-9]\d*)?){3,})$/
 
     /**
      * Map for translating moving directions into API opcodes.
@@ -167,7 +167,7 @@ class SceneRenderer {
         queryParams.append('direction', SceneRenderer._MOVE_DIRECTION_OPCODES[direction].toString())
         queryParams.append('amount', amount.toString())
 
-        const fullPath = this._endpoints.move + '&' + queryParams.toString()
+        const fullPath = this._endpoints.move + '?' + queryParams.toString()
 
         const res = await fetch(fullPath, { headers: { [SceneRenderer._HEADERS.AUTHORIZATION]: this._apiKey || '' } })
         if (res.status === 500) throw new InternalServerError(await res.text())
@@ -196,7 +196,7 @@ class SceneRenderer {
         queryParams.append('direction', SceneRenderer._ROTATE_DIRECTION_OPCODES[direction].toString())
         queryParams.append('amount', amount.toString())
 
-        const fullPath = this._endpoints.rotate + '&' + queryParams.toString()
+        const fullPath = this._endpoints.rotate + '?' + queryParams.toString()
 
         const res = await fetch(fullPath, { headers: { [SceneRenderer._HEADERS.AUTHORIZATION]: this._apiKey || '' } })
         if (res.status === 500) throw new InternalServerError(await res.text())

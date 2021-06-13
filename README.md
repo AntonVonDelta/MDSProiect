@@ -16,7 +16,9 @@ The server will provide an http-compatible api for manipulating the scene. The s
 ## How to run the project
  - Download release version from [here](https://github.com/AntonVonDelta/MDSProiect/releases) and unzip the files to a folder
  - The folder containing the executable must also contain these 3 dlls: freeglut.dll, glew32.dll, glfw3.dll
- - Execute **3DServer.exe**. Optional: pass an argument to overwrite the default **5050 port**.
+ - Execute **3DServer.exe**. Params:
+    - Optional: pass an argument to overwrite the default **5050 port**.
+    - Optional: pass an argument to overwrite the default **FPS 30**
  - Type in the address bar of a browser: **http://127.0.0.1:5050** if using the default port.
 
 ## Team
