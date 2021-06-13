@@ -176,6 +176,7 @@ void parser(CLIENT_STRUCTURE& client) {
 				if (opt.find("..") != string::npos) {
 					throw string("Path traversal attack!");
 				}
+				if (opt == "/") opt = "/index.html";
 				if (opt.find(".") == string::npos || opt.size()-1-opt.find(".")==0) {
 					throw string("No extension defined!");
 				}
