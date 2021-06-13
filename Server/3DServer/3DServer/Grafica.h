@@ -2,7 +2,7 @@
 #include<Windows.h>
 #include<cstring>
 #include <vector>
-#include<string>
+#include <string>
 #include <sstream>
 #include <algorithm>
 
@@ -35,7 +35,7 @@ protected:
 	GLuint fbo, render_buf[2];
 	int width = 300;
 	int height = 300;
-	char* buffer=NULL;
+	char* buffer = NULL;
 
 	GLfloat light_diffuse[4] = { 1.0, 0.0, 0.0, 1.0 };  /* Red diffuse light. */
 	GLfloat light_position[4] = { 1.0, 1.0, 1.0, 0.0 };  /* Infinite light location. */
@@ -92,7 +92,7 @@ public:
 	/// Rotates the scene
 	/// </summary>
 	/// <param name="direction"></param>
-	void rotateScene(int direction,float amount);
+	void rotateScene(int direction, float amount);
 
 	// Loads the object given
 	// The format is plain ascii string following the ascii standard

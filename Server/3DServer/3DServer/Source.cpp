@@ -76,7 +76,7 @@ void parser(CLIENT_STRUCTURE& client) {
 
 		client.talksHTTP = true;
 
-		if (opt == "/api/login") 		{
+		if (opt == "/api/login") {
 			try {
 				string generated_cookie = http.genRandomId(20);
 				http_context->initGrafica();
@@ -87,7 +87,7 @@ void parser(CLIENT_STRUCTURE& client) {
 				} else {
 					openConnections[generated_cookie] = http_context;
 					http.sendResponse(*http_context, 200, "", {
-						{string("Set-Cookie"), string("session=") + generated_cookie},
+						{string("X-Authorize"), generated_cookie},
 						{string("Transfer-Encoding"), string("chunked")},
 						{string("Content-Type"), string("application/octet-stream")},
 						{string("X-Image-Width"), to_string(http_context->getGrafica()->getWidth())},
@@ -98,19 +98,16 @@ void parser(CLIENT_STRUCTURE& client) {
 			} catch (exception e) {
 				http.sendResponse(*http_context, 500, e.what(), {});
 			}
-		}
-		if (opt == "/api/load") 		{
+		}else if (opt == "/api/load") {
 			int lenght = 0;
 			if (http_context->getParam("content-length") != "") {
 				lenght = stoi(http_context->getParam("content-length"));
 				string body = http.readBody(client, lenght);
 
 				try {
-					string cookie = http_context->getParam("cookie");
-					string id = cookie.substr(cookie.find('='));
-					id.erase(0, 1);
+					string cookie = http_context->getParam("X-Authorize");
 
-					HttpContext* video_feed = openConnections.at(id);
+					HttpContext* video_feed = openConnections.at(cookie);
 					video_feed->getGrafica()->loadObject(body);
 					video_feed->getGrafica()->nextScene();
 					video_feed->setActivity();
@@ -124,17 +121,14 @@ void parser(CLIENT_STRUCTURE& client) {
 					http.sendResponse(*http_context, 500, e.what(), {});
 				}
 			}
-		}
-		if (opt == "/api/move") {
+		} else if (opt == "/api/move") {
 			try {
-				string cookie = http_context->getParam("cookie");
-				int direction= stoi(http_context->getParam("direction"));
+				string cookie = http_context->getParam("X-Authorize");
+				int direction = stoi(http_context->getParam("direction"));
 				float amount = stof(http_context->getParam("amount"));
-				string id = cookie.substr(cookie.find('='));
-				id.erase(0, 1);
 
-				HttpContext* video_feed = openConnections.at(id);
-				video_feed->getGrafica()->moveScene(direction,amount);
+				HttpContext* video_feed = openConnections.at(cookie);
+				video_feed->getGrafica()->moveScene(direction, amount);
 				video_feed->setActivity();
 
 				http.sendResponse(*http_context, 200, "", {});
@@ -143,16 +137,13 @@ void parser(CLIENT_STRUCTURE& client) {
 			} catch (exception e) {
 				http.sendResponse(*http_context, 500, e.what(), {});
 			}
-		}
-		if (opt == "/api/rotate") {
+		} else if (opt == "/api/rotate") {
 			try {
-				string cookie = http_context->getParam("cookie");
+				string cookie = http_context->getParam("X-Authorize");
 				int direction = stoi(http_context->getParam("direction"));
 				float amount = stof(http_context->getParam("amount"));
-				string id = cookie.substr(cookie.find('='));
-				id.erase(0, 1);
 
-				HttpContext* video_feed = openConnections.at(id);
+				HttpContext* video_feed = openConnections.at(cookie);
 				video_feed->getGrafica()->rotateScene(direction, amount);
 				video_feed->setActivity();
 
@@ -162,28 +153,51 @@ void parser(CLIENT_STRUCTURE& client) {
 			} catch (exception e) {
 				http.sendResponse(*http_context, 500, e.what(), {});
 			}
-		}
-		if (opt == "/api/close") 		{
+		}else if (opt == "/api/close") {
 			try {
-				string cookie = http_context->getParam("cookie");
-				string id = cookie.substr(cookie.find('='));
-				id.erase(0, 1);
-
-				HttpContext* video_feed = openConnections.at(id);
+				string cookie = http_context->getParam("X-Authorize");
+				HttpContext* video_feed = openConnections.at(cookie);
 				http.sendChunk(*video_feed, "", 0);
 
 				delete video_feed;
-				openConnections.erase(id);
+				openConnections.erase(cookie);
 
 				http.sendResponse(*http_context, 200, "", {});
-			}catch (out_of_range) {
+			} catch (out_of_range) {
 				http.sendResponse(*http_context, 404, "", {});
-			}catch (exception e) {
+			} catch (exception e) {
 				http.sendResponse(*http_context, 500, e.what(), {});
 			}
+		} else {
+			// Static file management
+			try {
+				if (opt.find("..") != string::npos) {
+					throw string("Path traversal attack!");
+				}
+				if (opt.find(".") == string::npos || opt.size()-1-opt.find(".")==0) {
+					throw string("No extension defined!");
+				}
+
+				string path = "www";
+				string extension = opt.substr(opt.find("."));
+				extension.erase(0, 1);
+				path += opt;
+
+				ifstream fi(path, std::ios::binary);
+				std::stringstream buffer;
+				if (!fi.is_open()) {
+					throw string("Resursa inexistenta!");
+				}
+
+				buffer << fi.rdbuf();
+				http.sendResponse(*http_context, 200, buffer.str(), { {"Content-Type",Http::getContentType(extension)} });
+			} catch (exception e) {
+				http.sendResponse(*http_context, 404, "", {});
+			}
+			
 		}
-	} catch (string s) 	{
-		cout<<s<<endl;
+	} catch (string s) {
+		cout << s << endl;
 	}
 
 	if (http_context != nullptr) delete http_context;

@@ -58,11 +58,37 @@ class Http
 {
 private:
 	static const int HEADER_BUFF_SIZE = 5000;
+
+	static map<int, string> createHttpCodes() {
+		map<int, string> codes = {
+			{200,"200 OK"},
+			{404,"404 Not Found"},
+			{409,"409 Conflict"},
+			{422,"422 Unprocessable failure"},
+			{500,"500 Internal Server Error"}
+		};
+		return codes;
+	}
+	static map<string, string> createTypeCodes() {
+		map<string, string> codes = {
+			{"js","text/javascript"},
+			{"html","text/html"},
+			{"css"," text/css "},
+			{"png","image/png"},
+			{"jpg","image/jpeg"},
+			{"ico","image/jpeg"}
+		};
+		return codes;
+	}
 public:
+
+	static const map<int, string> HTTP_CODES;
+	static const map<string, string> TYPE_CODES;
+
+	static string getContentType(string extension);
 	static string genRandomId(const int);
 	static HttpContext* readHeader(CLIENT_STRUCTURE&);
 	static string readBody(CLIENT_STRUCTURE&, int);
 	static void sendResponse(HttpContext&,int,string,map<string,string>);
 	static void sendChunk(HttpContext&,const char*,int);
 };
-
