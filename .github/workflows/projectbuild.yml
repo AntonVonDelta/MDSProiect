@@ -64,8 +64,6 @@ jobs:
       
   tests_client:
     runs-on: windows-latest
-    needs: tests_server
-    if: success()
     steps:
     - uses: actions/checkout@v2
     
@@ -96,7 +94,7 @@ jobs:
         
   publish:
     runs-on: windows-latest
-    needs: tests_client
+    needs: [tests_client,tests_server]
     if: success() && github.ref == 'refs/heads/master'
 
     steps:
@@ -133,8 +131,9 @@ jobs:
     - name: Constructing output folder
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
+          echo .gitignore>>exclude.txt
           xcopy "${{ env.WEBSITE_ROOT_FILE_PATH }}" "${{ env.OUTPUT_PATH }}\www\" /i /s /e /y
-          xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\" /i /s /e /y
+          xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\" /i /s /e /y /exclude:exclude.txt
           
     - name: Archive project
       working-directory: ${{ env.PROJECT_ROOT }}
