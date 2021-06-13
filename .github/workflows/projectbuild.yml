@@ -134,7 +134,7 @@ jobs:
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
           xcopy "${{ env.WEBSITE_ROOT_FILE_PATH }}" "${{ env.OUTPUT_PATH }}\www\" /i /s /e /y
-          xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\" /i /s /e /y /EXCLUDE:.gitignore
+          xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\" /i /s /e /y
           
     - name: Archive project
       working-directory: ${{ env.PROJECT_ROOT }}
