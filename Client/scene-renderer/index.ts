@@ -36,13 +36,14 @@ class SceneRenderer {
     }
 
     /**
-     * Map used for acquiring the image size from the custom HTTP headers.
+     * Map used for storing the names of the custom HTTP headers used.
      * @private
      * @static
      */
-    private static _IMAGE_SIZE_HEADERS = {
+    private static _HEADERS = {
         WIDTH: 'X-Image-Width',
-        HEIGHT: 'X-Image-Height'
+        HEIGHT: 'X-Image-Height',
+        AUTHORIZATION: 'X-Authorize'
     }
 
     /**
@@ -64,6 +65,12 @@ class SceneRenderer {
     private _endpoints: { login: string, move: string, rotate: string, load: string }
 
     /**
+     * The API key received on login. Used for subsequent requests made to the server.
+     * @private
+     */
+    private _apiKey: string | null = null
+
+    /**
      * @param origin the URL origin for the API calls
      */
     public constructor(origin = '') {
@@ -80,20 +87,23 @@ class SceneRenderer {
      * Function that authenticates the user in order to start the video feed.
      * @returns a promise that resolves to an object with `width`, `height` (the size of the image) and
      * `stream` (null or a ReadableStream for an UInt8Array) properties
-     * @throws `AlreadyLoggedInError`, `CannotGetCookieError`, `UnknownStatusCodeError`, `InternalServerError`
+     * @throws `AlreadyLoggedInError`, `CannotGetKeyError`, `UnknownStatusCodeError`, `InternalServerError`
      * @async
      */
     public async login () {
         if (this._loggedIn) throw new AlreadyLoggedInError()
 
-        const res = await fetch(this._endpoints.login, { credentials: 'same-origin' })
+        const res = await fetch(this._endpoints.login)
         if (res.status === 500) throw new InternalServerError(await res.text())
-        if (res.status === 409) throw new CannotGetCookieError()
+        if (res.status === 409) throw new CannotGetKeyError()
         if (res.status !== 200) throw new UnknownStatusCodeError()
 
         this._loggedIn = true
-        const imageWidthHeader = res.headers.get(SceneRenderer._IMAGE_SIZE_HEADERS.WIDTH)
-        const imageHeightHeader = res.headers.get(SceneRenderer._IMAGE_SIZE_HEADERS.HEIGHT)
+        if (!res.headers.has(SceneRenderer._HEADERS.AUTHORIZATION))
+            throw new CannotGetKeyError()
+        this._apiKey = res.headers.get(SceneRenderer._HEADERS.AUTHORIZATION)
+        const imageWidthHeader = res.headers.get(SceneRenderer._HEADERS.WIDTH)
+        const imageHeightHeader = res.headers.get(SceneRenderer._HEADERS.HEIGHT)
 
         const imageWidth = imageWidthHeader ? parseInt(imageWidthHeader) : 720
         const imageHeight = imageHeightHeader ? parseInt(imageHeightHeader) : 480
@@ -111,7 +121,7 @@ class SceneRenderer {
      * @async
      */
     public async loadFromText (data: string) {
-        if (!this._loggedIn) throw new UnauthorizedError()
+        if (!this._loggedIn || !this._apiKey) throw new UnauthorizedError()
 
         const validLines = data
             .split('\n')
@@ -122,14 +132,17 @@ class SceneRenderer {
         }
 
         const res = await fetch(this._endpoints.load, {
-            credentials: 'same-origin',
             body: data,
             method: 'POST',
-            headers: { 'Content-Type': 'text/plain' }
+            headers: {
+                'Content-Type': 'text/plain',
+                [SceneRenderer._HEADERS.AUTHORIZATION]: this._apiKey
+            }
         })
         if (res.status === 500) throw new InternalServerError(await res.text())
         if (res.status === 404) {
             this._loggedIn = false
+            this._apiKey = null
             throw new UnauthorizedError()
         }
         if (res.status === 422) {
@@ -148,7 +161,7 @@ class SceneRenderer {
      * @async
      */
     public async move (direction: keyof typeof SceneRenderer._MOVE_DIRECTION_OPCODES, amount: number) {
-        if (!this._loggedIn) throw new UnauthorizedError()
+        if (!this._loggedIn || !this._apiKey) throw new UnauthorizedError()
 
         const queryParams = new URLSearchParams()
         queryParams.append('direction', SceneRenderer._MOVE_DIRECTION_OPCODES[direction].toString())
@@ -156,10 +169,11 @@ class SceneRenderer {
 
         const fullPath = this._endpoints.move + '&' + queryParams.toString()
 
-        const res = await fetch(fullPath, { credentials: 'same-origin' })
+        const res = await fetch(fullPath, { headers: { [SceneRenderer._HEADERS.AUTHORIZATION]: this._apiKey || '' } })
         if (res.status === 500) throw new InternalServerError(await res.text())
         if (res.status === 404) {
             this._loggedIn = false
+            this._apiKey = null
             throw new UnauthorizedError()
         }
         if (res.status !== 200) throw new UnknownStatusCodeError()
@@ -176,7 +190,7 @@ class SceneRenderer {
      * @async
      */
     public async rotate (direction: keyof typeof SceneRenderer._ROTATE_DIRECTION_OPCODES, amount: number) {
-        if (!this._loggedIn) throw new UnauthorizedError()
+        if (!this._loggedIn || !this._apiKey) throw new UnauthorizedError()
 
         const queryParams = new URLSearchParams()
         queryParams.append('direction', SceneRenderer._ROTATE_DIRECTION_OPCODES[direction].toString())
@@ -184,10 +198,11 @@ class SceneRenderer {
 
         const fullPath = this._endpoints.rotate + '&' + queryParams.toString()
 
-        const res = await fetch(fullPath, { credentials: 'same-origin' })
+        const res = await fetch(fullPath, { headers: { [SceneRenderer._HEADERS.AUTHORIZATION]: this._apiKey || '' } })
         if (res.status === 500) throw new InternalServerError(await res.text())
         if (res.status === 404) {
             this._loggedIn = false
+            this._apiKey = null
             throw new UnauthorizedError()
         }
         if (res.status !== 200) throw new UnknownStatusCodeError()
@@ -213,8 +228,8 @@ class UnknownStatusCodeError extends Error {
     }
 }
 
-class CannotGetCookieError extends Error {
-    constructor (message = 'Cannot Get Cookie') {
+class CannotGetKeyError extends Error {
+    constructor (message = 'Cannot Get API Key') {
         super(message)
     }
 }
