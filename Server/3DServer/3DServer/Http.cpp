@@ -136,7 +136,7 @@ HttpContext* Http::readHeader(CLIENT_STRUCTURE& client_struct) {
 		poz1 = str.find(':');
 		poz2 = str.find("\r\n");
 		string key = str.substr(0, poz1);
-		string value = str.substr(poz1 + 1, poz2 - poz1 - 1);
+		string value = eraseStartSpaces( str.substr(poz1 + 1, poz2 - poz1 - 1));
 		transform(key.begin(), key.end(), key.begin(), ::tolower);
 
 		request_params[key] = value;
@@ -224,5 +224,14 @@ void Http::sendChunk(HttpContext& http_context, const char* buffer, int len) {
 		throw "Disconnected";
 }
 
+string Http::eraseStartSpaces(string txt) {
+	int len = 0;
+	for (char& c : txt) {
+		if (c == ' ') len++;
+		else break;
+	}
+	txt.erase(0, len);
+	return txt;
+}
 const map<int, string> Http::HTTP_CODES = Http::createHttpCodes();
 const map<string, string> Http::TYPE_CODES = Http::createTypeCodes();

@@ -80,6 +80,8 @@ private:
 		};
 		return codes;
 	}
+
+	static string eraseStartSpaces(string);
 public:
 
 	static const map<int, string> HTTP_CODES;

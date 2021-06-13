@@ -86,6 +86,7 @@ void parser(CLIENT_STRUCTURE& client) {
 					http.sendResponse(*http_context, 409, "", {});
 				} else {
 					openConnections[generated_cookie] = http_context;
+					cout << generated_cookie << endl;
 					http.sendResponse(*http_context, 200, "", {
 						{string("X-Authorize"), generated_cookie},
 						{string("Transfer-Encoding"), string("chunked")},
@@ -105,7 +106,8 @@ void parser(CLIENT_STRUCTURE& client) {
 				string body = http.readBody(client, lenght);
 
 				try {
-					string cookie = http_context->getParam("X-Authorize");
+					string cookie = http_context->getParam("x-authorize");
+					cout << cookie << endl;
 
 					HttpContext* video_feed = openConnections.at(cookie);
 					video_feed->getGrafica()->loadObject(body);
@@ -123,7 +125,7 @@ void parser(CLIENT_STRUCTURE& client) {
 			}
 		} else if (opt == "/api/move") {
 			try {
-				string cookie = http_context->getParam("X-Authorize");
+				string cookie = http_context->getParam("x-authorize");
 				int direction = stoi(http_context->getParam("direction"));
 				float amount = stof(http_context->getParam("amount"));
 
@@ -139,7 +141,7 @@ void parser(CLIENT_STRUCTURE& client) {
 			}
 		} else if (opt == "/api/rotate") {
 			try {
-				string cookie = http_context->getParam("X-Authorize");
+				string cookie = http_context->getParam("x-authorize");
 				int direction = stoi(http_context->getParam("direction"));
 				float amount = stof(http_context->getParam("amount"));
 
@@ -155,7 +157,7 @@ void parser(CLIENT_STRUCTURE& client) {
 			}
 		}else if (opt == "/api/close") {
 			try {
-				string cookie = http_context->getParam("X-Authorize");
+				string cookie = http_context->getParam("x-authorize");
 				HttpContext* video_feed = openConnections.at(cookie);
 				http.sendChunk(*video_feed, "", 0);
 
@@ -178,7 +180,7 @@ void parser(CLIENT_STRUCTURE& client) {
 					throw string("No extension defined!");
 				}
 
-				string path = "www";
+				string path = "C:\\Users\\Sergiu\\Desktop\\Documente Facultate\\Anul2\\Sem2\\MDS\\Server\\3DServer\\Debug\\www";
 				string extension = opt.substr(opt.find("."));
 				extension.erase(0, 1);
 				path += opt;
