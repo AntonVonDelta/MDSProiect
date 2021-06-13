@@ -9,7 +9,7 @@ class SceneRenderer {
      * @private
      * @static
      */
-    private static _OBJ_LINE_REGEX = /^(v( -?(0|[1-9]\d*)(\.\d+)?){3,4}|vn( -?(0|[1-9]\d*)(\.\d+)?){3}|f( [1-9]\d*((\/([1-9]\d*)?)?\/[1-9]\d*)?){3,})$/
+    private static _OBJ_LINE_REGEX = /^(v(\s+-?(0|[1-9]\d*)(\.\d+)?){3,4}|vn(\s+-?(0|[1-9]\d*)(\.\d+)?){3}|f(\s+[1-9]\d*((\/([1-9]\d*)?)?\/[1-9]\d*)?){3,})$/
 
     /**
      * Map for translating moving directions into API opcodes.
