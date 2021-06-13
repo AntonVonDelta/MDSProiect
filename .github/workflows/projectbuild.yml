@@ -106,6 +106,11 @@ jobs:
       run: |
         echo ${{ github.workspace }} 
         echo ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}
+
+    - name: Constructing output folder
+      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
+      run: |
+        mkdir ${{ env.WEBSITE_SCRIPTS_FILE_PATH }} > nul
         
     - name: Download server artifact
       uses: actions/download-artifact@v2
@@ -113,16 +118,18 @@ jobs:
         name: server-artifact
         path: ${{ env.OUTPUT_PATH }}
         
+    - name: TEST
+      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
+      run: |
+          dir ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}
+          
     - name: Download client artifact
       uses: actions/download-artifact@v2
       with:
         name: client-artifact
         path: ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}
     
-    - name: Publishing client library
-      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
-      run: |
-          dir ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}
+
           
     - name: Publishing client library
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
