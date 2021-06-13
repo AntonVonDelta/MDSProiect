@@ -106,11 +106,6 @@ jobs:
       run: |
         echo ${{ github.workspace }} 
         echo ${{env.SOLUTION_FILE_PATH}}\${{env.BUILD_CONFIGURATION}}
-
-    - name: Constructing output folder
-      working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
-      run: |
-        mkdir -Force "${{ env.WEBSITE_SCRIPTS_FILE_PATH }}"
         
     - name: Download server artifact
       uses: actions/download-artifact@v2
@@ -121,7 +116,7 @@ jobs:
     - name: TEST
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
-          dir ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}
+          dir  -ErrorAction SilentlyContinue ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}
           
     - name: Download client artifact
       uses: actions/download-artifact@v2
@@ -130,7 +125,6 @@ jobs:
         path: ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}
     
 
-          
     - name: Publishing client library
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
@@ -140,11 +134,12 @@ jobs:
           git commit -am "Automated build of client library"
           git push --force
           
+          
     - name: Constructing output folder
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
-          xcopy "${{ env.WEBSITE_ROOT_FILE_PATH }}" "${{ env.OUTPUT_PATH }}\www\" /i /s /e /y
-          xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\" /i /s /e /y
+          xcopy  -ErrorAction SilentlyContinue "${{ env.WEBSITE_ROOT_FILE_PATH }}" "${{ env.OUTPUT_PATH }}\www\" /i /s /e /y
+          xcopy  -ErrorAction SilentlyContinue "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\" /i /s /e /y
           
     - name: Archive project
       working-directory: ${{ env.PROJECT_ROOT }}
