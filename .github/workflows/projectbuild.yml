@@ -110,7 +110,7 @@ jobs:
     - name: Constructing output folder
       working-directory: ${{ env.CLIENT_SOLUTION_FILE_PATH }}
       run: |
-        mkdir "${{ env.WEBSITE_SCRIPTS_FILE_PATH }}" > nul
+        mkdir -Force "${{ env.WEBSITE_SCRIPTS_FILE_PATH }}"
         
     - name: Download server artifact
       uses: actions/download-artifact@v2
