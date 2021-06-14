@@ -1,4 +1,4 @@
-name: MSBuild
+name: TestsAndBuild
 
 ## Haha...the suggested and default environment ${{env.GITHUB_WORKSPACE}} is not defined and gives error despite the documentation talking and using this variable
 ## It seems the correct one should be ${{ github.workspace }}...why should you bother github?
