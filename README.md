@@ -13,6 +13,8 @@ The server will provide an http-compatible api for manipulating the scene. The s
 
 **Read the protocol [here](https://github.com/AntonVonDelta/MDSProiect/wiki/Server-API)**
 
+![Demo](DemoScreenshot.png)
+
 ## How to run the project
  - Download release version from [here](https://github.com/AntonVonDelta/MDSProiect/releases) and unzip the files to a folder
  - The folder containing the executable must also contain these 3 dlls: freeglut.dll, glew32.dll, glfw3.dll
