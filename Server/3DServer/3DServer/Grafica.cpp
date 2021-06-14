@@ -1,28 +1,15 @@
 #include "Grafica.h"
 
-Grafica::Grafica() {
-	fbo = 0;
-	move_vector = {};
-	rotate_vector = {};
-	object_definition = vector<Triangle>();
-
+Grafica::Grafica() : fbo(0), move_vector({}), rotate_vector({}), object_definition(vector<Triangle>()),window(nullptr){
 	buffer = new char[width * height * 4];
 }
 
-Grafica::Grafica(int window_width, int window_height) {
-	fbo = 0;
-	move_vector = {};
-	rotate_vector = {};
-	object_definition = vector<Triangle>();
-
+Grafica::Grafica(int window_width, int window_height) : fbo(0), move_vector({}), rotate_vector({}), object_definition(vector<Triangle>()),window(nullptr) {
 	width = window_width;
 	height = window_height;
 	buffer = new char[width * height * 4];
 }
 
-Grafica::~Grafica() {
-	delete[] buffer;
-}
 Grafica::Grafica(const Grafica& other) {
 	buffer = new char[width * height * 4];
 	move_vector = other.move_vector;
@@ -35,6 +22,10 @@ Grafica::Grafica(const Grafica& other) {
 		init();
 		drawScene();
 	}
+}
+
+Grafica::~Grafica() {
+	delete[] buffer;
 }
 
 void Grafica::destroy() {
@@ -151,6 +142,7 @@ void Grafica::drawScene(void) {
 	glPushMatrix();
 
 	glTranslatef(move_vector.x, move_vector.y, move_vector.z);
+
 	glRotatef(rotate_vector.x, 1.0, 0, 0);
 	glRotatef(rotate_vector.y, 0, 1.0, 0);
 
