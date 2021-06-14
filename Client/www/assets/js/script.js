@@ -32,7 +32,7 @@ async function loadText() {
     await scene.loadFromText(input);
   }catch(err){
     if(err instanceof MalformedDataError){
-      alert("Inputul e gresit la linia: "+err.message);
+      alert(err.message);
     }else notifyDisconnected();
   }
 }
