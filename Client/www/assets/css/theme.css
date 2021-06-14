@@ -5,6 +5,82 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 
+/*Animated Background */
+
+@import url(https://fonts.googleapis.com/css?family=Exo:100);
+@-webkit-keyframes bg-scrolling-reverse {
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+@-moz-keyframes bg-scrolling-reverse {
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+@-o-keyframes bg-scrolling-reverse {
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+@keyframes bg-scrolling-reverse {
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+@-webkit-keyframes bg-scrolling {
+  0% {
+    background-position: 50px 50px;
+  }
+}
+
+@-moz-keyframes bg-scrolling {
+  0% {
+    background-position: 50px 50px;
+  }
+}
+
+@-o-keyframes bg-scrolling {
+  0% {
+    background-position: 50px 50px;
+  }
+}
+
+@keyframes bg-scrolling {
+  0% {
+    background-position: 50px 50px;
+  }
+}
+
+/* Main styles */
+
+body {
+  margin-top: 13.5rem;
+  color: #999;
+  font: 400 16px/1.5 exo, ubuntu, "segoe ui", helvetica, arial, sans-serif;
+  text-align: center;
+  /* img size is 50x50 */
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAABnSURBVHja7M5RDYAwDEXRDgmvEocnlrQS2SwUFST9uEfBGWs9c97nbGtDcquqiKhOImLs/UpuzVzWEi1atGjRokWLFi1atGjRokWLFi1atGjRokWLFi1af7Ukz8xWp8z8AAAA//8DAJ4LoEAAlL1nAAAAAElFTkSuQmCC") repeat 0 0;
+  -webkit-animation: bg-scrolling-reverse 0.92s infinite;
+  /* Safari 4+ */
+  -moz-animation: bg-scrolling-reverse 0.92s infinite;
+  /* Fx 5+ */
+  -o-animation: bg-scrolling-reverse 0.92s infinite;
+  /* Opera 12+ */
+  animation: bg-scrolling-reverse 0.92s infinite;
+  /* IE 10+ */
+  -webkit-animation-timing-function: linear;
+  -moz-animation-timing-function: linear;
+  -o-animation-timing-function: linear;
+  animation-timing-function: linear;
+}
+
+/*End of animated background*/
+
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
@@ -51,6 +127,10 @@ footer, header, main, section {
   display: block
 }
 
+header {
+  height: 130px;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -61,6 +141,314 @@ body {
   text-align: left;
   padding: 0;
 }
+
+/*Logo*/
+
+.logo {
+  text-align: center;
+  transform: rotateX(-90deg);
+  animation: bendLogo 2000ms 0s ease-in-out forwards;
+  transform-style: preserve-3d;
+  position: relative;
+  width: 60vmin;
+  height: 30vmin;
+  padding-top: 2.5vmin;
+}
+
+@keyframes squarify {
+  0% {
+    background-color: white;
+  }
+  25% {
+    background-color: black;
+    border-radius: 50%;
+  }
+  100% {
+    border-radius: 0;
+  }
+}
+
+@keyframes bendLogo {
+  0% {
+    transform: rotateX(-90deg) scale3d(0, 0, 0);
+  }
+  25% {
+    transform: rotateX(-90deg) scale3d(1, 1, 1);
+  }
+  90% {
+    transform: rotateX(-90deg) scale3d(1, 1, 1);
+  }
+  100% {
+    transform: rotateX(-35.5deg);
+  }
+}
+
+@keyframes slideLeft {
+  0% {
+    left: 20vmin;
+  }
+  50% {
+    left: 20vmin;
+  }
+  62.5% {
+    left: 0;
+  }
+  100% {
+    left: 0;
+  }
+}
+
+@keyframes slideRight {
+  0% {
+    left: 20vmin;
+  }
+  62.5% {
+    left: 20vmin;
+  }
+  75% {
+    left: 40vmin;
+  }
+  100% {
+    left: 40vmin;
+  }
+}
+
+@keyframes rotateLetters {
+  0% {
+    transform: rotate3d(0, 1, 0, -315deg);
+  }
+  100% {
+    transform: rotate3d(0, 1, 0, 45deg);
+  }
+}
+
+@keyframes rotate90 {
+  100% {
+    transform: rotate3d(1, 0, 0, 90deg);
+  }
+}
+
+@keyframes rotateMin180 {
+  100% {
+    transform: rotate3d(1, 0, 0, -179.9999deg);
+  }
+}
+
+@keyframes rotateMin90 {
+  100% {
+    transform: rotate3d(1, 0, 0, -90deg);
+  }
+}
+
+@keyframes rotateMin45 {
+  100% {
+    transform: rotate3d(1, 0, 0, -45deg);
+  }
+}
+
+@keyframes rotateMin30 {
+  100% {
+    transform: rotate3d(1, 0, 0, -30deg);
+  }
+}
+
+@keyframes rotateMin60 {
+  100% {
+    transform: rotate3d(1, 0, 0, -60deg);
+  }
+}
+
+@keyframes rotateMin120 {
+  100% {
+    transform: rotate3d(1, 0, 0, -120deg);
+  }
+}
+
+.logo-letter {
+  transform: rotate3d(0, 1, 0, 45deg);
+  transform-origin: 50% 50%;
+  display: inline-block;
+  transform-style: preserve-3d;
+  position: absolute;
+  left: 10vmin;
+}
+
+.logo-letter:first-child {
+  animation: slideLeft 2000ms ease-in-out forwards;
+}
+
+.logo-letter:nth-child(3) {
+  animation: slideRight 2000ms ease-in-out forwards;
+}
+
+.logo-letter i {
+  display: block;
+  height: 60px;
+  width: 60px;
+  background-color: black;
+  border: solid 2px white;
+  transform-style: preserve-3d;
+  transform-origin: top;
+  backface-visibility: visible;
+  box-shadow: none;
+  border-radius: 50%;
+  animation: squarify 2000ms 0s ease-in-out forwards;
+}
+
+.logo-letter i i {
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  top: -2px;
+  bottom: -2px;
+}
+
+.logo-letter>i {
+  transform: rotate3d(1, 0, 0, 90deg);
+}
+
+.logo-letter.q>i>i {
+  transform-origin: bottom;
+  animation: squarify 2000ms 0s ease-in-out forwards, rotate90 0.3s 2.6s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter.q>i>i>i {
+  animation: squarify 2000ms 0s ease-in-out forwards, rotate90 0.6s 3.2s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter.q>i>i>i>i {
+  animation: squarify 2000ms 0s ease-in-out forwards, rotate90 0.3s 3.8s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter.q>i>i>i>i>i {
+  transform-origin: bottom;
+  animation: squarify 2000ms 0s ease-in-out forwards, rotate90 0.3s 4.4s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter.r>i>i {
+  animation: squarify 2000ms 0s ease-in-out forwards, rotateMin90 0.3s 2.6s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter.r>i>i>i {
+  transform-origin: bottom;
+  animation: squarify 2000ms 0s ease-in-out forwards, rotateMin90 0.3s 3.2s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter.r>i>i>i>i {
+  animation: squarify 2000ms 0s ease-in-out forwards, rotateMin90 0.3s 3.8s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter.r>i>i>i>i>i {
+  animation: squarify 2000ms 0s ease-in-out forwards, rotate90 0.3s 4.4s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter.r>i>i>i>i>i>i {
+  transform-origin: bottom;
+  animation: squarify 2000ms 0s ease-in-out forwards, rotateMin90 0.3s 5s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter.r>i>i>i>i>i>i>i {
+  transform-origin: bottom;
+  animation: squarify 2000ms 0s ease-in-out forwards, rotate90 0.3s 5.6s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter.r>i>i>i>i>i>i>i>i {
+  transform-origin: bottom;
+  animation: squarify 2000ms 0s ease-in-out forwards, rotateMin45 0.3s 6.2s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter.r>i>i>i>i>i>i>i>i>i {
+  transform-origin: bottom;
+  animation: squarify 2000ms 0s ease-in-out forwards, rotateMin45 0.3s 6.8s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter-angled {
+  transform: rotate3d(0, 1, 0, 45deg);
+  transform-origin: 50% 50%;
+  display: inline-block;
+  transform-style: preserve-3d;
+  position: absolute;
+  left: 22vmin !important;
+}
+
+.logo-letter-angled:first-child {
+  animation: slideLeft 2000ms ease-in-out forwards;
+}
+
+.logo-letter-angled:nth-child(3) {
+  animation: slideRight 2000ms ease-in-out forwards;
+}
+
+.logo-letter-angled i {
+  display: block;
+  height: 60px;
+  width: 60px;
+  background-color: black;
+  border: solid 2px white;
+  transform-style: preserve-3d;
+  transform-origin: top;
+  backface-visibility: visible;
+  box-shadow: none;
+  border-radius: 50%;
+  animation: squarify 2000ms 0s ease-in-out forwards;
+}
+
+.logo-letter-angled i i {
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  top: -2px;
+  bottom: -2px;
+}
+
+.logo-letter-angled>i {
+  transform: rotate3d(1, 0, 0, 60deg);
+}
+
+.logo-letter-angled.d>i>i {
+  animation: squarify 2000ms 0s ease-in-out forwards, rotateMin60 0.3s 2.6s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter-angled.d>i>i>i {
+  transform-origin: bottom;
+  animation: squarify 2000ms 0s ease-in-out forwards, rotateMin180 0.3s 3.2s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter-angled.d>i>i>i>i {
+  animation: squarify 2000ms 0s ease-in-out forwards, rotateMin60 0.3s 3.8s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter-angled.d>i>i>i>i>i {
+  transform-origin: bottom;
+  animation: squarify 2000ms 0s ease-in-out forwards, rotateMin120 0.3s 4.4s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter-angled.d>i>i>i>i>i>i {
+  animation: squarify 2000ms 0s ease-in-out forwards, rotateMin120 0.3s 5s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter-angled.d>i>i>i>i>i>i>i {
+  transform-origin: bottom;
+  animation: squarify 2000ms 0s ease-in-out forwards, rotate90 0.3s 5.6s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter-angled.d>i>i>i>i>i>i>i>i {
+  transform-origin: bottom;
+  animation: squarify 2000ms 0s ease-in-out forwards, rotateMin45 0.3s 6.2s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+.logo-letter-angled.d>i>i>i>i>i>i>i>i>i {
+  transform-origin: bottom;
+  animation: squarify 2000ms 0s ease-in-out forwards, rotateMin45 0.3s 6.8s cubic-bezier(0.64, 0.54, 0.98, 0.34) forwards;
+}
+
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* End of Logo */
 
 #particles-js {
   height: 400px;
@@ -1490,7 +1878,7 @@ a.bg-light:focus, a.bg-light:hover {
 }
 
 .pt-3, .py-3 {
-  padding-top: 1rem!important
+  padding-top: 1rem
 }
 
 .pr-3 {
