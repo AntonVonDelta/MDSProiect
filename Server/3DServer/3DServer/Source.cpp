@@ -43,7 +43,7 @@ void worker() {
 	for (auto it = openConnections.cbegin(); it != openConnections.cend();) {
 		HttpContext* connection = it->second;
 
-		if (connection->getInactivity() > 60) {
+		if (connection->getInactivity() > 120) {
 			// Finish chunk
 			Http::sendChunk(*connection, "", 0);
 

@@ -129,7 +129,7 @@ void Grafica::initScene() {
 	glMatrixMode(GL_MODELVIEW);
 	gluLookAt(0.0, 0.0, 5.0,  /* eye is at (0,0,5) */
 		0.0, 0.0, 0.0,      /* center is at (0,0,0) */
-		0.0, 1.0, 0.);      /* up is in positive Y direction */
+		0.0, -1.0, 0.);      /* up is in positive Y direction */
 
 	/* Adjust cube position to be asthetic angle. */
 	glTranslatef(0.0, 0.0, -1.0);
