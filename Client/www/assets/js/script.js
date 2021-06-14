@@ -1,9 +1,11 @@
-var scene;
+var scene = null;
 var frame_data = null;
 var ctx = null;
 
 async function setupScene() {
   var input = document.getElementById("render-input").value;
+
+  if (scene != null) frame_data.stream.cancel();
   scene = new SceneRenderer();
 
   var canvas = document.getElementById("scene-canvas");
@@ -12,7 +14,6 @@ async function setupScene() {
   frame_data = await scene.login();
   await drawFrames();
 }
-
 
 async function loadText() {
   var input = document.getElementById("render-input").value;
@@ -38,12 +39,10 @@ async function rotateScene() {
   await scene.rotate("aroundY", 30);
 }
 
-
-
 async function drawFrames() {
   var width = frame_data.width;
   var height = frame_data.height;
-  var reader = frame_data.stream.getReader()
+  var reader = frame_data.stream.getReader();
   var arr = new Uint8ClampedArray(width * height * 4);
   var loaded = 0;
 
@@ -57,33 +56,59 @@ async function drawFrames() {
     loaded += value.length;
     loaded %= arr.length;
 
-    //console.log(`${value.length} bytes downloaded\t${loaded} current bytes for frame\t${arr.length-loaded} bytes left`);
+    //console.log(${ value.length}  bytes downloaded\t${ loaded}  current bytes for frame\t${ arr.length-loaded}  bytes left);
 
     // Scale the image and draw
     // https://stackoverflow.com/questions/51387989/change-image-size-with-ctx-putimagedata
-    createImageBitmap(new ImageData(arr, width, height)).then(function (bitmap) {
+    createImageBitmap(new ImageData(arr, width, height)).then(function (
+      bitmap
+    ) {
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
       ctx.drawImage(bitmap, 0, 0, ctx.canvas.width, ctx.canvas.height);
     });
   }
-
 }
 
 var lastSeenAt = { x: null, y: null };
+var movementVector = { x: 0, y: 0 };
 var dragging = 0;
-var controlMode = 0;  //0 translation, 1 rotation
+var controlMode = 0; //0 translation, 1 rotation
+var FPS = 30;
+setInterval(manipulateScene, Math.floor(1000 / FPS));
+
 $("#scene-canvas").mousedown(function (event) {
   dragging = 1;
   lastSeenAt.x = event.clientX;
   lastSeenAt.y = event.clientY;
 });
+$(document).mousemove(async function (event) {
+  if (dragging != 1) return;
+
+  var dy = event.clientY - lastSeenAt.y;
+  var dx = event.clientX - lastSeenAt.x;
+
+  movementVector.x += dx;
+  movementVector.y += dy;
+  lastSeenAt.x = event.clientX;
+  lastSeenAt.y = event.clientY;
+});
 $(document).mouseup(async function (event) {
   if (dragging != 1) return;
+  dragging = 0;
+});
+
+async function manipulateScene() {
+  if (dragging != 1) return;
+  if (scene == null) return;
 
   var width = $("#scene-canvas").width();
   var height = $("#scene-canvas").height();
-  var dy = event.clientY - lastSeenAt.y;
-  var dx = event.clientX - lastSeenAt.x;
+  var dx = movementVector.x;
+  var dy = movementVector.y;
+
+  // Reset movement vector
+  movementVector.x = 0;
+  movementVector.y = 0;
 
   if (controlMode == 0) {
     var xdirection = "";
@@ -94,39 +119,31 @@ $(document).mouseup(async function (event) {
     if (dy < 0) ydirection += "negative";
     else ydirection += "positive";
 
-    console.log(xdirection + "X", Math.abs(dx) / width);
-    console.log(ydirection + "Y", Math.abs(dy) / height);
-
-    scene.move(xdirection + "X", Math.abs(dx) / width);
-    scene.move(ydirection + "Y", Math.abs(dy) / height);
+    if (Math.abs(dx) != 0) scene.move(xdirection + "X", Math.abs(dx) / width);
+    if (Math.abs(dy) != 0) scene.move(ydirection + "Y", Math.abs(dy) / height);
   } else {
     var xdirection = "";
     var ydirection = "";
 
-    console.log("aroundY", dx / width * 60);
-    console.log("aroundX", dy / height * 60);
-
-    await scene.rotate("aroundY", dx / width * 60);
-    await scene.rotate("aroundX", -dy / height * 60);
+    if (Math.abs(dx) != 0) await scene.rotate("aroundY", (dx / width) * 60);
+    if (Math.abs(dy) != 0) await scene.rotate("aroundX", (-dy / height) * 60);
   }
+}
 
-  dragging = 0;
-});
 $(document).keypress(function (event) {
-  var keycode = (event.keyCode ? event.keyCode : event.which);
-  if (keycode == '32') {
+  var keycode = event.keyCode ? event.keyCode : event.which;
+  if (keycode == "32") {
     controlMode = 1;
   }
 });
 $(document).keyup(function (event) {
-  var keycode = (event.keyCode ? event.keyCode : event.which);
-  if (keycode == '32') {
+  var keycode = event.keyCode ? event.keyCode : event.which;
+  if (keycode == "32") {
     controlMode = 0;
   }
 });
 
-var objcube=
-`
+var objcube = `
 v 1.000000 -1.000000 -1.000000
 v 1.000000 -1.000000 1.000000
 v -1.000000 -1.000000 1.000000
@@ -169,8 +186,7 @@ f 4/13/5 3/9/5 8/11/5
 f 5/6/6 1/12/6 8/11/6
 `;
 
-var objsphere =
-  `
+var objsphere = `
 v 0.000000 1.000000 -0.000000
 v -0.000000 0.980785 -0.195090
 v -0.038060 0.980785 -0.191342
@@ -2660,9 +2676,7 @@ f 482/558/482 480/526/480 479/525/479
 f 482/559/482 481/527/481 480/526/480
 f 482/560/482 450/528/450 481/527/481`;
 
-
-var objcomplex=
-`
+var objcomplex = `
 v 2.000000 -1.000000 0.000000
 v 2.195090 -1.000000 0.019215
 v 2.382684 -1.000000 0.076120
@@ -4775,3 +4789,64 @@ f 555//520 552//520 551//520
 f 548//521 549//521 551//521
 f 555//522 554//522 552//522
 `;
+
+/* Design scripts */
+
+/* Login button script */
+const cube = document.querySelector(".cube");
+
+cube.addEventListener("click", (e) => {
+  cube.classList.add("cube-ani");
+  cube.classList.toggle("show-success");
+  setTimeout(() => {
+    cube.remove();
+  }, 2000);
+  setTimeout(() => {
+    setupScene();
+    loadUI();
+  }, 2100);
+});
+
+cube.addEventListener("animationend", (e) => {
+  if (e.animationName === "show-top") {
+    cube.classList.remove("cube-ani");
+  } else if (e.animationName === "spin-up") {
+    cube.classList.remove("spin");
+  }
+});
+
+function loadUI() {
+  const progress = document.getElementById("progress");
+  const pstatus = document.getElementById("text-status");
+  const buttonDrawer = document.getElementById("btnd");
+
+  progress.classList.remove("clear");
+  pstatus.classList.remove("clear");
+  buttonDrawer.classList.remove("clear");
+  setTimeout(() => {
+    progress.classList.add("bar-5");
+  }, 200);
+  setTimeout(() => {
+    progress.classList.add("bar-15");
+  }, 500);
+  setTimeout(() => {
+    progress.classList.add("bar-35");
+  }, 900);
+  setTimeout(() => {
+    progress.classList.add("bar-75");
+  }, 1400);
+
+  setTimeout(() => {
+    progress.classList.add("bar-100");
+    pstatus.innerHTML = "Scene loaded";
+  }, 2000);
+
+  setTimeout(() => {
+    progress.remove();
+    pstatus.remove();
+  }, 3000);
+}
+
+/* End of login button script */
+
+/* 3D input */
