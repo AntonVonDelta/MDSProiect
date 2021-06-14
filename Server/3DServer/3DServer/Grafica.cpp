@@ -9,7 +9,7 @@ Grafica::Grafica() {
 	buffer = new char[width * height * 4];
 }
 
-Grafica::Grafica(int window_width,int window_height) {
+Grafica::Grafica(int window_width, int window_height) {
 	fbo = 0;
 	move_vector = {};
 	rotate_vector = {};
@@ -150,8 +150,8 @@ void Grafica::initScene() {
 void Grafica::drawScene(void) {
 	glPushMatrix();
 
-	glTranslatef(move_vector.x,move_vector.y,move_vector.z);
-	glRotatef(rotate_vector.x,1.0,0,0);
+	glTranslatef(move_vector.x, move_vector.y, move_vector.z);
+	glRotatef(rotate_vector.x, 1.0, 0, 0);
 	glRotatef(rotate_vector.y, 0, 1.0, 0);
 
 	for (const Triangle& triangle : object_definition) {
@@ -170,7 +170,7 @@ void Grafica::drawScene(void) {
 
 void Grafica::nextScene() {
 	if (!init_succesful) return;
-	
+
 	// Select current context
 	glfwMakeContextCurrent(window);
 
@@ -195,7 +195,7 @@ void Grafica::nextScene() {
 void Grafica::moveScene(int direction, float amount) {
 	switch (direction) {
 		case 0:
-			move_vector.z+= amount;
+			move_vector.z += amount;
 			break;
 
 		case 1:
@@ -271,7 +271,7 @@ void Grafica::loadObject(string input) {
 		}
 		if (mode == "f") {
 			Triangle temp;
-			
+
 			temp.hasNormal = false;
 
 			try {
@@ -279,10 +279,10 @@ void Grafica::loadObject(string input) {
 					string coord_group;
 					line_stream >> coord_group;
 					istringstream coord_stream(coord_group);
-					int vertex_index=-1, texture_index=-1, normal_index=-1;
+					int vertex_index = -1, texture_index = -1, normal_index = -1;
 
 					char junk;
-					coord_stream >> vertex_index>>junk;
+					coord_stream >> vertex_index >> junk;
 
 					if (junk == '/') {
 						if (coord_stream.peek() != '/' && !coord_stream.eof()) {
@@ -294,12 +294,12 @@ void Grafica::loadObject(string input) {
 							coord_stream >> normal_index;
 						}
 					}
-					
 
-					temp.v[i] = corners.at(vertex_index-1);
+
+					temp.v[i] = corners.at(vertex_index - 1);
 
 					if (normal_index != -1) {
-						temp.normals[i] = normals.at(normal_index-1);
+						temp.normals[i] = normals.at(normal_index - 1);
 						temp.hasNormal = true;
 					}
 				}

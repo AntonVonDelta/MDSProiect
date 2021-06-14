@@ -23,25 +23,24 @@
 
 using namespace std;
 
-class HttpContext
-{
+class HttpContext {
 private:
 	map<string, string> request_params;
 	CLIENT_STRUCTURE Client;
 	string SessionId;
-	Grafica *data=nullptr; // This is used to store Grafica object. This is created on heap so must be destroyed on class destructor
+	Grafica* data = nullptr; // This is used to store Grafica object. This is created on heap so must be destroyed on class destructor
 	time_t lastActivity;
 public:
 	~HttpContext();
-	HttpContext():Client({}) {
+	HttpContext() :Client({}) {
 		time(&lastActivity);
 	}
 
-	HttpContext(const HttpContext & other) {
+	HttpContext(const HttpContext& other) {
 		throw string("Context cannot be copied!");
 	}
 
-	void initGrafica(int width,int height);
+	void initGrafica(int width, int height);
 	void setRequestParams(map<string, string> rp);
 	void setClient(CLIENT_STRUCTURE);
 	void setSessionId(string);
@@ -54,31 +53,30 @@ public:
 	CLIENT_STRUCTURE& getClient();
 };
 
-class Http
-{
+class Http {
 private:
 	static const int HEADER_BUFF_SIZE = 5000;
 
 	static map<int, string> createHttpCodes() {
-		map<int, string> codes = {
+		return {
 			{200,"200 OK"},
 			{404,"404 Not Found"},
 			{409,"409 Conflict"},
 			{422,"422 Unprocessable failure"},
 			{500,"500 Internal Server Error"}
 		};
-		return codes;
 	}
 	static map<string, string> createTypeCodes() {
-		map<string, string> codes = {
+		return {
 			{"js","text/javascript"},
 			{"html","text/html"},
-			{"css"," text/css "},
+			{"css","text/css "},
 			{"png","image/png"},
 			{"jpg","image/jpeg"},
-			{"ico","image/jpeg"}
+			{"ico","image/jpeg"},
+			{"gltf","model/gltf+json"},
+			{"bin","application/octet-stream"}
 		};
-		return codes;
 	}
 
 	static string eraseStartSpaces(string);
@@ -91,6 +89,6 @@ public:
 	static string genRandomId(const int);
 	static HttpContext* readHeader(CLIENT_STRUCTURE&);
 	static string readBody(CLIENT_STRUCTURE&, int);
-	static void sendResponse(HttpContext&,int,string,map<string,string>);
-	static void sendChunk(HttpContext&,const char*,int);
+	static void sendResponse(HttpContext&, int, string, map<string, string>);
+	static void sendChunk(HttpContext&, const char*, int);
 };
