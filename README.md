@@ -21,6 +21,8 @@ The server will provide an http-compatible api for manipulating the scene. The s
     - Optional: pass two arguments to overwrite the default size of the internal OpenGL **window context: 300x300**
  - Type in the address bar of a browser: **http://127.0.0.1:5050** if using the default port.
 
+ Example: **3DServer.exe 5050 480 480**
+ 
 ## Team
 - Achimescu Valentin
 - Vilceanu Razvan-Arthur
