@@ -130,7 +130,7 @@ jobs:
     - name: Constructing output folder
       working-directory: ${{ env.PROJECT_ROOT }}
       run: |
-          copy /Y ${{ env.CLIENT_SOLUTION_FILE_PATH }}\index.js ${{ env.WEBSITE_SCRIPTS_FILE_PATH }}\index.js
+          copy "${{ env.CLIENT_SOLUTION_FILE_PATH }}\index.js" "${{ env.WEBSITE_SCRIPTS_FILE_PATH }}\index.js" /Y 
           echo .gitignore >> ${{ env.PROJECT_ROOT }}\exclude.txt
           xcopy "${{ env.WEBSITE_ROOT_FILE_PATH }}" "${{ env.OUTPUT_PATH }}\www\" /i /s /e /y
           xcopy "${{env.RELEASE_FILE_PATH}}" "${{ env.OUTPUT_PATH }}\" /i /s /e /y /exclude:${{ env.PROJECT_ROOT }}\exclude.txt
