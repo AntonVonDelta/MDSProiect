@@ -125,8 +125,9 @@ class SceneRenderer {
 
         const lines = data.split('\n')
         for (let i = 0; i < lines.length; i++) {
-            if (lines[i].length > 0 && !lines[i].startsWith('#') && !SceneRenderer._OBJ_LINE_REGEX.test(lines[i]))
-                throw new MalformedDataError(`Invalid '.obj' string on line ${i + 1}`)
+            const line = lines[i].trim()
+            if (line.length > 0 && !line.startsWith('#') && !SceneRenderer._OBJ_LINE_REGEX.test(line))
+                throw new MalformedDataError(`Invalid '.obj' string: ${line}`)
         }
 
         const res = await fetch(this._endpoints.load, {
