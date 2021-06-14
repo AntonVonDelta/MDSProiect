@@ -25,6 +25,8 @@ The server will provide an http-compatible api for manipulating the scene. The s
 
  Example: **3DServer.exe 5050 480 480**
  
+ See a tutorial here: https://www.youtube.com/watch?v=HCGcTnvR6J4
+ 
 ## Team
 - Achimescu Valentin
 - Vilceanu Razvan-Arthur
