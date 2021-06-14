@@ -2,14 +2,14 @@
 
 HttpContext::~HttpContext() {
 	closeSelectedClient(Client);
-	if (data != nullptr) 	{
+	if (data != nullptr) {
 		data->destroy();
 		delete data;
 	}
 }
 
-void HttpContext::initGrafica(int width,int height) {
-	data = new Grafica(width,height);
+void HttpContext::initGrafica(int width, int height) {
+	data = new Grafica(width, height);
 	if (!data->init()) throw string("Could not init the graphics!");
 }
 Grafica* HttpContext::getGrafica() {
@@ -93,7 +93,6 @@ HttpContext* Http::readHeader(CLIENT_STRUCTURE& client_struct) {
 	// Create the header string
 	*buff = 0;
 	string str(initial_buff);
-	cout << str.c_str() << endl;
 
 	// Get the request url
 	string request_page;
@@ -136,7 +135,7 @@ HttpContext* Http::readHeader(CLIENT_STRUCTURE& client_struct) {
 		poz1 = str.find(':');
 		poz2 = str.find("\r\n");
 		string key = str.substr(0, poz1);
-		string value = eraseStartSpaces( str.substr(poz1 + 1, poz2 - poz1 - 1));
+		string value = eraseStartSpaces(str.substr(poz1 + 1, poz2 - poz1 - 1));
 		transform(key.begin(), key.end(), key.begin(), ::tolower);
 
 		request_params[key] = value;
@@ -146,6 +145,9 @@ HttpContext* Http::readHeader(CLIENT_STRUCTURE& client_struct) {
 	// Construct the http context
 	http_context->setClient(client_struct);
 	http_context->setRequestParams(request_params);
+
+	// Debugging
+	cout << request_page << endl;
 
 	delete[] initial_buff;
 	return http_context;
@@ -176,7 +178,7 @@ void Http::sendResponse(HttpContext& http_context, int responseCode, string body
 		header << "Content-Length: " << content_length << "\r\n";
 	}
 
-	for (auto const& x : fields) 	{
+	for (auto const& x : fields) {
 		header << x.first << ": " << x.second << "\r\n";
 	}
 	header << "\r\n";
