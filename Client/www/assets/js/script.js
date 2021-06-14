@@ -1,6 +1,12 @@
 var scene = null;
 var frame_data = null;
 var ctx = null;
+var progressBarReady=false;
+
+function notifyDisconnected(){
+  alert("Deconectat de la server deoarece ai fost inactiv. Reconecteaza-te!");
+  if(scene!=null) scene.logout();
+}
 
 async function setupScene() {
   var input = document.getElementById("render-input").value;
@@ -11,32 +17,63 @@ async function setupScene() {
   var canvas = document.getElementById("scene-canvas");
   ctx = canvas.getContext("2d");
 
-  frame_data = await scene.login();
-  await drawFrames();
+  try{
+    frame_data = await scene.login();
+    await drawFrames();
+  }catch(err){
+    notifyDisconnected();
+  }
+
 }
 
 async function loadText() {
   var input = document.getElementById("render-input").value;
-  await scene.loadFromText(input);
+  try{
+    await scene.loadFromText(input);
+  }catch(err){
+    if(err instanceof MalformedDataError){
+      alert("Inputul e gresit!");
+    }else notifyDisconnected();
+  }
 }
 async function loadSphere() {
   var input = objsphere;
+  try{
   await scene.loadFromText(input);
+  }catch(err){
+    notifyDisconnected();
+  }
 }
 async function loadCube() {
   var input = objcube;
+  try{
   await scene.loadFromText(input);
+  }catch(err){
+    notifyDisconnected();
+  }
 }
 async function loadThreeObj() {
   var input = objcomplex;
-  await scene.loadFromText(input);
+  try{
+    await scene.loadFromText(input);
+  }catch(err){
+    notifyDisconnected();
+  }
 }
 
 async function moveScene() {
-  await scene.move("positiveX", 0.5);
+  try{
+    await scene.move("positiveX", 0.5);
+  }catch(err){
+    notifyDisconnected();
+  }
 }
 async function rotateScene() {
-  await scene.rotate("aroundY", 30);
+  try{
+    await scene.rotate("aroundY", 30);
+  }catch(err){
+    notifyDisconnected();
+  }
 }
 
 async function drawFrames() {
@@ -46,26 +83,31 @@ async function drawFrames() {
   var arr = new Uint8ClampedArray(width * height * 4);
   var loaded = 0;
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-
-    for (var i = 0; i < value.length; i++) {
-      arr[(loaded + i) % arr.length] = value[i];
+  try{
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+  
+      for (var i = 0; i < value.length; i++) {
+        arr[(loaded + i) % arr.length] = value[i];
+      }
+      loaded += value.length;
+      loaded %= arr.length;
+  
+      //console.log(${ value.length}  bytes downloaded\t${ loaded}  current bytes for frame\t${ arr.length-loaded}  bytes left);
+      if(progressBarReady) $(".face .growing-bar").css("width",((loaded==0?arr.length:loaded)/arr.length*100)+"%");
+  
+      // Scale the image and draw
+      // https://stackoverflow.com/questions/51387989/change-image-size-with-ctx-putimagedata
+      createImageBitmap(new ImageData(arr, width, height)).then(function (
+        bitmap
+      ) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.drawImage(bitmap, 0, 0, ctx.canvas.width, ctx.canvas.height);
+      });
     }
-    loaded += value.length;
-    loaded %= arr.length;
-
-    //console.log(${ value.length}  bytes downloaded\t${ loaded}  current bytes for frame\t${ arr.length-loaded}  bytes left);
-
-    // Scale the image and draw
-    // https://stackoverflow.com/questions/51387989/change-image-size-with-ctx-putimagedata
-    createImageBitmap(new ImageData(arr, width, height)).then(function (
-      bitmap
-    ) {
-      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-      ctx.drawImage(bitmap, 0, 0, ctx.canvas.width, ctx.canvas.height);
-    });
+  }catch(err){
+    notifyDisconnected();
   }
 }
 
@@ -103,8 +145,8 @@ async function manipulateScene() {
 
   var width = $("#scene-canvas").width();
   var height = $("#scene-canvas").height();
-  var dx = movementVector.x;
-  var dy = movementVector.y;
+  var dx = -movementVector.x;
+  var dy = -movementVector.y;
 
   // Reset movement vector
   movementVector.x = 0;
@@ -119,14 +161,23 @@ async function manipulateScene() {
     if (dy < 0) ydirection += "negative";
     else ydirection += "positive";
 
-    if (Math.abs(dx) != 0) scene.move(xdirection + "X", Math.abs(dx) / width);
-    if (Math.abs(dy) != 0) scene.move(ydirection + "Y", Math.abs(dy) / height);
+    try{
+      if (Math.abs(dx) != 0) scene.move(xdirection + "X", Math.abs(dx) / width);
+      if (Math.abs(dy) != 0) scene.move(ydirection + "Y", Math.abs(dy) / height);
+    }catch(err){
+      notifyDisconnected();
+    }
+
   } else {
     var xdirection = "";
     var ydirection = "";
 
-    if (Math.abs(dx) != 0) await scene.rotate("aroundY", (dx / width) * 60);
-    if (Math.abs(dy) != 0) await scene.rotate("aroundX", (-dy / height) * 60);
+    try{
+      if (Math.abs(dx) != 0) await scene.rotate("aroundY", (dx / width) * 60);
+      if (Math.abs(dy) != 0) await scene.rotate("aroundX", (-dy / height) * 60);
+    }catch(err){
+      notifyDisconnected();
+    }
   }
 }
 
@@ -142,6 +193,71 @@ $(document).keyup(function (event) {
     controlMode = 0;
   }
 });
+
+
+
+
+/* Design scripts */
+
+/* Login button script */
+const cube = document.querySelector(".cube");
+
+cube.addEventListener("click", (e) => {
+  cube.classList.add("cube-ani");
+  cube.classList.toggle("show-success");
+  setTimeout(() => {
+    cube.remove();
+  }, 2000);
+  setTimeout(() => {
+    setupScene();
+    loadUI();
+  }, 2100);
+});
+
+cube.addEventListener("animationend", (e) => {
+  if (e.animationName === "show-top") {
+    cube.classList.remove("cube-ani");
+  } else if (e.animationName === "spin-up") {
+    cube.classList.remove("spin");
+  }
+});
+
+function loadUI() {
+  const progress = document.getElementById("progress");
+  const pstatus = document.getElementById("text-status");
+  const buttonDrawer = document.getElementById("btnd");
+
+  progress.classList.remove("clear");
+  pstatus.classList.remove("clear");
+  buttonDrawer.classList.remove("clear");
+  setTimeout(() => {
+    progress.classList.add("bar-5");
+  }, 200);
+  setTimeout(() => {
+    progress.classList.add("bar-15");
+  }, 500);
+  setTimeout(() => {
+    progress.classList.add("bar-35");
+  }, 900);
+  setTimeout(() => {
+    progress.classList.add("bar-75");
+  }, 1400);
+
+  setTimeout(() => {
+    progress.classList.add("bar-100");
+    pstatus.innerHTML = "Scene loaded";
+  }, 2000);
+
+  setTimeout(() => {
+    progressBarReady=true;
+  }, 3000);
+}
+
+/* End of login button script */
+
+/* 3D input */
+
+
 
 var objcube = `
 v 1.000000 -1.000000 -1.000000
@@ -4789,64 +4905,3 @@ f 555//520 552//520 551//520
 f 548//521 549//521 551//521
 f 555//522 554//522 552//522
 `;
-
-/* Design scripts */
-
-/* Login button script */
-const cube = document.querySelector(".cube");
-
-cube.addEventListener("click", (e) => {
-  cube.classList.add("cube-ani");
-  cube.classList.toggle("show-success");
-  setTimeout(() => {
-    cube.remove();
-  }, 2000);
-  setTimeout(() => {
-    setupScene();
-    loadUI();
-  }, 2100);
-});
-
-cube.addEventListener("animationend", (e) => {
-  if (e.animationName === "show-top") {
-    cube.classList.remove("cube-ani");
-  } else if (e.animationName === "spin-up") {
-    cube.classList.remove("spin");
-  }
-});
-
-function loadUI() {
-  const progress = document.getElementById("progress");
-  const pstatus = document.getElementById("text-status");
-  const buttonDrawer = document.getElementById("btnd");
-
-  progress.classList.remove("clear");
-  pstatus.classList.remove("clear");
-  buttonDrawer.classList.remove("clear");
-  setTimeout(() => {
-    progress.classList.add("bar-5");
-  }, 200);
-  setTimeout(() => {
-    progress.classList.add("bar-15");
-  }, 500);
-  setTimeout(() => {
-    progress.classList.add("bar-35");
-  }, 900);
-  setTimeout(() => {
-    progress.classList.add("bar-75");
-  }, 1400);
-
-  setTimeout(() => {
-    progress.classList.add("bar-100");
-    pstatus.innerHTML = "Scene loaded";
-  }, 2000);
-
-  setTimeout(() => {
-    progress.remove();
-    pstatus.remove();
-  }, 3000);
-}
-
-/* End of login button script */
-
-/* 3D input */
