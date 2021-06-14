@@ -43,6 +43,6 @@ Issues found here: [#3](https://github.com/AntonVonDelta/MDSProiect/issues/3) an
 
 ## API
 The server API for the http protocol is found [here](https://github.com/AntonVonDelta/MDSProiect/wiki/Server-API)
-
+ 
 ## Arhitectura/UML
 ![Design](https://github.com/AntonVonDelta/MDSProiect/blob/master/UMLDesign.png)

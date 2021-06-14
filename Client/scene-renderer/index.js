@@ -78,12 +78,10 @@ class SceneRenderer {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._loggedIn || !this._apiKey)
                 throw new UnauthorizedError();
-            const validLines = data
-                .split('\n')
-                .map(line => line.trim())
-                .filter(line => line.length > 0 && !line.startsWith('#'));
-            if (!validLines.every(line => SceneRenderer._OBJ_LINE_REGEX.test(line))) {
-                throw new MalformedDataError();
+            const lines = data.split('\n');
+            for (let i = 0; i < lines.length; i++) {
+                if (lines[i].length > 0 && !lines[i].startsWith('#') && !SceneRenderer._OBJ_LINE_REGEX.test(lines[i]))
+                    throw new MalformedDataError(`Invalid '.obj' string on line ${i + 1}`);
             }
             const res = yield fetch(this._endpoints.load, {
                 body: data,
