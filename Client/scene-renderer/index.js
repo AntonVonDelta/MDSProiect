@@ -23,6 +23,11 @@ class SceneRenderer {
          * @private
          */
         this._loggedIn = false;
+        /**
+         * The API key received on login. Used for subsequent requests made to the server.
+         * @private
+         */
+        this._apiKey = null;
         this._origin = origin;
         this._endpoints = {
             login: `${this._origin}/api/login`,
@@ -35,23 +40,26 @@ class SceneRenderer {
      * Function that authenticates the user in order to start the video feed.
      * @returns a promise that resolves to an object with `width`, `height` (the size of the image) and
      * `stream` (null or a ReadableStream for an UInt8Array) properties
-     * @throws `AlreadyLoggedInError`, `CannotGetCookieError`, `UnknownStatusCodeError`, `InternalServerError`
+     * @throws `AlreadyLoggedInError`, `CannotGetKeyError`, `UnknownStatusCodeError`, `InternalServerError`
      * @async
      */
     login() {
         return __awaiter(this, void 0, void 0, function* () {
             if (this._loggedIn)
                 throw new AlreadyLoggedInError();
-            const res = yield fetch(this._endpoints.login, { credentials: 'same-origin' });
+            const res = yield fetch(this._endpoints.login);
             if (res.status === 500)
                 throw new InternalServerError(yield res.text());
             if (res.status === 409)
-                throw new CannotGetCookieError();
+                throw new CannotGetKeyError();
             if (res.status !== 200)
                 throw new UnknownStatusCodeError();
             this._loggedIn = true;
-            const imageWidthHeader = res.headers.get(SceneRenderer._IMAGE_SIZE_HEADERS.WIDTH);
-            const imageHeightHeader = res.headers.get(SceneRenderer._IMAGE_SIZE_HEADERS.HEIGHT);
+            if (!res.headers.has(SceneRenderer._HEADERS.AUTHORIZATION))
+                throw new CannotGetKeyError();
+            this._apiKey = res.headers.get(SceneRenderer._HEADERS.AUTHORIZATION);
+            const imageWidthHeader = res.headers.get(SceneRenderer._HEADERS.WIDTH);
+            const imageHeightHeader = res.headers.get(SceneRenderer._HEADERS.HEIGHT);
             const imageWidth = imageWidthHeader ? parseInt(imageWidthHeader) : 720;
             const imageHeight = imageHeightHeader ? parseInt(imageHeightHeader) : 480;
             const imageReadableStream = res.body;
@@ -68,7 +76,7 @@ class SceneRenderer {
      */
     loadFromText(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!this._loggedIn)
+            if (!this._loggedIn || !this._apiKey)
                 throw new UnauthorizedError();
             const validLines = data
                 .split('\n')
@@ -78,15 +86,18 @@ class SceneRenderer {
                 throw new MalformedDataError();
             }
             const res = yield fetch(this._endpoints.load, {
-                credentials: 'same-origin',
                 body: data,
                 method: 'POST',
-                headers: { 'Content-Type': 'text/plain' }
+                headers: {
+                    'Content-Type': 'text/plain',
+                    [SceneRenderer._HEADERS.AUTHORIZATION]: this._apiKey
+                }
             });
             if (res.status === 500)
                 throw new InternalServerError(yield res.text());
             if (res.status === 404) {
                 this._loggedIn = false;
+                this._apiKey = null;
                 throw new UnauthorizedError();
             }
             if (res.status === 422) {
@@ -107,17 +118,18 @@ class SceneRenderer {
      */
     move(direction, amount) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!this._loggedIn)
+            if (!this._loggedIn || !this._apiKey)
                 throw new UnauthorizedError();
             const queryParams = new URLSearchParams();
             queryParams.append('direction', SceneRenderer._MOVE_DIRECTION_OPCODES[direction].toString());
             queryParams.append('amount', amount.toString());
-            const fullPath = this._endpoints.move + '&' + queryParams.toString();
-            const res = yield fetch(fullPath, { credentials: 'same-origin' });
+            const fullPath = this._endpoints.move + '?' + queryParams.toString();
+            const res = yield fetch(fullPath, { headers: { [SceneRenderer._HEADERS.AUTHORIZATION]: this._apiKey || '' } });
             if (res.status === 500)
                 throw new InternalServerError(yield res.text());
             if (res.status === 404) {
                 this._loggedIn = false;
+                this._apiKey = null;
                 throw new UnauthorizedError();
             }
             if (res.status !== 200)
@@ -136,17 +148,18 @@ class SceneRenderer {
      */
     rotate(direction, amount) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!this._loggedIn)
+            if (!this._loggedIn || !this._apiKey)
                 throw new UnauthorizedError();
             const queryParams = new URLSearchParams();
             queryParams.append('direction', SceneRenderer._ROTATE_DIRECTION_OPCODES[direction].toString());
             queryParams.append('amount', amount.toString());
-            const fullPath = this._endpoints.rotate + '&' + queryParams.toString();
-            const res = yield fetch(fullPath, { credentials: 'same-origin' });
+            const fullPath = this._endpoints.rotate + '?' + queryParams.toString();
+            const res = yield fetch(fullPath, { headers: { [SceneRenderer._HEADERS.AUTHORIZATION]: this._apiKey || '' } });
             if (res.status === 500)
                 throw new InternalServerError(yield res.text());
             if (res.status === 404) {
                 this._loggedIn = false;
+                this._apiKey = null;
                 throw new UnauthorizedError();
             }
             if (res.status !== 200)
@@ -154,13 +167,23 @@ class SceneRenderer {
             return true;
         });
     }
+    /**
+     * Function that resets the loggedIn flag and deletes the API key.
+     * @throws `UnauthorizedError`
+     */
+    logout() {
+        if (!this._loggedIn || !this._apiKey)
+            throw new UnauthorizedError();
+        this._loggedIn = false;
+        this._apiKey = null;
+    }
 }
 /**
  * RegExp object used for validating `.obj` input strings.
  * @private
  * @static
  */
-SceneRenderer._OBJ_LINE_REGEX = /^(v( -?(0|[1-9]\d*)(\.\d+)?){3,4}|vn( -?(0|[1-9]\d*)(\.\d+)?){3}|vt( (1(\.0+)?|0(\.\d+)?)){1,3}|f( [1-9]\d*((\/([1-9]\d*)?)?\/[1-9]\d*)?){3,})$/;
+SceneRenderer._OBJ_LINE_REGEX = /^(v(\s+-?(0|[1-9]\d*)(\.\d+)?){3,4}|vn(\s+-?(0|[1-9]\d*)(\.\d+)?){3}|vt(\s+-?(0|[1-9]\d*)(\.\d+)?){1,3}|f(\s+[1-9]\d*((\/([1-9]\d*)?)?\/[1-9]\d*)?){3,})$/;
 /**
  * Map for translating moving directions into API opcodes.
  * @private
@@ -184,13 +207,14 @@ SceneRenderer._ROTATE_DIRECTION_OPCODES = {
     aroundY: 0
 };
 /**
- * Map used for acquiring the image size from the custom HTTP headers.
+ * Map used for storing the names of the custom HTTP headers used.
  * @private
  * @static
  */
-SceneRenderer._IMAGE_SIZE_HEADERS = {
+SceneRenderer._HEADERS = {
     WIDTH: 'X-Image-Width',
-    HEIGHT: 'X-Image-Height'
+    HEIGHT: 'X-Image-Height',
+    AUTHORIZATION: 'X-Authorize'
 };
 class UnauthorizedError extends Error {
     constructor(message = 'Unauthorized') {
@@ -207,8 +231,8 @@ class UnknownStatusCodeError extends Error {
         super(message);
     }
 }
-class CannotGetCookieError extends Error {
-    constructor(message = 'Cannot Get Cookie') {
+class CannotGetKeyError extends Error {
+    constructor(message = 'Cannot Get API Key') {
         super(message);
     }
 }
