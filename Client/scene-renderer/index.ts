@@ -208,6 +208,16 @@ class SceneRenderer {
         if (res.status !== 200) throw new UnknownStatusCodeError()
         return true
     }
+
+    /**
+     * Function that resets the loggedIn flag and deletes the API key.
+     * @throws `UnauthorizedError`
+     */
+    public logout () {
+        if (!this._loggedIn || !this._apiKey) throw new UnauthorizedError()
+        this._loggedIn = false
+        this._apiKey = null
+    }
 }
 
 class UnauthorizedError extends Error {
