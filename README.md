@@ -27,6 +27,13 @@ The server will provide an http-compatible api for manipulating the scene. The s
  
  See a tutorial here: https://www.youtube.com/watch?v=HCGcTnvR6J4
  
+## How use the project
+  - Click **Launch** on the first page of the website
+  - Click **LogIn** to register a context on the server
+  - Click **Load Cube** or any other option
+  - Click and drag the object on the canvas to move it
+  - Press **space** and drag the object to rotate it
+
 ## Team
 - Achimescu Valentin
 - Vilceanu Razvan-Arthur
